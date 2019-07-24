@@ -27,7 +27,7 @@ public class Ticket {
     @NoArgsConstructor
     @AllArgsConstructor
     @EqualsAndHashCode
-    public class TicketKey implements Serializable {
+    public static class TicketKey implements Serializable {
         static final long serialVersionUID = 1L;
         private int journeyId;
         private int passengerId;

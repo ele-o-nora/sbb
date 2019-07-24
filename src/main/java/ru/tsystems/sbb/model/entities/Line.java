@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class Line {
     @OneToMany(mappedBy = "line")
     private List<Route> routes;
 
-    @OneToMany(mappedBy = "line")
+    @OneToMany(mappedBy = "line", fetch = FetchType.EAGER)
     private List<LineStation> stations;
 
 }

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,6 +45,12 @@ public class Station {
     @OneToMany(mappedBy = "station")
     private List<LineStation> lines;
 
-    @OneToMany(mappedBy = "station")
+    @OneToMany(mappedBy = "station", fetch = FetchType.EAGER)
     private List<Schedule> trains;
+
+    @OneToMany(mappedBy = "from")
+    private List<Ticket> ticketsFrom;
+
+    @OneToMany(mappedBy = "to")
+    private List<Ticket> ticketsTo;
 }

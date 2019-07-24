@@ -28,7 +28,7 @@ public class Schedule {
     @NoArgsConstructor
     @AllArgsConstructor
     @EqualsAndHashCode
-    public class ScheduleKey implements Serializable {
+    public static class ScheduleKey implements Serializable {
         static final long serialVersionUID = 1L;
         private int journeyId;
         private int stationId;

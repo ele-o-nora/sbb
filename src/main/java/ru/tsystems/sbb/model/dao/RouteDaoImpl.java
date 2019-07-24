@@ -1,0 +1,73 @@
+package ru.tsystems.sbb.model.dao;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import ru.tsystems.sbb.model.entities.Line;
+import ru.tsystems.sbb.model.entities.Route;
+import ru.tsystems.sbb.model.entities.Station;
+
+import java.util.List;
+
+@Component
+public class RouteDaoImpl implements RouteDao {
+
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    @Override
+    public List<Line> allLines() {
+        Session session = sessionFactory.getCurrentSession();
+        List<Line> lines = session.createQuery("from Line", Line.class).getResultList();
+        return lines;
+    }
+
+    @Override
+    public List<Station> allLineStations(Line line) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Station> stations = session.createQuery("select s " +
+                "from Station s join s.lines ls " +
+                "where ls.line = :line " +
+                "order by ls.order asc", Station.class)
+                .setParameter("line", line)
+                .getResultList();
+        return stations;
+    }
+
+    @Override
+    public Line getLineById(int lineId) {
+        Session session = sessionFactory.getCurrentSession();
+        Line line = session.get(Line.class, lineId);
+        return line;
+    }
+
+    @Override
+    public List<Route> allLineRoutes(Line line) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Route> routes = session.createQuery("from Route r " +
+                "where r.line = :line", Route.class)
+                .setParameter("line", line)
+                .getResultList();
+        return routes;
+    }
+
+    @Override
+    public List<Station> allRouteStations(Route route) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Station> stations = session.createQuery("select s " +
+                "from Station s join s.routes r join s.lines ls " +
+                "where r = :route " +
+                "order by ls.order asc", Station.class)
+                .setParameter("route", route)
+                .getResultList();
+        return stations;
+    }
+
+    @Override
+    public Route getRouteById(int routeId) {
+        Session session = sessionFactory.getCurrentSession();
+        Route route = session.get(Route.class, routeId);
+        return route;
+    }
+}

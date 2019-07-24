@@ -24,10 +24,10 @@ import java.io.Serializable;
 public class LineStation {
 
     @Embeddable
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor
     @EqualsAndHashCode
-    public class LineStationKey implements Serializable {
+    public static class LineStationKey implements Serializable {
         static final long serialVersionUID = 1L;
         private int lineId;
         private int stationId;
