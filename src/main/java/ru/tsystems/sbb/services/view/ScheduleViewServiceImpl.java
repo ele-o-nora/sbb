@@ -2,12 +2,10 @@ package ru.tsystems.sbb.services.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
 import ru.tsystems.sbb.services.data.ScheduleDataService;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

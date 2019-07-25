@@ -26,10 +26,10 @@ public class RouteDaoImpl implements RouteDao {
     @Override
     public List<Station> allLineStations(Line line) {
         Session session = sessionFactory.getCurrentSession();
-        List<Station> stations = session.createQuery("select s " +
-                "from Station s join s.lines ls " +
-                "where ls.line = :line " +
-                "order by ls.order asc", Station.class)
+        List<Station> stations = session.createQuery("select s "
+                + "from Station s join s.lines ls "
+                + "where ls.line = :line "
+                + "order by ls.order asc", Station.class)
                 .setParameter("line", line)
                 .getResultList();
         return stations;
@@ -45,8 +45,8 @@ public class RouteDaoImpl implements RouteDao {
     @Override
     public List<Route> allLineRoutes(Line line) {
         Session session = sessionFactory.getCurrentSession();
-        List<Route> routes = session.createQuery("from Route r " +
-                "where r.line = :line", Route.class)
+        List<Route> routes = session.createQuery("from Route r "
+                + "where r.line = :line", Route.class)
                 .setParameter("line", line)
                 .getResultList();
         return routes;
@@ -55,10 +55,10 @@ public class RouteDaoImpl implements RouteDao {
     @Override
     public List<Station> allRouteStations(Route route) {
         Session session = sessionFactory.getCurrentSession();
-        List<Station> stations = session.createQuery("select s " +
-                "from Station s join s.routes r join s.lines ls " +
-                "where r = :route " +
-                "order by ls.order asc", Station.class)
+        List<Station> stations = session.createQuery("select s "
+                + "from Station s join s.routes r join s.lines ls "
+                + "where r = :route "
+                + "order by ls.order asc", Station.class)
                 .setParameter("route", route)
                 .getResultList();
         return stations;

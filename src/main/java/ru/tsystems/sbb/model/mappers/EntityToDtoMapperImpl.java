@@ -22,7 +22,7 @@ import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.Train;
 
 @Component
-public class EntityToDtoMapperImpl implements EntityToDtoMapper{
+public class EntityToDtoMapperImpl implements EntityToDtoMapper {
 
     @Autowired
     private ModelMapper mapper;
