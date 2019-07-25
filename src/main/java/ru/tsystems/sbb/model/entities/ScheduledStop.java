@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -38,12 +39,12 @@ public class ScheduledStop {
     @EmbeddedId
     private ScheduleKey id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "journey_id")
     @MapsId("journeyId")
     private Journey journey;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "station_id")
     @MapsId("stationId")
     private Station station;
@@ -54,7 +55,4 @@ public class ScheduledStop {
     @Column
     private LocalDateTime departure;
 
-    @Formula("select timestampdiff(minute, departure, arrival) " +
-            "where arrival is not null and departure is not null")
-    private int stoppageTime;
 }

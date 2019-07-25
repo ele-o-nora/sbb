@@ -55,5 +55,6 @@ public class Station {
     private List<Ticket> ticketsTo;
 
     @OneToMany(mappedBy = "destination")
-    private List<Journey> journeysTo;
+    private List<Journey> routesTo;
+
 }

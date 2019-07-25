@@ -1,6 +1,7 @@
 package ru.tsystems.sbb.config;
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -56,6 +57,11 @@ public class HibernateConfig {
         HibernateTransactionManager tm = new HibernateTransactionManager();
         tm.setSessionFactory(sessionFactory().getObject());
         return tm;
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
 }

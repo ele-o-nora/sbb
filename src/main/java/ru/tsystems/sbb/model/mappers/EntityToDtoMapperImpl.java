@@ -31,7 +31,7 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper{
     public JourneyDto convert(Journey journey) {
         JourneyDto journeyDto = mapper.map(journey, JourneyDto.class);
         journeyDto.setRoute(journey.getRoute().getNumber());
-        journeyDto.setTimeEnRoute(journey.getMinutesEnRoute());
+        journeyDto.setDestination(journey.getDestination().getName());
         return journeyDto;
     }
 
@@ -65,7 +65,8 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper{
         scheduledStopDto.setRoute(scheduledStop
                 .getJourney().getRoute().getNumber());
         scheduledStopDto.setDirection(scheduledStop
-                .getJourney().getDestination());
+                .getJourney().getDestination().getName());
+        scheduledStopDto.setJourneyId(scheduledStop.getJourney().getId());
         return scheduledStopDto;
     }
 

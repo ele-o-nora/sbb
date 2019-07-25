@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ScheduledStopDto {
     private String station;
+    private int journeyId;
     private String route;
     private String direction;
     private LocalDateTime arrival;
