@@ -53,4 +53,7 @@ public class Station {
 
     @OneToMany(mappedBy = "to")
     private List<Ticket> ticketsTo;
+
+    @OneToMany(mappedBy = "destination")
+    private List<Journey> journeysTo;
 }

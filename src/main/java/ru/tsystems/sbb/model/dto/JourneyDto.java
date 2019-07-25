@@ -11,8 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 public class JourneyDto {
     private int id;
-    private int firstClassSeats;
-    private int secondClassSeats;
-    private RouteDto route;
+    private String route;
+    private String destination;
+    private TrainDto trainType;
     private List<ScheduleDto> stops;
+    private int availableSeats;
 }

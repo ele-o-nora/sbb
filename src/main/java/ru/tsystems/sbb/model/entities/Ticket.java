@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -46,6 +48,9 @@ public class Ticket {
     @MapsId("passengerId")
     private Passenger passenger;
 
+    @Formula("select s.departure from Schedule s where s.journey_id = journey_id and s.station_id = station_from_id")
+    private LocalDateTime departure;
+
     @ManyToOne
     @JoinColumn(name = "station_from_id")
     private Station from;
@@ -53,9 +58,6 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "station_to_id")
     private Station to;
-
-    @Column(name = "class")
-    private int travelClass;
 
     @Column
     private float price;

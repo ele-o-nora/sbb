@@ -1,6 +1,5 @@
 package ru.tsystems.sbb.services;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +10,7 @@ import ru.tsystems.sbb.model.dto.StationDto;
 import ru.tsystems.sbb.model.entities.Line;
 import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.Station;
+import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,14 +23,14 @@ public class RouteDataServiceImpl implements RouteDataService {
     private RouteDao routeDao;
 
     @Autowired
-    private ModelMapper mapper;
+    private EntityToDtoMapper mapper;
 
     @Override
     public List<StationDto> getAllLineStations(int lineId) {
         Line line = routeDao.getLineById(lineId);
         List<Station> stations = routeDao.allLineStations(line);
         List<StationDto> stationsDto = stations.stream()
-                .map(station -> mapper.map(station, StationDto.class))
+                .map(station -> mapper.convert(station))
                 .collect(Collectors.toList());
         return stationsDto;
     }
@@ -40,7 +40,7 @@ public class RouteDataServiceImpl implements RouteDataService {
         Route route = routeDao.getRouteById(routeId);
         List<Station> stations = routeDao.allRouteStations(route);
         List<StationDto> stationsDto = stations.stream()
-                .map(station -> mapper.map(station, StationDto.class))
+                .map(station -> mapper.convert(station))
                 .collect(Collectors.toList());
         return stationsDto;
     }
@@ -50,7 +50,7 @@ public class RouteDataServiceImpl implements RouteDataService {
         Line line = routeDao.getLineById(lineId);
         List<Route> routes = routeDao.allLineRoutes(line);
         List<RouteDto> routesDto = routes.stream()
-                .map(route -> mapper.map(route, RouteDto.class))
+                .map(route -> mapper.convert(route))
                 .collect(Collectors.toList());
         return routesDto;
     }
@@ -59,7 +59,7 @@ public class RouteDataServiceImpl implements RouteDataService {
     public List<LineDto> getAllLines() {
         List<Line> lines = routeDao.allLines();
         List<LineDto> linesDto = lines.stream()
-                .map(line -> mapper.map(line, LineDto.class))
+                .map(line -> mapper.convert(line))
                 .collect(Collectors.toList());
         return linesDto;
     }

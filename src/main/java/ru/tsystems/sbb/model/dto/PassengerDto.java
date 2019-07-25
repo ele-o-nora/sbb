@@ -15,5 +15,4 @@ public class PassengerDto {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private List<TicketDto> tickets;
 }

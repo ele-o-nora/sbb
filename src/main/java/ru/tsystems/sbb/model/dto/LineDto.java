@@ -12,5 +12,5 @@ import java.util.List;
 public class LineDto {
     private int id;
     private String line;
-    private List<LineStationDto> stations;
+    private List<StationDto> stations;
 }

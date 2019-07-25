@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class ScheduleDto {
-    private StationDto station;
-    private JourneyDto journey;
+    private String station;
+    private String route;
+    private String direction;
     private LocalDateTime arrival;
     private LocalDateTime departure;
 }

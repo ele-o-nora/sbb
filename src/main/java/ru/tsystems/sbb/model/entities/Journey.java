@@ -3,6 +3,7 @@ package ru.tsystems.sbb.model.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,19 +28,23 @@ public class Journey {
     @Column
     private int id;
 
-    @Column(name = "first_class_seats")
-    private int firstClassSeats;
-
-    @Column(name = "second_class_seats")
-    private int secondClassSeats;
-
     @ManyToOne
     @JoinColumn(name = "route_id")
     private Route route;
+
+    @ManyToOne
+    @JoinColumn(name = "train_id")
+    private Train trainType;
 
     @OneToMany(mappedBy = "journey")
     private List<Ticket> tickets;
 
     @OneToMany(mappedBy = "journey")
     private List<Schedule> stops;
+
+    @Formula("select s.name from Station s join Schedule sch on s.id = sch.station_id where sch.journey_id = id order by sch.arrival desc limit 1")
+    private String destination;
+
+    @Formula("(select t.seats from Train t where t.id = train_id) - (select count(*) from Ticket t where t.journey_id = id)")
+    private int availableSeats;
 }

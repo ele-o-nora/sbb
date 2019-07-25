@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
-public class Line {
+public class Train {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +26,11 @@ public class Line {
     private int id;
 
     @Column
-    private String name;
+    private String model;
 
-    @OneToMany(mappedBy = "line")
-    private List<Route> routes;
+    @Column
+    private int seats;
 
-    @OneToMany(mappedBy = "line", fetch = FetchType.EAGER)
-    private List<LineStation> stations;
-
+    @OneToMany(mappedBy = "trainType")
+    private List<Journey> journeys;
 }

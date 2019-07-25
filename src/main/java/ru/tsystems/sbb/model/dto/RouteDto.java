@@ -12,5 +12,6 @@ import java.util.Set;
 public class RouteDto {
     private int id;
     private String number;
+    private String line;
     private Set<StationDto> stations;
 }

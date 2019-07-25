@@ -4,14 +4,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class TicketDto {
-    private JourneyDto journey;
+    private String route;
     private PassengerDto passenger;
-    private StationDto from;
-    private StationDto to;
-    private int travelClass;
+    private String StationFrom;
+    private LocalDateTime departure;
+    private String stationTo;
     private float price;
 }
