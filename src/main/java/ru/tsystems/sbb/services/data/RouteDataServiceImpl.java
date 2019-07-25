@@ -1,4 +1,4 @@
-package ru.tsystems.sbb.services;
+package ru.tsystems.sbb.services.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,38 +29,34 @@ public class RouteDataServiceImpl implements RouteDataService {
     public List<StationDto> getAllLineStations(int lineId) {
         Line line = routeDao.getLineById(lineId);
         List<Station> stations = routeDao.allLineStations(line);
-        List<StationDto> stationsDto = stations.stream()
+        return stations.stream()
                 .map(station -> mapper.convert(station))
                 .collect(Collectors.toList());
-        return stationsDto;
     }
 
     @Override
     public List<StationDto> getAllRouteStations(int routeId) {
         Route route = routeDao.getRouteById(routeId);
         List<Station> stations = routeDao.allRouteStations(route);
-        List<StationDto> stationsDto = stations.stream()
+        return stations.stream()
                 .map(station -> mapper.convert(station))
                 .collect(Collectors.toList());
-        return stationsDto;
     }
 
     @Override
     public List<RouteDto> getAllRoutes(int lineId) {
         Line line = routeDao.getLineById(lineId);
         List<Route> routes = routeDao.allLineRoutes(line);
-        List<RouteDto> routesDto = routes.stream()
+        return routes.stream()
                 .map(route -> mapper.convert(route))
                 .collect(Collectors.toList());
-        return routesDto;
     }
 
     @Override
     public List<LineDto> getAllLines() {
         List<Line> lines = routeDao.allLines();
-        List<LineDto> linesDto = lines.stream()
+        return lines.stream()
                 .map(line -> mapper.convert(line))
                 .collect(Collectors.toList());
-        return linesDto;
     }
 }

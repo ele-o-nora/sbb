@@ -1,4 +1,4 @@
-package ru.tsystems.sbb.services;
+package ru.tsystems.sbb.services.data;
 
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
