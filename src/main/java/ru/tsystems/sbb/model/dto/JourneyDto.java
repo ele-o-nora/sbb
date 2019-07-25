@@ -14,6 +14,11 @@ public class JourneyDto {
     private String route;
     private String destination;
     private TrainDto trainType;
-    private List<ScheduleDto> stops;
+    private List<ScheduledStopDto> stops;
     private int availableSeats;
+    private String timeEnRoute;
+
+    public void setTimeEnRoute(long minutes) {
+        timeEnRoute = String.format("%d h %2d min", minutes / 60, minutes % 60);
+    }
 }

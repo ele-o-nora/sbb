@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ScheduleDto {
+public class ScheduledStopDto {
     private String station;
     private String route;
     private String direction;

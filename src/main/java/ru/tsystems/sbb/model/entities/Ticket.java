@@ -48,7 +48,9 @@ public class Ticket {
     @MapsId("passengerId")
     private Passenger passenger;
 
-    @Formula("select s.departure from Schedule s where s.journey_id = journey_id and s.station_id = station_from_id")
+    @Formula("select s.departure from ScheduledStop s " +
+            "where s.journey_id = journey_id " +
+            "and s.station_id = station_from_id")
     private LocalDateTime departure;
 
     @ManyToOne

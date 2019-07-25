@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table
-public class Schedule {
+public class ScheduledStop {
 
     @Embeddable
     @NoArgsConstructor
@@ -52,4 +53,8 @@ public class Schedule {
 
     @Column
     private LocalDateTime departure;
+
+    @Formula("select timestampdiff(minute, departure, arrival) " +
+            "where arrival is not null and departure is not null")
+    private int stoppageTime;
 }

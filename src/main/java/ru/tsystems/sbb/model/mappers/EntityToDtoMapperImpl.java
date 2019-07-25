@@ -7,7 +7,7 @@ import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
-import ru.tsystems.sbb.model.dto.ScheduleDto;
+import ru.tsystems.sbb.model.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TrainDto;
@@ -16,7 +16,7 @@ import ru.tsystems.sbb.model.entities.Line;
 import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Passenger;
 import ru.tsystems.sbb.model.entities.Route;
-import ru.tsystems.sbb.model.entities.Schedule;
+import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.Train;
@@ -31,6 +31,7 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper{
     public JourneyDto convert(Journey journey) {
         JourneyDto journeyDto = mapper.map(journey, JourneyDto.class);
         journeyDto.setRoute(journey.getRoute().getNumber());
+        journeyDto.setTimeEnRoute(journey.getMinutesEnRoute());
         return journeyDto;
     }
 
@@ -57,12 +58,15 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper{
     }
 
     @Override
-    public ScheduleDto convert(Schedule schedule) {
-        ScheduleDto scheduleDto = mapper.map(schedule, ScheduleDto.class);
-        scheduleDto.setStation(schedule.getStation().getName());
-        scheduleDto.setRoute(schedule.getJourney().getRoute().getNumber());
-        scheduleDto.setDirection(schedule.getJourney().getDestination());
-        return scheduleDto;
+    public ScheduledStopDto convert(ScheduledStop scheduledStop) {
+        ScheduledStopDto scheduledStopDto = mapper.map(scheduledStop,
+                ScheduledStopDto.class);
+        scheduledStopDto.setStation(scheduledStop.getStation().getName());
+        scheduledStopDto.setRoute(scheduledStop
+                .getJourney().getRoute().getNumber());
+        scheduledStopDto.setDirection(scheduledStop
+                .getJourney().getDestination());
+        return scheduledStopDto;
     }
 
     @Override

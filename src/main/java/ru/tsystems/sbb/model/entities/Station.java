@@ -46,7 +46,7 @@ public class Station {
     private List<LineStation> lines;
 
     @OneToMany(mappedBy = "station", fetch = FetchType.EAGER)
-    private List<Schedule> trains;
+    private List<ScheduledStop> trains;
 
     @OneToMany(mappedBy = "from")
     private List<Ticket> ticketsFrom;

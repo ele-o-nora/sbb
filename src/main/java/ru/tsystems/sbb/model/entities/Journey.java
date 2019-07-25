@@ -40,11 +40,27 @@ public class Journey {
     private List<Ticket> tickets;
 
     @OneToMany(mappedBy = "journey")
-    private List<Schedule> stops;
+    private List<ScheduledStop> stops;
 
-    @Formula("select s.name from Station s join Schedule sch on s.id = sch.station_id where sch.journey_id = id order by sch.arrival desc limit 1")
+    @Formula("select s.name from Station s " +
+            "join ScheduledStop sch on s.id = sch.station_id " +
+            "where sch.journey_id = id " +
+            "order by sch.arrival desc limit 1")
     private String destination;
 
-    @Formula("(select t.seats from Train t where t.id = train_id) - (select count(*) from Ticket t where t.journey_id = id)")
+    @Formula("(select t.seats from Train t " +
+            "where t.id = train_id) " +
+            "- (select count(*) from Ticket t " +
+            "where t.journey_id = id)")
     private int availableSeats;
+
+    @Formula("select timestampdiff(second, " +
+            "(select s.arrival from ScheduledStop s " +
+            "where s.journey_id = id " +
+            "order by s.arrival desc limit 1), " +
+            "(select s.departure from Schedule s " +
+            "where s.journey_id = id " +
+            "order by s.departure asc limit 1))")
+    private long minutesEnRoute;
+
 }
