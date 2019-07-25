@@ -3,7 +3,6 @@ package ru.tsystems.sbb.model.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

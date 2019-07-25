@@ -13,7 +13,6 @@ public class TicketDto {
     private String route;
     private PassengerDto passenger;
     private String StationFrom;
-    private LocalDateTime departure;
     private String stationTo;
     private float price;
 }

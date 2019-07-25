@@ -30,6 +30,8 @@ public class HibernateConfig {
                 env.getRequiredProperty("hibernate.dialect"));
         properties.put("hibernate.show_sql",
                 env.getRequiredProperty("hibernate.show_sql"));
+        properties.put("hibernate.jdbc.time_zone",
+                env.getRequiredProperty("hibernate.jdbc.time_zone"));
         return properties;
     }
 
