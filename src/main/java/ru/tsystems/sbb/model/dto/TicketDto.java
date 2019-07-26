@@ -10,7 +10,7 @@ import lombok.Setter;
 public class TicketDto {
     private String route;
     private PassengerDto passenger;
-    private String stationFrom;
-    private String stationTo;
+    private ScheduledStopDto stationFrom;
+    private ScheduledStopDto stationTo;
     private float price;
 }

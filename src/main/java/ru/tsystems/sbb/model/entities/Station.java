@@ -48,12 +48,6 @@ public class Station {
     @OneToMany(mappedBy = "station", fetch = FetchType.EAGER)
     private List<ScheduledStop> trains;
 
-    @OneToMany(mappedBy = "from")
-    private List<Ticket> ticketsFrom;
-
-    @OneToMany(mappedBy = "to")
-    private List<Ticket> ticketsTo;
-
     @OneToMany(mappedBy = "destination")
     private List<Journey> routesTo;
 

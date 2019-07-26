@@ -16,10 +16,11 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Autowired
     private SessionFactory sessionFactory;
+    private static final int SEARCH_PERIOD = 6;
 
     @Override
-    public List<ScheduledStop> stationSchedule(Station station,
-                                               LocalDateTime from) {
+    public List<ScheduledStop> stationSchedule(final Station station,
+                                               final LocalDateTime from) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select distinct s from ScheduledStop s "
                 + "where s.station = :station "
@@ -28,13 +29,14 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 + "order by s.arrival, s.departure asc", ScheduledStop.class)
                 .setParameter("station", station)
                 .setParameter("from", from)
-                .setParameter("to", from.plusHours(6))
+                .setParameter("to", from.plusHours(SEARCH_PERIOD))
                 .getResultList();
     }
 
     @Override
-    public List<Journey> trainsFromTo(Station origin, Station destination,
-                                      LocalDateTime from) {
+    public List<Journey> trainsFromTo(final Station origin,
+                                      final Station destination,
+                                      final LocalDateTime from) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select j from Journey j "
                 + "join j.stops st1, j.stops st2 "
@@ -44,11 +46,12 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 .setParameter("origin", origin)
                 .setParameter("dest", destination)
                 .setParameter("from", from)
-                .setParameter("to", from.plusHours(6)).getResultList();
+                .setParameter("to", from.plusHours(SEARCH_PERIOD))
+                .getResultList();
     }
 
     @Override
-    public Station getStationByName(String stationName) {
+    public Station getStationByName(final String stationName) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from Station s "
                 + "where s.name = :name", Station.class)

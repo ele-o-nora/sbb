@@ -28,7 +28,7 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     private ModelMapper mapper;
 
     @Override
-    public JourneyDto convert(Journey journey) {
+    public JourneyDto convert(final Journey journey) {
         JourneyDto journeyDto = mapper.map(journey, JourneyDto.class);
         journeyDto.setRoute(journey.getRoute().getNumber());
         journeyDto.setDestination(journey.getDestination().getName());
@@ -36,7 +36,7 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     }
 
     @Override
-    public LineDto convert(Line line) {
+    public LineDto convert(final Line line) {
         LineDto lineDto = mapper.map(line, LineDto.class);
         for (LineStation ls : line.getStations()) {
             StationDto station = convert(ls.getStation());
@@ -46,19 +46,19 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     }
 
     @Override
-    public PassengerDto convert(Passenger passenger) {
+    public PassengerDto convert(final Passenger passenger) {
         return mapper.map(passenger, PassengerDto.class);
     }
 
     @Override
-    public RouteDto convert(Route route) {
+    public RouteDto convert(final Route route) {
         RouteDto routeDto = mapper.map(route, RouteDto.class);
         routeDto.setLine(route.getLine().getName());
         return routeDto;
     }
 
     @Override
-    public ScheduledStopDto convert(ScheduledStop scheduledStop) {
+    public ScheduledStopDto convert(final ScheduledStop scheduledStop) {
         ScheduledStopDto scheduledStopDto = mapper.map(scheduledStop,
                 ScheduledStopDto.class);
         scheduledStopDto.setStation(scheduledStop.getStation().getName());
@@ -71,21 +71,19 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     }
 
     @Override
-    public StationDto convert(Station station) {
+    public StationDto convert(final Station station) {
         return mapper.map(station, StationDto.class);
     }
 
     @Override
-    public TicketDto convert(Ticket ticket) {
+    public TicketDto convert(final Ticket ticket) {
         TicketDto ticketDto = mapper.map(ticket, TicketDto.class);
         ticketDto.setRoute(ticket.getJourney().getRoute().getNumber());
-        ticketDto.setStationFrom(ticket.getFrom().getName());
-        ticketDto.setStationTo(ticket.getTo().getName());
         return ticketDto;
     }
 
     @Override
-    public TrainDto convert(Train train) {
+    public TrainDto convert(final Train train) {
         return mapper.map(train, TrainDto.class);
     }
 }

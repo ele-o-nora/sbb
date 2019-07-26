@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class ScheduledStopDto {
+    private int id;
     private String station;
     private int journeyId;
     private String route;

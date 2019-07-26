@@ -19,12 +19,13 @@ public class RouteDaoImpl implements RouteDao {
     @Override
     public List<Line> allLines() {
         Session session = sessionFactory.getCurrentSession();
-        List<Line> lines = session.createQuery("from Line", Line.class).getResultList();
+        List<Line> lines = session.createQuery("from Line", Line.class)
+                .getResultList();
         return lines;
     }
 
     @Override
-    public List<Station> allLineStations(Line line) {
+    public List<Station> allLineStations(final Line line) {
         Session session = sessionFactory.getCurrentSession();
         List<Station> stations = session.createQuery("select s "
                 + "from Station s join s.lines ls "
@@ -36,14 +37,14 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public Line getLineById(int lineId) {
+    public Line getLineById(final int lineId) {
         Session session = sessionFactory.getCurrentSession();
         Line line = session.get(Line.class, lineId);
         return line;
     }
 
     @Override
-    public List<Route> allLineRoutes(Line line) {
+    public List<Route> allLineRoutes(final Line line) {
         Session session = sessionFactory.getCurrentSession();
         List<Route> routes = session.createQuery("from Route r "
                 + "where r.line = :line", Route.class)
@@ -53,7 +54,7 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public List<Station> allRouteStations(Route route) {
+    public List<Station> allRouteStations(final Route route) {
         Session session = sessionFactory.getCurrentSession();
         List<Station> stations = session.createQuery("select s "
                 + "from Station s join s.routes r join s.lines ls "
@@ -65,7 +66,7 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public Route getRouteById(int routeId) {
+    public Route getRouteById(final int routeId) {
         Session session = sessionFactory.getCurrentSession();
         Route route = session.get(Route.class, routeId);
         return route;

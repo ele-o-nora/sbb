@@ -17,13 +17,13 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     private ScheduleDataService dataService;
 
     @Override
-    public Map<String, Object> getStationSchedule(String stationName) {
+    public Map<String, Object> getStationSchedule(final String stationName) {
         return getStationSchedule(stationName, LocalDateTime.now());
     }
 
     @Override
-    public Map<String, Object> getStationSchedule(String stationName,
-                                                  LocalDateTime from) {
+    public Map<String, Object> getStationSchedule(final String stationName,
+                                                  final LocalDateTime from) {
         List<ScheduledStopDto> trains = dataService
                 .stationSchedule(stationName, from);
         Map<String, Object> objects = new HashMap<>();

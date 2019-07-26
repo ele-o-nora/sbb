@@ -15,7 +15,7 @@ public class ScheduleController {
 
     @PostMapping("/curSchedule")
     public ModelAndView stationSchedule(@RequestParam(value = "stationName")
-                                                    String stationName) {
+                                            final String stationName) {
         return new ModelAndView("schedule",
                 viewService.getStationSchedule(stationName));
     }

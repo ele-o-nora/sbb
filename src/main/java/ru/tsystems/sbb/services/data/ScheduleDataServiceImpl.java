@@ -26,8 +26,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     private EntityToDtoMapper mapper;
 
     @Override
-    public List<ScheduledStopDto> stationSchedule(String stationName,
-                                                  LocalDateTime from) {
+    public List<ScheduledStopDto> stationSchedule(final String stationName,
+                                                  final LocalDateTime from) {
         Station station = scheduleDao.getStationByName(stationName);
         List<ScheduledStop> scheduledStops = scheduleDao
                 .stationSchedule(station, from);
@@ -37,8 +37,9 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     }
 
     @Override
-    public List<JourneyDto> trainsFromTo(String stationFrom, String stationTo,
-                                         LocalDateTime from) {
+    public List<JourneyDto> trainsFromTo(final String stationFrom,
+                                         final String stationTo,
+                                         final LocalDateTime from) {
         Station origin = scheduleDao.getStationByName(stationFrom);
         Station destination = scheduleDao.getStationByName(stationTo);
         List<Journey> journeys = scheduleDao.

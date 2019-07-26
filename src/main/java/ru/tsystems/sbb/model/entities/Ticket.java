@@ -48,11 +48,11 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "station_from_id")
-    private Station from;
+    private ScheduledStop from;
 
     @ManyToOne
     @JoinColumn(name = "station_to_id")
-    private Station to;
+    private ScheduledStop to;
 
     @Column
     private float price;

@@ -26,7 +26,7 @@ public class RouteDataServiceImpl implements RouteDataService {
     private EntityToDtoMapper mapper;
 
     @Override
-    public List<StationDto> getAllLineStations(int lineId) {
+    public List<StationDto> getAllLineStations(final int lineId) {
         Line line = routeDao.getLineById(lineId);
         List<Station> stations = routeDao.allLineStations(line);
         return stations.stream()
@@ -35,7 +35,7 @@ public class RouteDataServiceImpl implements RouteDataService {
     }
 
     @Override
-    public List<StationDto> getAllRouteStations(int routeId) {
+    public List<StationDto> getAllRouteStations(final int routeId) {
         Route route = routeDao.getRouteById(routeId);
         List<Station> stations = routeDao.allRouteStations(route);
         return stations.stream()
@@ -44,7 +44,7 @@ public class RouteDataServiceImpl implements RouteDataService {
     }
 
     @Override
-    public List<RouteDto> getAllRoutes(int lineId) {
+    public List<RouteDto> getAllRoutes(final int lineId) {
         Line line = routeDao.getLineById(lineId);
         List<Route> routes = routeDao.allLineRoutes(line);
         return routes.stream()

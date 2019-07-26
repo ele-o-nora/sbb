@@ -1,22 +1,21 @@
 package ru.tsystems.sbb.model.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,27 +24,17 @@ import java.time.LocalDateTime;
 @Table
 public class ScheduledStop {
 
-    @Embeddable
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    public static class ScheduleKey implements Serializable {
-        static final long serialVersionUID = 1L;
-        private int journeyId;
-        private int stationId;
-    }
-
-    @EmbeddedId
-    private ScheduleKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private int id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "journey_id")
-    @MapsId("journeyId")
     private Journey journey;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "station_id")
-    @MapsId("stationId")
     private Station station;
 
     @Column
@@ -53,5 +42,11 @@ public class ScheduledStop {
 
     @Column
     private LocalDateTime departure;
+
+    @OneToMany(mappedBy = "from")
+    private List<Ticket> ticketsFrom;
+
+    @OneToMany(mappedBy = "to")
+    private List<Ticket> ticketsTo;
 
 }
