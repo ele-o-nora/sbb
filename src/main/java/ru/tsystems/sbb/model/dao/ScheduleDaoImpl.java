@@ -16,7 +16,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Autowired
     private SessionFactory sessionFactory;
-    private static final int SEARCH_PERIOD = 6;
+    private static final int SEARCH_PERIOD = 12;
 
     @Override
     public List<ScheduledStop> stationSchedule(final Station station,

@@ -47,7 +47,9 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
 
     @Override
     public PassengerDto convert(final Passenger passenger) {
-        return mapper.map(passenger, PassengerDto.class);
+        PassengerDto passengerDto = mapper.map(passenger, PassengerDto.class);
+        passengerDto.setDateOfBirth(passenger.getDateOfBirth());
+        return passengerDto;
     }
 
     @Override
@@ -67,6 +69,8 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
         scheduledStopDto.setDirection(scheduledStop
                 .getJourney().getDestination().getName());
         scheduledStopDto.setJourneyId(scheduledStop.getJourney().getId());
+        scheduledStopDto.setArrival(scheduledStop.getArrival());
+        scheduledStopDto.setDeparture(scheduledStop.getDeparture());
         return scheduledStopDto;
     }
 

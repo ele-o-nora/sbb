@@ -13,9 +13,10 @@
 <ul>
     <c:forEach var="train" items="${trains}">
         <li>
-            Route: ${train.route} Direction: ${train.direction}
-            <c:if test="${!empty train.arrival}">Arrives: ${train.arrival}</c:if>
-            <c:if test="${!empty train.departure}">Departs: ${train.departure}</c:if>
+            Route: ${train.route};
+            Direction: ${train.direction};
+            Arrives: ${train.arrival};
+            Departs: ${train.departure}
         </li>
     </c:forEach>
 </ul>
