@@ -16,7 +16,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Autowired
     private SessionFactory sessionFactory;
-    private static final int SEARCH_PERIOD = 12;
+    private static final int SEARCH_PERIOD = 4;
 
     @Override
     public List<ScheduledStop> stationSchedule(final Station station,
@@ -39,7 +39,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                                       final LocalDateTime from) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select j from Journey j "
-                + "join j.stops st1, j.stops st2 "
+                + "join j.stops st1 join j.stops st2 "
                 + "where st1.station = :origin and st2.station = :dest "
                 + "and st1.departure >= :from and st1.departure < :to "
                 + "and st1.departure < st2.arrival "
@@ -55,7 +55,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
     public List<Journey> trainsFromToByArrival(Station origin, Station destination, LocalDateTime by) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select j from Journey j "
-                + "join j.stops st1, j.stops st2 "
+                + "join j.stops st1 join j.stops st2 "
                 + "where st1.station = :origin and st2.station = :dest "
                 + "and st2.arrival <= :by and st2.arrival > :from "
                 + "and st1.departure < st2.arrival "

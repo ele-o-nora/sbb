@@ -13,13 +13,13 @@
 <c:forEach var="train" items="${trains}">
     <li>
         Route: ${train.route} Direction: ${train.destination}
-        <c:forEach var="stop" items="${trains.stops}">
-            <c:if test="${stop.station.name = origin}">
+        <c:forEach var="stop" items="${train.stops}">
+            <c:if test="${stop.station eq origin}">
                 Departs: ${stop.departure}
             </c:if>
         </c:forEach>
-        <c:forEach var="stop" items="${trains.stops}">
-            <c:if test="${stop.station.name = destination}">
+        <c:forEach var="stop" items="${train.stops}">
+            <c:if test="${stop.station eq destination}">
                 Arrives: ${stop.arrival}
             </c:if>
         </c:forEach>

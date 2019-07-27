@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class LineDto {
     private int id;
-    private String line;
+    private String name;
     private List<StationDto> stations;
 }

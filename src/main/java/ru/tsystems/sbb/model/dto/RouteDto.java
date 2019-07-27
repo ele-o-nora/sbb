@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,5 +13,5 @@ public class RouteDto {
     private int id;
     private String number;
     private String line;
-    private Set<StationDto> stations;
+    private List<StationDto> stations;
 }

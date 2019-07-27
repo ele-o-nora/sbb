@@ -21,6 +21,9 @@ import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.Train;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class EntityToDtoMapperImpl implements EntityToDtoMapper {
 
@@ -32,6 +35,9 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
         JourneyDto journeyDto = mapper.map(journey, JourneyDto.class);
         journeyDto.setRoute(journey.getRoute().getNumber());
         journeyDto.setDestination(journey.getDestination().getName());
+        List<ScheduledStopDto> stopsDto = journey.getStops().stream()
+                .map(this::convert).collect(Collectors.toList());
+        journeyDto.setStops(stopsDto);
         return journeyDto;
     }
 
@@ -56,6 +62,9 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     public RouteDto convert(final Route route) {
         RouteDto routeDto = mapper.map(route, RouteDto.class);
         routeDto.setLine(route.getLine().getName());
+        List<StationDto> stationsDto = route.getStations().stream()
+                .map(this::convert).collect(Collectors.toList());
+        routeDto.setStations(stationsDto);
         return routeDto;
     }
 
@@ -83,6 +92,8 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     public TicketDto convert(final Ticket ticket) {
         TicketDto ticketDto = mapper.map(ticket, TicketDto.class);
         ticketDto.setRoute(ticket.getJourney().getRoute().getNumber());
+        ticketDto.setStationFrom(convert(ticket.getFrom()));
+        ticketDto.setStationTo(convert(ticket.getTo()));
         return ticketDto;
     }
 
