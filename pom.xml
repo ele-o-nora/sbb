@@ -13,6 +13,7 @@
         <spring.version>5.1.8.RELEASE</spring.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <slf4j.version>1.7.26</slf4j.version>
     </properties>
 
     <dependencies>
@@ -81,11 +82,52 @@
             <version>2.3.5</version>
         </dependency>
 
-        <!-- JSON -->
+        <!-- Bootstrap -->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.9.1</version>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+        <!-- JQuery -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+
+        <!-- MomentJS -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>momentjs</artifactId>
+            <version>2.24.0</version>
+        </dependency>
+
+        <!-- Tempus Dominus Bootstrap 4 -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>tempusdominus-bootstrap-4</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+
+        <!-- SLF4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- Font Awesome-->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>5.9.0</version>
         </dependency>
 
     </dependencies>

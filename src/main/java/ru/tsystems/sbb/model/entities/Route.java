@@ -38,7 +38,7 @@ public class Route {
     @JoinColumn(name = "line_id")
     private Line line;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "RouteStation",
             joinColumns = @JoinColumn(name = "route_id"),
             inverseJoinColumns = @JoinColumn(name = "station_id"))

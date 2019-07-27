@@ -19,4 +19,18 @@ public class ScheduleController {
         return new ModelAndView("schedule",
                 viewService.getStationSchedule(stationName));
     }
+
+    @PostMapping("/findTrains")
+    public ModelAndView findTrainsFromTo(@RequestParam(value = "stationFrom")
+                                             final String stationFrom,
+                                         @RequestParam(value = "stationTo")
+                                             final String stationTo,
+                                         @RequestParam(value = "searchType")
+                                             final String searchType,
+                                         @RequestParam(value = "dateTime")
+                                             final String dateTime) {
+        return new ModelAndView("trains",
+                viewService.getTrainsFromTo(stationFrom, stationTo,
+                        dateTime, searchType));
+    }
 }

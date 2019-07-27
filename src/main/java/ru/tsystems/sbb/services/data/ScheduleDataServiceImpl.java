@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
+import ru.tsystems.sbb.model.dto.StationDto;
 import ru.tsystems.sbb.model.entities.Journey;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
@@ -25,6 +26,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     @Autowired
     private EntityToDtoMapper mapper;
 
+    private static final String DEFAULT_SEARCH_TYPE = "departure";
+
     @Override
     public List<ScheduledStopDto> stationSchedule(final String stationName,
                                                   final LocalDateTime from) {
@@ -39,12 +42,26 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     @Override
     public List<JourneyDto> trainsFromTo(final String stationFrom,
                                          final String stationTo,
-                                         final LocalDateTime from) {
+                                         final LocalDateTime dateTime,
+                                         final String searchType) {
         Station origin = scheduleDao.getStationByName(stationFrom);
         Station destination = scheduleDao.getStationByName(stationTo);
-        List<Journey> journeys = scheduleDao.
-                trainsFromTo(origin, destination, from);
+        List<Journey> journeys;
+        if (searchType.equalsIgnoreCase(DEFAULT_SEARCH_TYPE)) {
+            journeys = scheduleDao.
+                    trainsFromToByDeparture(origin, destination, dateTime);
+        } else {
+            journeys = scheduleDao.
+                    trainsFromToByArrival(origin, destination, dateTime);
+        }
         return journeys.stream().map(journey -> mapper.convert(journey))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StationDto> allStations() {
+        return scheduleDao.getAllStations()
+                .stream().map(station -> mapper.convert(station))
                 .collect(Collectors.toList());
     }
 

@@ -9,7 +9,10 @@ import java.util.List;
 
 public interface ScheduleDao {
     List<ScheduledStop> stationSchedule(Station station, LocalDateTime from);
-    List<Journey> trainsFromTo(Station origin, Station destination,
+    List<Journey> trainsFromToByDeparture(Station origin, Station destination,
                                LocalDateTime from);
+    List<Journey> trainsFromToByArrival(Station origin, Station destination,
+                                          LocalDateTime by);
     Station getStationByName(String stationName);
+    List<Station> getAllStations();
 }

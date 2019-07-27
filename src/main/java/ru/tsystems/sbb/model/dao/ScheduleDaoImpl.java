@@ -34,7 +34,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
     }
 
     @Override
-    public List<Journey> trainsFromTo(final Station origin,
+    public List<Journey> trainsFromToByDeparture(final Station origin,
                                       final Station destination,
                                       final LocalDateTime from) {
         Session session = sessionFactory.getCurrentSession();
@@ -42,6 +42,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 + "join j.stops st1, j.stops st2 "
                 + "where st1.station = :origin and st2.station = :dest "
                 + "and st1.departure >= :from and st1.departure < :to "
+                + "and st1.departure < st2.arrival "
                 + "order by st1.departure asc", Journey.class)
                 .setParameter("origin", origin)
                 .setParameter("dest", destination)
@@ -51,10 +52,33 @@ public class ScheduleDaoImpl implements ScheduleDao {
     }
 
     @Override
+    public List<Journey> trainsFromToByArrival(Station origin, Station destination, LocalDateTime by) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select j from Journey j "
+                + "join j.stops st1, j.stops st2 "
+                + "where st1.station = :origin and st2.station = :dest "
+                + "and st2.arrival <= :by and st2.arrival > :from "
+                + "and st1.departure < st2.arrival "
+                + "order by st1.departure", Journey.class)
+                .setParameter("origin", origin)
+                .setParameter("dest", destination)
+                .setParameter("by", by)
+                .setParameter("from", by.minusHours(SEARCH_PERIOD))
+                .getResultList();
+    }
+
+    @Override
     public Station getStationByName(final String stationName) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from Station s "
                 + "where s.name = :name", Station.class)
                 .setParameter("name", stationName).getSingleResult();
+    }
+
+    @Override
+    public List<Station> getAllStations() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("from Station s order by s.name",
+                Station.class).getResultList();
     }
 }

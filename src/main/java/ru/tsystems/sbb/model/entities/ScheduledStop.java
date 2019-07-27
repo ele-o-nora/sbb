@@ -29,11 +29,11 @@ public class ScheduledStop {
     @Column
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "journey_id")
     private Journey journey;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "station_id")
     private Station station;
 
