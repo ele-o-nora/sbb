@@ -21,7 +21,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "scheduled_stop")
 public class ScheduledStop {
 
     @Id

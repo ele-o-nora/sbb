@@ -39,7 +39,7 @@ public class Route {
     private Line line;
 
     @ManyToMany
-    @JoinTable(name = "RouteStation",
+    @JoinTable(name = "route_station",
             joinColumns = @JoinColumn(name = "route_id"),
             inverseJoinColumns = @JoinColumn(name = "station_id"))
     private Set<Station> stations;

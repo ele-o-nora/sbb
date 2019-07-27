@@ -20,7 +20,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "line_station")
 public class LineStation {
 
     @Embeddable

@@ -37,7 +37,7 @@ public class Station {
     private int zone;
 
     @ManyToMany
-    @JoinTable(name = "RouteStation",
+    @JoinTable(name = "route_station",
             joinColumns = @JoinColumn(name = "station_id"),
             inverseJoinColumns = @JoinColumn(name = "route_id"))
     private Set<Route> routes;
