@@ -47,11 +47,11 @@ public class Ticket {
     private Passenger passenger;
 
     @ManyToOne
-    @JoinColumn(name = "station_from_id")
+    @JoinColumn(name = "stop_from_id")
     private ScheduledStop from;
 
     @ManyToOne
-    @JoinColumn(name = "station_to_id")
+    @JoinColumn(name = "stop_to_id")
     private ScheduledStop to;
 
     @Column
