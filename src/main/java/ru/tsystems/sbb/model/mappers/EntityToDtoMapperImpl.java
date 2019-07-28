@@ -16,6 +16,7 @@ import ru.tsystems.sbb.model.entities.Line;
 import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Passenger;
 import ru.tsystems.sbb.model.entities.Route;
+import ru.tsystems.sbb.model.entities.RouteStation;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Ticket;
@@ -62,9 +63,10 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     public RouteDto convert(final Route route) {
         RouteDto routeDto = mapper.map(route, RouteDto.class);
         routeDto.setLine(route.getLine().getName());
-        List<StationDto> stationsDto = route.getStations().stream()
-                .map(this::convert).collect(Collectors.toList());
-        routeDto.setStations(stationsDto);
+        for (RouteStation rs: route.getStations()) {
+            StationDto station = convert(rs.getStation());
+            routeDto.getStations().add(station);
+        }
         return routeDto;
     }
 
