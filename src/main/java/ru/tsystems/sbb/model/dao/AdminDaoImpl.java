@@ -21,7 +21,7 @@ public class AdminDaoImpl implements AdminDao{
 
     @Override
     public void add(final Station station) {
-        sessionFactory.getCurrentSession().persist(station);
+        sessionFactory.getCurrentSession().save(station);
     }
 
     @Override

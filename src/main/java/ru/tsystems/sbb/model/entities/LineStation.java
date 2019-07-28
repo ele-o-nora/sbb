@@ -10,6 +10,9 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -23,29 +26,19 @@ import java.io.Serializable;
 @Table(name = "line_station")
 public class LineStation {
 
-    @Embeddable
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @EqualsAndHashCode
-    public static class LineStationKey implements Serializable {
-        static final long serialVersionUID = 1L;
-        private int lineId;
-        private int stationId;
-    }
-
-    @EmbeddedId
-    private LineStationKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "line_id")
-    @MapsId("lineId")
     private Line line;
 
     @ManyToOne
     @JoinColumn(name = "station_id")
-    @MapsId("stationId")
     private Station station;
 
-    @Column
+    @Column(name = "order_from_centre")
     private int order;
 }

@@ -77,8 +77,8 @@ public class RouteDaoImpl implements RouteDao {
     @Override
     public List<LineStation> getLineStations(final Line line, final int from) {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from LineStation ls " +
-                "where ls.line = :line "
+        return session.createQuery("from LineStation ls "
+                + "where ls.line = :line "
                 + "and ls.order >= :order", LineStation.class)
                 .setParameter("line", line)
                 .setParameter("order", from)

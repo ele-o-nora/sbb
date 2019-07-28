@@ -1,20 +1,17 @@
 package ru.tsystems.sbb.model.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 @Getter
 @Setter
@@ -23,27 +20,17 @@ import java.io.Serializable;
 @Table
 public class Ticket {
 
-    @Embeddable
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    public static class TicketKey implements Serializable {
-        static final long serialVersionUID = 1L;
-        private int journeyId;
-        private int passengerId;
-    }
-
-    @EmbeddedId
-    private TicketKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "journey_id")
-    @MapsId("journeyId")
     private Journey journey;
 
     @ManyToOne
     @JoinColumn(name = "passenger_id")
-    @MapsId("passengerId")
     private Passenger passenger;
 
     @ManyToOne
