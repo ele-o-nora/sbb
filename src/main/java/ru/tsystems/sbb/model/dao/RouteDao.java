@@ -13,4 +13,5 @@ public interface RouteDao {
     List<Route> allLineRoutes(Line line);
     List<Station> allRouteStations(Route route);
     Route getRouteById(int routeId);
+    List<Station> getAllStations();
 }

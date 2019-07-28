@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
-import ru.tsystems.sbb.model.dto.StationDto;
 import ru.tsystems.sbb.model.entities.Journey;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
@@ -55,13 +54,6 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
                     trainsFromToByArrival(origin, destination, dateTime);
         }
         return journeys.stream().map(journey -> mapper.convert(journey))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<StationDto> allStations() {
-        return scheduleDao.getAllStations()
-                .stream().map(station -> mapper.convert(station))
                 .collect(Collectors.toList());
     }
 

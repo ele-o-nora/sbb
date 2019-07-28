@@ -2,7 +2,6 @@ package ru.tsystems.sbb.services.data;
 
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
-import ru.tsystems.sbb.model.dto.StationDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,5 +11,4 @@ public interface ScheduleDataService {
                                            LocalDateTime from);
     List<JourneyDto> trainsFromTo(String stationFrom, String stationTo,
                                   LocalDateTime from, String searchType);
-    List<StationDto> allStations();
 }

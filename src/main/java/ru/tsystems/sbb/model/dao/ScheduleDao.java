@@ -14,5 +14,4 @@ public interface ScheduleDao {
     List<Journey> trainsFromToByArrival(Station origin, Station destination,
                                           LocalDateTime by);
     Station getStationByName(String stationName);
-    List<Station> getAllStations();
 }

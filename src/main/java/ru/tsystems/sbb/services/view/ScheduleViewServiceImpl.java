@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.sbb.services.data.RouteDataService;
 import ru.tsystems.sbb.services.data.ScheduleDataService;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,10 @@ import java.util.Map;
 public class ScheduleViewServiceImpl implements ScheduleViewService {
 
     @Autowired
-    private ScheduleDataService dataService;
+    private ScheduleDataService scheduleDataService;
+
+    @Autowired
+    private RouteDataService routeDataService;
 
     @Override
     public Map<String, Object> getTrainsFromTo(final String origin,
@@ -27,8 +31,8 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
         DateTimeFormatter formatter = DateTimeFormatter
                 .ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime moment = LocalDateTime.parse(dateTime, formatter);
-        List<JourneyDto> trains = dataService.trainsFromTo(origin, destination,
-                moment, searchType);
+        List<JourneyDto> trains = scheduleDataService
+                .trainsFromTo(origin, destination, moment, searchType);
         Map<String, Object> objects = new HashMap<>();
         objects.put("origin", origin);
         objects.put("destination", destination);
@@ -38,7 +42,7 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
 
     @Override
     public Map<String, Object> getStationsList() {
-        List<StationDto> stations = dataService.allStations();
+        List<StationDto> stations = routeDataService.allStations();
         Map<String, Object> objects = new HashMap<>();
         objects.put("stations", stations);
         return objects;
@@ -52,7 +56,7 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     @Override
     public Map<String, Object> getStationSchedule(final String stationName,
                                                   final LocalDateTime from) {
-        List<ScheduledStopDto> trains = dataService
+        List<ScheduledStopDto> trains = scheduleDataService
                 .stationSchedule(stationName, from);
         Map<String, Object> objects = new HashMap<>();
         objects.put("trains", trains);

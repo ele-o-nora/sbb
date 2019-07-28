@@ -74,11 +74,4 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 + "where s.name = :name", Station.class)
                 .setParameter("name", stationName).getSingleResult();
     }
-
-    @Override
-    public List<Station> getAllStations() {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from Station s order by s.name",
-                Station.class).getResultList();
-    }
 }
