@@ -16,8 +16,8 @@ public class PassengerDto {
     private String lastName;
     private String dateOfBirth;
 
-    public void setDateOfBirth(final LocalDate dateOfBirth) {
+    public void setDateOfBirth(final LocalDate birthDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-        this.dateOfBirth = formatter.format(dateOfBirth);
+        dateOfBirth = formatter.format(birthDate);
     }
 }

@@ -10,21 +10,57 @@
 </head>
 <body>
 <ul>
-<c:forEach var="train" items="${trains}">
-    <li>
-        Route: ${train.route} Direction: ${train.destination}
-        <c:forEach var="stop" items="${train.stops}">
-            <c:if test="${stop.station eq origin}">
-                Departs: ${stop.departure}
-            </c:if>
+    <c:if test="${!empty trains}">
+        <c:forEach var="train" items="${trains}">
+            <li>
+                Route: ${train.route} Direction: ${train.destination}
+                <c:forEach var="stop" items="${train.stops}">
+                    <c:if test="${stop.station eq origin}">
+                        Departs from ${origin}: ${stop.departure}
+                    </c:if>
+                </c:forEach>
+                <c:forEach var="stop" items="${train.stops}">
+                    <c:if test="${stop.station eq destination}">
+                        Arrives at ${destination}: ${stop.arrival}
+                    </c:if>
+                </c:forEach>
+            </li>
         </c:forEach>
-        <c:forEach var="stop" items="${train.stops}">
-            <c:if test="${stop.station eq destination}">
-                Arrives: ${stop.arrival}
-            </c:if>
+    </c:if>
+    <c:if test="${!empty connections}">
+        <c:forEach var = "connection" items="${connections}">
+            <ul>
+                <li>
+                    Route: ${connection.firstTrain.route}
+                    Direction ${connection.firstTrain.destination}
+                    <c:forEach var="stop" items="${connection.firstTrain.stops}">
+                        <c:if test="${stop.station eq origin}">
+                            Departs from ${origin}: ${stop.departure}
+                        </c:if>
+                    </c:forEach>
+                    <c:forEach var="stop" items="${connection.firstTrain.stops}">
+                        <c:if test="${stop.station eq connection.transferStation}">
+                            Arrives at ${connection.transferStation}: ${stop.arrival}
+                        </c:if>
+                    </c:forEach>
+                </li>
+                <li>
+                    Route: ${connection.secondTrain.route}
+                    Direction ${connection.secondTrain.destination}
+                    <c:forEach var="stop" items="${connection.secondTrain.stops}">
+                        <c:if test="${stop.station eq connection.transferStation}">
+                            Departs from ${connection.transferStation}: ${stop.departure}
+                        </c:if>
+                    </c:forEach>
+                    <c:forEach var="stop" items="${connection.secondTrain.stops}">
+                        <c:if test="${stop.station eq destination}">
+                            Arrives at ${destination}: ${stop.arrival}
+                        </c:if>
+                    </c:forEach>
+                </li>
+            </ul>
         </c:forEach>
-    </li>
-</c:forEach>
+    </c:if>
 </ul>
 </body>
 </html>

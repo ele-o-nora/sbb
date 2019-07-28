@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.sbb.model.dto.TransferTrainsDto;
 import ru.tsystems.sbb.services.data.RouteDataService;
 import ru.tsystems.sbb.services.data.ScheduleDataService;
 
@@ -32,11 +33,19 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
                 .ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime moment = LocalDateTime.parse(dateTime, formatter);
         List<JourneyDto> trains = scheduleDataService
-                .trainsFromTo(origin, destination, moment, searchType);
+                .directTrainsFromTo(origin, destination, moment, searchType);
         Map<String, Object> objects = new HashMap<>();
+        if (trains != null) {
+            objects.put("trains", trains);
+        } else {
+            List<TransferTrainsDto> connections = scheduleDataService
+                    .trainsFromToWithTransfer(origin, destination,
+                            moment, searchType);
+            objects.put("connections", connections);
+        }
         objects.put("origin", origin);
         objects.put("destination", destination);
-        objects.put("trains", trains);
+
         return objects;
     }
 
