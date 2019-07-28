@@ -32,7 +32,7 @@ public class Line {
     @OneToMany(mappedBy = "line")
     private List<Route> routes;
 
-    @OneToMany(mappedBy = "line", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "line")
     private List<LineStation> stations;
 
 }

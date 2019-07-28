@@ -39,7 +39,7 @@ public class User {
     private Passenger passenger;
 
     @ManyToMany
-    @JoinTable(name = "UserRole",
+    @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;

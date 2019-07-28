@@ -36,19 +36,16 @@ public class Station {
     @Column
     private int zone;
 
-    @ManyToMany
-    @JoinTable(name = "route_station",
-            joinColumns = @JoinColumn(name = "station_id"),
-            inverseJoinColumns = @JoinColumn(name = "route_id"))
-    private Set<Route> routes;
-
     @OneToMany(mappedBy = "station")
     private List<LineStation> lines;
 
-    @OneToMany(mappedBy = "station", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "station")
     private List<ScheduledStop> trains;
 
     @OneToMany(mappedBy = "destination")
     private List<Journey> routesTo;
+
+    @OneToMany(mappedBy = "station")
+    private List<RouteStation> routes;
 
 }

@@ -38,12 +38,9 @@ public class Route {
     @JoinColumn(name = "line_id")
     private Line line;
 
-    @ManyToMany
-    @JoinTable(name = "route_station",
-            joinColumns = @JoinColumn(name = "route_id"),
-            inverseJoinColumns = @JoinColumn(name = "station_id"))
-    private Set<Station> stations;
-
     @OneToMany(mappedBy = "route")
     private List<Journey> journeys;
+
+    @OneToMany(mappedBy = "route")
+    private List<RouteStation> stations;
 }
