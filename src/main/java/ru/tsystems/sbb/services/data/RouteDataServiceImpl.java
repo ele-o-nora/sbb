@@ -61,6 +61,11 @@ public class RouteDataServiceImpl implements RouteDataService {
     }
 
     @Override
+    public LineDto getLine(int lineId) {
+        return mapper.convert(routeDao.getLineById(lineId));
+    }
+
+    @Override
     public List<StationDto> allStations() {
         return routeDao.getAllStations()
                 .stream().map(station -> mapper.convert(station))

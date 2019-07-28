@@ -44,12 +44,7 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
 
     @Override
     public LineDto convert(final Line line) {
-        LineDto lineDto = mapper.map(line, LineDto.class);
-        for (LineStation ls : line.getStations()) {
-            StationDto station = convert(ls.getStation());
-            lineDto.getStations().add(station);
-        }
-        return lineDto;
+        return mapper.map(line, LineDto.class);
     }
 
     @Override

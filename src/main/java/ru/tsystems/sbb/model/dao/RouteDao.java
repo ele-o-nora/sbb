@@ -1,6 +1,7 @@
 package ru.tsystems.sbb.model.dao;
 
 import ru.tsystems.sbb.model.entities.Line;
+import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.Station;
 
@@ -14,4 +15,5 @@ public interface RouteDao {
     List<Station> allRouteStations(Route route);
     Route getRouteById(int routeId);
     List<Station> getAllStations();
+    List<LineStation> getLineStations(Line line, int from);
 }

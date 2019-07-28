@@ -9,6 +9,7 @@
     <title>Schedule</title>
 </head>
 <body>
+<%@include file="header.jsp" %>
 <h2>Schedule for ${stationName}</h2>
 <ul>
     <c:forEach var="train" items="${trains}">

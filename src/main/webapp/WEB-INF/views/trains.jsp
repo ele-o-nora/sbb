@@ -9,6 +9,7 @@
     <title>Connections</title>
 </head>
 <body>
+<%@include file="header.jsp" %>
 <h2>Trains from ${origin} to ${destination}</h2>
 <ul>
     <c:if test="${!empty trains}">

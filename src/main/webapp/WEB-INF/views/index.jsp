@@ -81,7 +81,6 @@
         <option>${station.name}</option>
     </c:forEach>
 </datalist>
-<script type="text/javascript" src="${pageContext.request.contextPath}/webjars/momentjs/2.24.0/min/moment.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/webjars/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
 </body>

@@ -12,4 +12,5 @@ public interface RouteDataService {
     List<RouteDto> getAllRoutes(int lineId);
     List<LineDto> getAllLines();
     List<StationDto> allStations();
+    LineDto getLine(int lineId);
 }
