@@ -97,19 +97,23 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         for (Station transfer : transferStations) {
             List<Journey> trainsToTransfer = scheduleDao
                     .trainsFromToByDeparture(origin, transfer, from);
-            for (Journey firstTrain: trainsToTransfer) {
-                LocalDateTime arrivalAtTransfer = firstTrain.getStops()
-                        .stream().filter(scheduledStop -> scheduledStop
-                                .getStation().equals(transfer))
-                        .findFirst().get().getArrival();
-                Journey secondTrain = scheduleDao
-                        .firstTrainAfter(transfer, destination,
-                                arrivalAtTransfer.plusMinutes(TRANSFER_TIME));
-                TransferTrainsDto trains = new TransferTrainsDto();
-                trains.setFirstTrain(mapper.convert(firstTrain));
-                trains.setSecondTrain(mapper.convert(secondTrain));
-                trains.setTransferStation(transfer.getName());
-                connections.add(trains);
+            if (!trainsToTransfer.isEmpty()) {
+                for (Journey firstTrain : trainsToTransfer) {
+                    LocalDateTime arrivalAtTransfer = firstTrain.getStops()
+                            .stream().filter(scheduledStop -> scheduledStop
+                                    .getStation().equals(transfer))
+                            .findFirst().get().getArrival();
+                    Journey secondTrain = scheduleDao
+                            .firstTrainAfter(transfer, destination,
+                                    arrivalAtTransfer.plusMinutes(TRANSFER_TIME));
+                    if (secondTrain != null) {
+                        TransferTrainsDto trains = new TransferTrainsDto();
+                        trains.setFirstTrain(mapper.convert(firstTrain));
+                        trains.setSecondTrain(mapper.convert(secondTrain));
+                        trains.setTransferStation(transfer.getName());
+                        connections.add(trains);
+                    }
+                }
             }
         }
         return connections;
@@ -123,20 +127,24 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         for (Station transfer : transferStations) {
             List<Journey> trainsFromTransfer = scheduleDao
                     .trainsFromToByArrival(transfer, destination, by);
-            for (Journey secondTrain : trainsFromTransfer) {
-                LocalDateTime departFromTransfer = secondTrain.getStops()
-                        .stream().filter(scheduledStop -> scheduledStop
-                                .getStation().equals(transfer))
-                        .findFirst().get().getDeparture();
-                Journey firstTrain = scheduleDao
-                        .lastTrainBefore(origin, transfer,
-                                departFromTransfer
-                                        .minusMinutes(TRANSFER_TIME));
-                TransferTrainsDto trains = new TransferTrainsDto();
-                trains.setFirstTrain(mapper.convert(firstTrain));
-                trains.setSecondTrain(mapper.convert(secondTrain));
-                trains.setTransferStation(transfer.getName());
-                connections.add(trains);
+            if (!trainsFromTransfer.isEmpty()) {
+                for (Journey secondTrain : trainsFromTransfer) {
+                    LocalDateTime departFromTransfer = secondTrain.getStops()
+                            .stream().filter(scheduledStop -> scheduledStop
+                                    .getStation().equals(transfer))
+                            .findFirst().get().getDeparture();
+                    Journey firstTrain = scheduleDao
+                            .lastTrainBefore(origin, transfer,
+                                    departFromTransfer
+                                            .minusMinutes(TRANSFER_TIME));
+                    if (firstTrain != null) {
+                        TransferTrainsDto trains = new TransferTrainsDto();
+                        trains.setFirstTrain(mapper.convert(firstTrain));
+                        trains.setSecondTrain(mapper.convert(secondTrain));
+                        trains.setTransferStation(transfer.getName());
+                        connections.add(trains);
+                    }
+                }
             }
         }
         return connections;

@@ -1,6 +1,5 @@
 package ru.tsystems.sbb.model.entities;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +16,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode
 @Entity
 @Table
 public class Station {
