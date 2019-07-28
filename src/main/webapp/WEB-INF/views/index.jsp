@@ -8,15 +8,15 @@
     <meta charset="UTF-8">
     <title>Westerosi Railways</title>
     <link rel="stylesheet"
-          href="webjars/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" />
-    <link rel="stylesheet" href="webjars/font-awesome/5.9.0/css/fontawesome.min.css">
-    <link rel="stylesheet" href="webjars/font-awesome/5.9.0/css/regular.min.css">
-    <link rel="stylesheet" href="webjars/font-awesome/5.9.0/css/solid.min.css">
+          href="${pageContext.request.contextPath}/webjars/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/5.9.0/css/fontawesome.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/5.9.0/css/regular.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/font-awesome/5.9.0/css/solid.min.css">
 </head>
 <body>
 <%@include file="header.jsp" %>
 <h2>Search for connection:</h2>
-<form action="/findTrains" method="post">
+<form action="${pageContext.request.contextPath}/findTrains" method="post">
     <div class="container">
         <div class="form-row m-1">
             <div class="col-sm-3 offset-3">
@@ -72,7 +72,7 @@
     </div>
 </form>
 <h2>Or look up current schedule:</h2>
-<form action="/curSchedule" method="post">
+<form action="${pageContext.request.contextPath}/curSchedule" method="post">
     <input list="stations" name="stationName" placeholder="Station" autocomplete="off"/>
     <input type="submit" value="Schedule"/>
 </form>
@@ -81,8 +81,8 @@
         <option>${station.name}</option>
     </c:forEach>
 </datalist>
-<script type="text/javascript" src="webjars/momentjs/2.24.0/min/moment.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/webjars/momentjs/2.24.0/min/moment.min.js"></script>
 <script type="text/javascript"
-        src="webjars/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
+        src="${pageContext.request.contextPath}/webjars/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
 </body>
 </html>

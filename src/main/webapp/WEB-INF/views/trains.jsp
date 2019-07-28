@@ -9,6 +9,7 @@
     <title>Connections</title>
 </head>
 <body>
+<h2>Trains from ${origin} to ${destination}</h2>
 <ul>
     <c:if test="${!empty trains}">
         <c:forEach var="train" items="${trains}">
