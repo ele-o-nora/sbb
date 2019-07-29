@@ -2,6 +2,7 @@ package ru.tsystems.sbb.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +17,12 @@ public class AdminController {
     @Autowired
     private AdminViewService viewService;
 
-    @RequestMapping(value = {"", "/"})
+    @GetMapping(value = {"", "/"})
     public ModelAndView adminPanel() {
         return new ModelAndView("admin", viewService.getLinesList());
     }
 
-    @RequestMapping("/addStation/{id}")
+    @GetMapping("/addStation/{id}")
     public ModelAndView addStation(@PathVariable final int id) {
         return new ModelAndView("addStation",
                 viewService.getCurrentLineStations(id));
