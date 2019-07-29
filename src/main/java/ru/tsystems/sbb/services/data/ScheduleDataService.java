@@ -12,8 +12,8 @@ public interface ScheduleDataService {
                                            LocalDateTime from);
     List<JourneyDto> directTrainsFromTo(String stationFrom, String stationTo,
                                   LocalDateTime from, String searchType);
-    List<TransferTrainsDto> trainsFromToWithTransfer(String stationFrom,
-                                                     String stationTo,
-                                                     LocalDateTime from,
-                                                     String searchType);
+    List<TransferTrainsDto> trainsWithTransfer(String stationFrom,
+                                               String stationTo,
+                                               LocalDateTime from,
+                                               String searchType);
 }

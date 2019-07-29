@@ -21,7 +21,8 @@ public class AdminDataServiceImpl implements AdminDataService {
     private RouteDao routeDao;
 
     @Override
-    public void addNewStation(String stationName, int lineId, int zone, int order) {
+    public void addNewStation(final String stationName, final int lineId,
+                              final int zone, final int order) {
         recalculateOrders(lineId, order);
         Station station = new Station();
         station.setName(stationName);
@@ -34,7 +35,7 @@ public class AdminDataServiceImpl implements AdminDataService {
         adminDao.add(lineStation);
     }
 
-    private void recalculateOrders(int lineId, int firstOrder) {
+    private void recalculateOrders(final int lineId, final int firstOrder) {
         List<LineStation> lineStations = routeDao
                 .getLineStations(routeDao.getLineById(lineId), firstOrder);
         for (LineStation ls : lineStations) {

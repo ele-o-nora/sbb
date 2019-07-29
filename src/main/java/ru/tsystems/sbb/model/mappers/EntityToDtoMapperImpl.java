@@ -13,7 +13,6 @@ import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TrainDto;
 import ru.tsystems.sbb.model.entities.Journey;
 import ru.tsystems.sbb.model.entities.Line;
-import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Passenger;
 import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.RouteStation;

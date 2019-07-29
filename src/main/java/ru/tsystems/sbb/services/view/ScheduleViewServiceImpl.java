@@ -39,7 +39,7 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
             objects.put("trains", trains);
         } else {
             List<TransferTrainsDto> connections = scheduleDataService
-                    .trainsFromToWithTransfer(origin, destination,
+                    .trainsWithTransfer(origin, destination,
                             moment, searchType);
             objects.put("connections", connections);
         }

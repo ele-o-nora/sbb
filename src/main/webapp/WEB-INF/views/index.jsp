@@ -53,7 +53,7 @@
                     });
                 });
             </script>
-            <div class="col-sm-2">
+            <div class="col-sm-2 my-auto">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary btn-sm active">
                         <input type="radio" name="searchType" value="departure"

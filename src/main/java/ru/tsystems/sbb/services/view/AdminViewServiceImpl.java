@@ -29,13 +29,16 @@ public class AdminViewServiceImpl implements AdminViewService {
     }
 
     @Override
-    public Map<String, Object> addNewStation(String stationName, int lineId, int zone, int order) {
+    public Map<String, Object> addNewStation(final String stationName,
+                                             final int lineId,
+                                             final int zone,
+                                             final int order) {
         adminDataService.addNewStation(stationName, lineId, zone, order);
         return getCurrentLineStations(lineId);
     }
 
     @Override
-    public Map<String, Object> getCurrentLineStations(int lineId) {
+    public Map<String, Object> getCurrentLineStations(final int lineId) {
         List<StationDto> stations = routeDataService
                 .getAllLineStations(lineId);
         LineDto line = routeDataService.getLine(lineId);

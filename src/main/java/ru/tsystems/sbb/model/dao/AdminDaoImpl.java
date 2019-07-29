@@ -8,7 +8,7 @@ import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Station;
 
 @Component
-public class AdminDaoImpl implements AdminDao{
+public class AdminDaoImpl implements AdminDao {
 
     @Autowired
     private SessionFactory sessionFactory;

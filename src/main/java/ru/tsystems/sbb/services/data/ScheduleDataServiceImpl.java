@@ -66,17 +66,17 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     }
 
     @Override
-    public List<TransferTrainsDto> trainsFromToWithTransfer(final String stationFrom,
-                                                       final String stationTo,
-                                                       final LocalDateTime from,
-                                                       final String searchType) {
+    public List<TransferTrainsDto> trainsWithTransfer(final String stationFrom,
+                                                      final String stationTo,
+                                                      final LocalDateTime from,
+                                                      final String searchType) {
         Station origin = scheduleDao.getStationByName(stationFrom);
         Station destination = scheduleDao.getStationByName(stationTo);
         List<TransferTrainsDto> connections;
         if (searchType.equalsIgnoreCase(DEFAULT_SEARCH_TYPE)) {
             connections = transferTrainsByDepart(origin, destination, from);
         } else {
-            connections = transferTrainsByArrival(origin, destination, from);
+            connections = transferTrainsByArrive(origin, destination, from);
         }
         return connections;
     }
@@ -86,7 +86,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
                 .map(LineStation::getLine).collect(Collectors.toList());
         List<Line> secondStationLines = s2.getLines().stream()
                 .map(LineStation::getLine).collect(Collectors.toList());
-        return firstStationLines.stream().anyMatch(secondStationLines::contains);
+        return firstStationLines.stream()
+                .anyMatch(secondStationLines::contains);
     }
 
     private List<TransferTrainsDto> transferTrainsByDepart(final Station origin,
@@ -102,10 +103,12 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
                     LocalDateTime arrivalAtTransfer = firstTrain.getStops()
                             .stream().filter(scheduledStop -> scheduledStop
                                     .getStation().equals(transfer))
-                            .findFirst().get().getArrival();
+                            .findFirst().orElse(new ScheduledStop())
+                            .getArrival();
                     Journey secondTrain = scheduleDao
                             .firstTrainAfter(transfer, destination,
-                                    arrivalAtTransfer.plusMinutes(TRANSFER_TIME));
+                                    arrivalAtTransfer
+                                            .plusMinutes(TRANSFER_TIME));
                     if (secondTrain != null) {
                         TransferTrainsDto trains = new TransferTrainsDto();
                         trains.setFirstTrain(mapper.convert(firstTrain));
@@ -119,7 +122,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         return connections;
     }
 
-    private List<TransferTrainsDto> transferTrainsByArrival(final Station origin,
+    private List<TransferTrainsDto> transferTrainsByArrive(final Station origin,
                                                     final Station destination,
                                                     final LocalDateTime by) {
         List<TransferTrainsDto> connections = new ArrayList<>();
@@ -132,7 +135,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
                     LocalDateTime departFromTransfer = secondTrain.getStops()
                             .stream().filter(scheduledStop -> scheduledStop
                                     .getStation().equals(transfer))
-                            .findFirst().get().getDeparture();
+                            .findFirst().orElse(new ScheduledStop())
+                            .getDeparture();
                     Journey firstTrain = scheduleDao
                             .lastTrainBefore(origin, transfer,
                                     departFromTransfer

@@ -16,22 +16,26 @@ public class AdminController {
     @Autowired
     private AdminViewService viewService;
 
-    @RequestMapping(value={"", "/"})
+    @RequestMapping(value = {"", "/"})
     public ModelAndView adminPanel() {
         return new ModelAndView("admin", viewService.getLinesList());
     }
 
     @RequestMapping("/addStation/{id}")
-    public ModelAndView addStation(@PathVariable int id) {
+    public ModelAndView addStation(@PathVariable final int id) {
         return new ModelAndView("addStation",
                 viewService.getCurrentLineStations(id));
     }
 
     @PostMapping("/addNewStation")
-    public ModelAndView addStation(@RequestParam(value = "name") String newStation,
-                                    @RequestParam(value = "line") int lineId,
-                                    @RequestParam(value = "zone") int zone,
-                                    @RequestParam(value = "order") int order) {
+    public ModelAndView addStation(@RequestParam(value = "name")
+                                               final String newStation,
+                                   @RequestParam(value = "line")
+                                               final int lineId,
+                                   @RequestParam(value = "zone")
+                                               final int zone,
+                                   @RequestParam(value = "order")
+                                               final int order) {
         return new ModelAndView("addStation",
                 viewService.addNewStation(newStation, lineId, zone, order));
     }
