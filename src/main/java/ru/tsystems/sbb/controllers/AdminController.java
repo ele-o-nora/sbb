@@ -17,13 +17,8 @@ public class AdminController {
     private AdminViewService viewService;
 
     @RequestMapping("")
-    public String adminPanel() {
-        return "admin";
-    }
-
-    @RequestMapping("/addStation")
-    public ModelAndView chooseLineForNewStation() {
-        return new ModelAndView("addStation", viewService.getLinesList());
+    public ModelAndView adminPanel() {
+        return new ModelAndView("admin", viewService.getLinesList());
     }
 
     @RequestMapping("/addStation/{id}")
