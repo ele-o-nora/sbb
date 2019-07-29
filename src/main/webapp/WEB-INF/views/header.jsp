@@ -10,7 +10,7 @@
           href="${pageContext.request.contextPath}/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark navbar-expand-md bg-dark">
         <a href="${pageContext.request.contextPath}/"
            class="navbar-brand text-danger text-uppercase font-weight-bold">Westerosi Railways</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"

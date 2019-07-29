@@ -19,17 +19,17 @@
 <form action="${pageContext.request.contextPath}/findTrains" method="post">
     <div class="container">
         <div class="form-row m-1">
-            <div class="col-sm-3 offset-3">
+            <div class="col-sm-4 offset-2">
                 <input class="form-control" list="stations" autocomplete="off"
                        placeholder="From" name="stationFrom"/>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <input class="form-control" list="stations" autocomplete="off"
                        placeholder="To" name="stationTo"/>
             </div>
         </div>
         <div class="form-row m-1">
-            <div class='col-sm-4 offset-3'>
+            <div class='col-sm-4 offset-2'>
                 <input type="text" class="form-control datetimepicker-input" name="dateTime"
                        id="datetimepicker" data-toggle="datetimepicker" data-target="#datetimepicker" />
             </div>
@@ -53,20 +53,20 @@
                     });
                 });
             </script>
-            <div class="col-sm-1">
+            <div class="col-sm-2">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-secondary active">
+                    <label class="btn btn-secondary btn-sm active">
                         <input type="radio" name="searchType" value="departure"
-                               autocomplete="off" checked> From
+                               autocomplete="off" checked> Departure
                     </label>
-                    <label class="btn btn-secondary">
+                    <label class="btn btn-secondary btn-sm">
                         <input type="radio" name="searchType" value="arrival"
-                               autocomplete="off"> To
+                               autocomplete="off"> Arrival
                     </label>
                 </div>
             </div>
-            <div class="col-sm-1">
-                <input type="submit" value="Search" class="btn btn-outline-secondary">
+            <div class="col-sm-2">
+                <input type="submit" value="Find trains" class="btn btn-outline-secondary float-right">
             </div>
         </div>
     </div>
