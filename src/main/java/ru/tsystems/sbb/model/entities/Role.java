@@ -20,7 +20,7 @@ import java.util.Set;
 public class Role extends AbstractEntity {
 
     @Column
-    private String role;
+    private String name;
 
     @ManyToMany
     @JoinTable(name = "user_role",
