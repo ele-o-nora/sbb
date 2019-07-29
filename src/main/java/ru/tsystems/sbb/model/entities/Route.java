@@ -20,12 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
-public class Route {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class Route extends AbstractEntity {
 
     @Column
     private String number;

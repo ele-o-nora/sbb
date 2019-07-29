@@ -21,12 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class User extends AbstractEntity {
 
     @Column(name = "e-mail")
     private String eMail;

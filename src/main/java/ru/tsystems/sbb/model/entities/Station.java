@@ -18,12 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
-public class Station {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class Station extends AbstractEntity {
 
     @Column
     private String name;

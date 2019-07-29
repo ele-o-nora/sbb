@@ -24,12 +24,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @Table(name = "line_station")
-public class LineStation {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class LineStation extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "line_id")

@@ -21,12 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "scheduled_stop")
-public class ScheduledStop {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class ScheduledStop extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "journey_id")

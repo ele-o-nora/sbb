@@ -18,12 +18,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table
-public class Ticket {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class Ticket extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "journey_id")

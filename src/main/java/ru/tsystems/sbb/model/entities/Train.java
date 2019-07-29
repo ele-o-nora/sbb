@@ -18,12 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
-public class Train {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class Train extends AbstractEntity {
 
     @Column
     private String model;

@@ -20,12 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
-public class Passenger {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class Passenger extends AbstractEntity {
 
     @Column(name = "first_name")
     private String firstName;

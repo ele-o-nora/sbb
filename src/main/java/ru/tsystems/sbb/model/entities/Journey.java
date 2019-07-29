@@ -20,12 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
-public class Journey {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class Journey extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "route_id")

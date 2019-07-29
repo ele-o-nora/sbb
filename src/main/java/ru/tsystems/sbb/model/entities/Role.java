@@ -20,12 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table
-public class Role {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class Role extends AbstractEntity {
 
     @Column
     private String role;

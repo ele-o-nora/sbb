@@ -18,12 +18,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "route_station")
-public class RouteStation {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+public class RouteStation extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "route_id")
