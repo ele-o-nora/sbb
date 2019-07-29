@@ -24,7 +24,7 @@
                 <a href="${pageContext.request.contextPath}/" class="nav-link">Home</a>
             </li>
             <li class="nav-item">
-                <a href="${pageContext.request.contextPath}/admin" class="nav-link">Admin panel</a>
+                <a href="${pageContext.request.contextPath}/admin/" class="nav-link">Admin panel</a>
             </li>
         </ul>
         </div>

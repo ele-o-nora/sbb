@@ -16,7 +16,7 @@ public class AdminController {
     @Autowired
     private AdminViewService viewService;
 
-    @RequestMapping("")
+    @RequestMapping(value={"", "/"})
     public ModelAndView adminPanel() {
         return new ModelAndView("admin", viewService.getLinesList());
     }
