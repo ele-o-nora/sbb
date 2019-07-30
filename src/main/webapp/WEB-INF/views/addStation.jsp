@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>Add new station</title>
 </head>
-<body>
+<body class="text-center">
 <%@include file="header.jsp" %>
 <h3>Add new station to line: ${line.name}</h3>
 <form action="${pageContext.request.contextPath}/admin/addNewStation" method="post" id="addStationForm">
