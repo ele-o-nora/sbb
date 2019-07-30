@@ -23,8 +23,8 @@ $(document).ready(function () {
 
 });
 
-function toggleForm(zone, order) {
-    $("#addStationForm").toggle();
+function showAddStationForm(zone, order) {
+    $("#addStationForm").show();
     $("#zone").val(zone);
     $("#order").val(order);
     $("#addStationName").focus();
