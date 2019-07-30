@@ -51,7 +51,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         Station origin = scheduleDao.getStationByName(stationFrom);
         Station destination = scheduleDao.getStationByName(stationTo);
         if (!sameLine(origin, destination)) {
-            return null;
+            return new ArrayList<>();
         }
         List<Journey> journeys;
         if (searchType.equalsIgnoreCase(DEFAULT_SEARCH_TYPE)) {

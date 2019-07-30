@@ -11,11 +11,11 @@
 <body>
 <%@include file="header.jsp" %>
 <h3>Add new station to line: ${line.name}</h3>
-<form action="${pageContext.request.contextPath}/admin/addNewStation" method="post" id="addStationForm" style="display:none">
+<form action="${pageContext.request.contextPath}/admin/addNewStation" method="post" id="addStationForm">
     <input type="hidden" name="zone" id="zone" value="0">
     <input type="hidden" name="order" id="order" value="0">
     <input type="hidden" name="line" value="${line.id}">
-    <input type="text" placeholder="Station name" name="name" id="addStationName">
+    <input type="text" placeholder="Station name" name="name" id="addStationName" required>
     <input type="submit" value="Add station">
 </form>
 <c:forEach var="station" items="${stations}" varStatus="status">
@@ -36,13 +36,5 @@ Zone: ${loop.index}<br/>
 </c:forEach>
 </c:if>
 </c:forEach>
-<script type="text/javascript">
-    function toggleForm(zone, order) {
-        $("#addStationForm").toggle();
-        $("#zone").val(zone);
-        $("#order").val(order);
-        $("#addStationName").focus();
-    }
-</script>
 </body>
 </html>

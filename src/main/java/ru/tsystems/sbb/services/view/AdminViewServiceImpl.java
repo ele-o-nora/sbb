@@ -38,6 +38,11 @@ public class AdminViewServiceImpl implements AdminViewService {
     }
 
     @Override
+    public void addNewTrainModel(String model, int seats) {
+        adminDataService.addNewTrainModel(model, seats);
+    }
+
+    @Override
     public Map<String, Object> getCurrentLineStations(final int lineId) {
         List<StationDto> stations = routeDataService
                 .getAllLineStations(lineId);

@@ -40,4 +40,13 @@ public class AdminController {
         return new ModelAndView("addStation",
                 viewService.addNewStation(newStation, lineId, zone, order));
     }
+
+    @PostMapping("/addTrain")
+    public ModelAndView addNewTrainModel(@RequestParam(value = "model")
+                                             final String model,
+                                         @RequestParam(value =  "seats")
+                                             final int seats) {
+        viewService.addNewTrainModel(model, seats);
+        return adminPanel();
+    }
 }

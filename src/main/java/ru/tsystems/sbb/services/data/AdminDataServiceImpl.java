@@ -7,6 +7,7 @@ import ru.tsystems.sbb.model.dao.AdminDao;
 import ru.tsystems.sbb.model.dao.RouteDao;
 import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Station;
+import ru.tsystems.sbb.model.entities.Train;
 
 import java.util.List;
 
@@ -33,6 +34,14 @@ public class AdminDataServiceImpl implements AdminDataService {
         lineStation.setStation(station);
         lineStation.setOrder(order);
         adminDao.add(lineStation);
+    }
+
+    @Override
+    public void addNewTrainModel(String model, int seats) {
+        Train train = new Train();
+        train.setModel(model);
+        train.setSeats(seats);
+        adminDao.add(train);
     }
 
     private void recalculateOrders(final int lineId, final int firstOrder) {

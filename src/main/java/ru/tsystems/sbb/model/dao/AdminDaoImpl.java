@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Station;
+import ru.tsystems.sbb.model.entities.Train;
 
 @Component
 public class AdminDaoImpl implements AdminDao {
@@ -19,8 +20,13 @@ public class AdminDaoImpl implements AdminDao {
     }
 
     @Override
+    public void add(Train train) {
+        sessionFactory.getCurrentSession().persist(train);
+    }
+
+    @Override
     public void add(final Station station) {
-        sessionFactory.getCurrentSession().save(station);
+        sessionFactory.getCurrentSession().persist(station);
     }
 
     @Override

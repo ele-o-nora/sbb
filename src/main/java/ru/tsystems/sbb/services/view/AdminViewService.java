@@ -7,4 +7,5 @@ public interface AdminViewService {
     Map<String, Object> getCurrentLineStations(int lineId);
     Map<String, Object> addNewStation(String stationName, int lineId,
                                       int zone, int order);
+    void addNewTrainModel(String model, int seats);
 }

@@ -35,7 +35,7 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
         List<JourneyDto> trains = scheduleDataService
                 .directTrainsFromTo(origin, destination, moment, searchType);
         Map<String, Object> objects = new HashMap<>();
-        if (trains != null) {
+        if (!trains.isEmpty()) {
             objects.put("trains", trains);
         } else {
             List<TransferTrainsDto> connections = scheduleDataService

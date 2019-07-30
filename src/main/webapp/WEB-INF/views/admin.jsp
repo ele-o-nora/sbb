@@ -10,17 +10,17 @@
 </head>
 <body>
 <%@include file="header.jsp" %>
-<div id="lines">Add new station</div>
-    <ul id="linesList" style="display:none">
+<div id="addStationMenu">Add new station</div>
+    <ul id="linesList">
         <c:forEach var="line" items="${lines}">
             <li><a href="${pageContext.request.contextPath}/admin/addStation/${line.id}">${line.name}</a></li>
         </c:forEach>
     </ul>
-
-    <script type="text/javascript">
-        $('#lines').click(function() {
-            $('#linesList').toggle();
-        });
-    </script>
+<div id="addTrainMenu">Add new train model</div>
+<form action="${pageContext.request.contextPath}/admin/addTrain" method="post" id="addTrainForm">
+    <input type="text" name="model" placeholder="Model name" required>
+    <input type="text" name="seats" placeholder="Seats quantity" required>
+    <input type="submit" value="Add">
+</form>
 </body>
 </html>
