@@ -11,7 +11,7 @@
 <body class="text-center">
 <%@include file="header.jsp" %>
 <div class="container m-5">
-    <h6 class="text-muted">Search for connection:</h6>
+    <h6 class="text-secondary">Search for connection:</h6>
     <form action="${pageContext.request.contextPath}/findTrains" method="post">
         <div class="form-row m-1">
             <div class="col-sm-4 offset-2">
@@ -47,7 +47,7 @@
     </form>
 </div>
 <div class="container m-5">
-    <h6 class="text-muted">Or look up current schedule:</h6>
+    <h6 class="text-secondary">Or look up current schedule:</h6>
     <form action="${pageContext.request.contextPath}/curSchedule" method="post">
         <div class="form-row">
             <div class="col-sm-5 offset-sm-3">

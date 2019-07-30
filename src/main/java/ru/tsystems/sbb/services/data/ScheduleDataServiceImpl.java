@@ -30,7 +30,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     private EntityToDtoMapper mapper;
 
     private static final String DEFAULT_SEARCH_TYPE = "departure";
-    private static final int TRANSFER_TIME = 10;
+    private static final int TRANSFER_TIME = 15;
 
     @Override
     public List<ScheduledStopDto> stationSchedule(final String stationName,
