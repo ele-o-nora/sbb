@@ -14,11 +14,31 @@ $(document).ready(function () {
     });
 
     $('#addStationMenu').click(function () {
-        $('#linesList').toggle();
+        $('#linesStationsList').toggle();
     });
 
     $('#addTrainMenu').click(function () {
         $('#addTrainForm').toggle();
+    });
+
+    $('#modifyRouteMenu').click(function () {
+        $('#linesRoutesList').toggle();
+    });
+
+    $('#Northern').click(function () {
+        $('#routesNorthern').toggle();
+    });
+
+    $('#Eastern').click(function () {
+        $('#routesEastern').toggle();
+    });
+
+    $('#Western').click(function () {
+        $('#routesWestern').toggle();
+    });
+
+    $('#Southern').click(function () {
+        $('#routesSouthern').toggle();
     });
 
 });

@@ -1,9 +1,10 @@
 
-#addStationForm, #linesList, #addTrainForm {
+#addStationForm, #linesStationsList, #addTrainForm, #linesRoutesList,
+#routesNorthern, #routesSouthern, #routesEastern, #routesWestern {
     display: none;
 }
 
-#addStationMenu, #addTrainMenu {
+#addStationMenu, #addTrainMenu, #Northern, #Southern, #Western, #Eastern {
     cursor: pointer;
 }
 

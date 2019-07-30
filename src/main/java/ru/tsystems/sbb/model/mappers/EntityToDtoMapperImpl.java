@@ -21,6 +21,7 @@ import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.Train;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,10 +58,12 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     public RouteDto convert(final Route route) {
         RouteDto routeDto = mapper.map(route, RouteDto.class);
         routeDto.setLine(route.getLine().getName());
+        List<String> stations = new ArrayList<>();
         for (RouteStation rs: route.getStations()) {
             StationDto station = convert(rs.getStation());
-            routeDto.getStations().add(station);
+            stations.add(station.getName());
         }
+        routeDto.setStations(stations);
         return routeDto;
     }
 

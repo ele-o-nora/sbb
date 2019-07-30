@@ -19,7 +19,7 @@ public class AdminController {
 
     @GetMapping(value = {"", "/"})
     public ModelAndView adminPanel() {
-        return new ModelAndView("admin", viewService.getLinesList());
+        return new ModelAndView("admin", viewService.prepAdminPanel());
     }
 
     @GetMapping("/addStation/{id}")

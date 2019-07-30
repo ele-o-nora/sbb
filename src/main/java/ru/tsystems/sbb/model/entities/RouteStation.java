@@ -26,8 +26,8 @@ public class RouteStation extends AbstractEntity {
     private Station station;
 
     @Column(name = "time_en_route")
-    private int timeEnRoute;
+    private Integer timeEnRoute;
 
     @Column(name = "wait_time")
-    private int waitTime;
+    private Integer waitTime;
 }

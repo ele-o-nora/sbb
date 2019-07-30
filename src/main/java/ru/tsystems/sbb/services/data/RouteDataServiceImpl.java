@@ -71,4 +71,9 @@ public class RouteDataServiceImpl implements RouteDataService {
                 .stream().map(station -> mapper.convert(station))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public RouteDto getRoute(int routeId) {
+        return mapper.convert(routeDao.getRouteById(routeId));
+    }
 }

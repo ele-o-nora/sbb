@@ -18,7 +18,7 @@
 </div>
 <div class="row">
     <div class="col-sm-4 offset-4">
-        <ul id="linesList" class="list-group">
+        <ul id="linesStationsList" class="list-group">
             <c:forEach var="line" items="${lines}">
                 <li class="list-group-item">
                     <a href="${pageContext.request.contextPath}/admin/addStation/${line.id}"
@@ -46,6 +46,35 @@
         </div>
     </div>
 </form>
-
+<div class="row">
+    <div class="col-sm-6 offset-3">
+        <div id="modifyRouteMenu" class="bg-dark text-light m-3 rounded">Add/modify routes</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4 offset-4">
+        <ul id="linesRoutesList" class="list-group">
+            <c:forEach var="line" items="${lines}">
+                <li class="list-group-item">
+                    <span id="${line.name}" class="text-danger">${line.name} line</span>
+                    <ul class="list-group" id="routes${line.name}">
+                        <c:forEach var="route" items="${routes}">
+                            <c:if test="${route.line eq line.name}">
+                                <li class = list-group-item>
+                                    <a href="${pageContext.request.contextPath}/admin/editRoute/${route.id}"
+                                       class="text-secondary stretched-link">${route.number}</a>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                        <li class = list-group-item>
+                            <a href="${pageContext.request.contextPath}/admin/addRoute"
+                               class="text-secondary stretched-link">Add new route</a>
+                        </li>
+                    </ul>
+                </li>
+            </c:forEach>
+        </ul>
+    </div>
+</div>
 </body>
 </html>

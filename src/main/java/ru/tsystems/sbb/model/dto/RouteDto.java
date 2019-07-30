@@ -13,5 +13,5 @@ public class RouteDto {
     private int id;
     private String number;
     private String line;
-    private List<StationDto> stations;
+    private List<String> stations;
 }
