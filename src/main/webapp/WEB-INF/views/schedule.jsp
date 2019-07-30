@@ -6,11 +6,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Schedule</title>
+    <title>Station schedule</title>
 </head>
 <body>
 <%@include file="header.jsp" %>
-<h2>Schedule for ${stationName}</h2>
+<h2>Current schedule for ${stationName}</h2>
 <ul>
     <c:forEach var="train" items="${trains}">
         <li>

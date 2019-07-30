@@ -1,18 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"
          isELIgnored="false" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Westerosi Railways</title>
 </head>
-<body>
+<body class="text-center">
 <%@include file="header.jsp" %>
-<h2>Search for connection:</h2>
-<form action="${pageContext.request.contextPath}/findTrains" method="post">
-    <div class="container">
+<div class="container m-5">
+    <h6 class="text-muted">Search for connection:</h6>
+    <form action="${pageContext.request.contextPath}/findTrains" method="post">
         <div class="form-row m-1">
             <div class="col-sm-4 offset-2">
                 <input class="form-control" list="stations" autocomplete="off"
@@ -44,13 +44,22 @@
                 <input type="submit" value="Find trains" class="btn btn-outline-secondary float-right">
             </div>
         </div>
-    </div>
-</form>
-<h2>Or look up current schedule:</h2>
-<form action="${pageContext.request.contextPath}/curSchedule" method="post">
-    <input list="stations" name="stationName" placeholder="Station" autocomplete="off" required/>
-    <input type="submit" value="Go"/>
-</form>
+    </form>
+</div>
+<div class="container m-5">
+    <h6 class="text-muted">Or look up current schedule:</h6>
+    <form action="${pageContext.request.contextPath}/curSchedule" method="post">
+        <div class="form-row">
+            <div class="col-sm-5 offset-sm-3">
+                <input list="stations" class="form-control" name="stationName" placeholder="Station" autocomplete="off"
+                       required/>
+            </div>
+            <div class="col-sm-1">
+                <input type="submit" value="Go" class="btn btn-outline-secondary"/>
+            </div>
+        </div>
+    </form>
+</div>
 <datalist id="stations">
     <c:forEach var="station" items="${stations}">
         <option>${station.name}</option>
