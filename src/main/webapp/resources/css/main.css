@@ -4,7 +4,7 @@
     display: none;
 }
 
-#addStationMenu, #addTrainMenu, #Northern, #Southern, #Western, #Eastern, #trainModelsMenu {
+#addStationMenu, #addTrainMenu, #Northern, #Southern, #Western, #Eastern, #trainModelsMenu, #modifyRouteMenu {
     cursor: pointer;
 }
 

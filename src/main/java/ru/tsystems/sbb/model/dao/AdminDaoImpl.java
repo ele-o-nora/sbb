@@ -64,7 +64,8 @@ public class AdminDaoImpl implements AdminDao {
     public void cleanRouteStopPattern(Route route) {
         Session session = sessionFactory.getCurrentSession();
         session.createQuery("delete from RouteStation rs "
-                + "where rs.route = :route").executeUpdate();
+                + "where rs.route = :route")
+                .setParameter("route", route).executeUpdate();
     }
 
     @Override

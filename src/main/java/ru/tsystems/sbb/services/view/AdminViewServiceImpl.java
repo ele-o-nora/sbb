@@ -78,10 +78,15 @@ public class AdminViewServiceImpl implements AdminViewService {
 
     @Override
     public Map<String, Object> newRouteStopPattern(final String routeNumber,
+                                                   final int routeId,
                                                    final int lineId,
                                                    final String[] stations) {
         LineDto line = routeDataService.getLine(lineId);
         Map<String, Object> objects = new HashMap<>();
+        if (routeId > 0) {
+            RouteDto route = routeDataService.getRoute(routeId);
+            objects.put("route", route);
+        }
         objects.put("routeNumber", routeNumber);
         objects.put("line", line);
         objects.put("routeStations", stations);

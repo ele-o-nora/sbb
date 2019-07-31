@@ -37,8 +37,8 @@
     <div class="col-sm-4 offset-4">
         <ul id="linesRoutesList" class="list-group">
             <c:forEach var="line" items="${lines}">
-                <li class="list-group-item">
-                    <span id="${line.name}" class="text-danger">${line.name} line</span>
+                <li id="${line.name}" class="list-group-item">
+                    <span class="text-danger">${line.name} line</span>
                     <ul class="list-group" id="routes${line.name}">
                         <c:forEach var="route" items="${routes}">
                             <c:if test="${route.line eq line.name}">
@@ -72,8 +72,8 @@
                         Seats: <span class="text-danger">${train.seats}</span></span>
                 </li>
             </c:forEach>
-            <li class="list-group-item active">
-                <span class="text-dark" id="addTrainMenu">Add new train model</span>
+            <li class="list-group-item active" id="addTrainMenu">
+                <span class="text-dark">Add new train model</span>
             </li>
         </ul>
     </div>

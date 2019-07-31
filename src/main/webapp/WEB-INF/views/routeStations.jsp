@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Choose route stations</title>
 </head>
 <%@include file="header.jsp" %>
 <body class="text-center">
@@ -16,10 +16,12 @@
 <c:if test="${!empty route}">
     <h4 class="text-secondary m-4">Modify route <span class="text-danger">${route.number}</span> on ${line.name} line</h4>
 </c:if>
+<span class="text-danger">Enter duration in minutes</span>
 <form action="${pageContext.request.contextPath}/admin/scheduleRoute" method="post">
     <input type="hidden" name="lineId" value="${line.id}">
     <c:if test="${!empty route}">
         <input type="hidden" name="routeNumber" value="${route.number}">
+        <input type="hidden" name="routeId" value="${route.id}">
     </c:if>
     <c:forEach var="station" items="${stations}">
         <c:set var="contains" value="false"/>

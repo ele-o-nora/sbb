@@ -9,8 +9,8 @@ public interface AdminViewService {
                                       int zone, int order);
     void addNewTrainModel(String model, int seats);
     Map<String, Object> modifyRouteStations(int lineId, int routeId);
-    Map<String, Object> newRouteStopPattern(String routeNumber, int lineId,
-                                            String[] stations);
+    Map<String, Object> newRouteStopPattern(String routeNumber, int routeId,
+                                            int lineId, String[] stations);
     void addNewRoute(String routeNumber, int lineId, String[] stations,
                      int[] timesEnRoute, int[] waitTimes);
     void modifyRoute(int routeId, String[] stations, int[] timesEnRoute,

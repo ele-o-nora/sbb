@@ -65,10 +65,43 @@ public class AdminController {
 
     @PostMapping("/scheduleRoute")
     public ModelAndView scheduleRoute(@RequestParam(value = "routeNumber")
-                                  final String routeNumber,
+                                  final String routeNum,
+                              @RequestParam(value = "routeId", required = false,
+                              defaultValue = "0") final int routeId,
                               @RequestParam(value = "lineId") final int lineId,
                               @RequestParam(value = "stations")
                                   final String[] stations) {
-        return null;
+        return new ModelAndView("scheduleRoute",
+                viewService.newRouteStopPattern(routeNum, routeId,
+                        lineId, stations));
+    }
+
+    @PostMapping("/addNewRoute")
+    public ModelAndView addNewRouteFinal(@RequestParam(value = "routeNumber")
+                                             final String routeNum,
+                                         @RequestParam(value = "lineId")
+                                             final int lineId,
+                                         @RequestParam(value = "stations")
+                                             final String[] stations,
+                                         @RequestParam(value = "timesEnRoute")
+                                             final int[] timesEnRoute,
+                                         @RequestParam(value = "waitTimes")
+                                             final int[] waitTimes) {
+        viewService.addNewRoute(routeNum, lineId, stations,
+                timesEnRoute, waitTimes);
+        return adminPanel();
+    }
+
+    @PostMapping("/modifyRoute")
+    public ModelAndView modifyRouteFinal(@RequestParam(value = "routeId")
+                                             final int routeId,
+                                         @RequestParam(value = "stations")
+                                             final String[] stations,
+                                         @RequestParam(value = "timesEnRoute")
+                                             final int[] timesEnRoute,
+                                         @RequestParam(value = "waitTimes")
+                                             final int[] waitTimes) {
+        viewService.modifyRoute(routeId, stations, timesEnRoute, waitTimes);
+        return adminPanel();
     }
 }
