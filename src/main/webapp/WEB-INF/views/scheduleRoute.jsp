@@ -28,14 +28,14 @@
                 ${station}
             <c:if test="${!status.first and !status.last}">
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" name="waitTimes" placeholder="Time at station">
+                    <input type="text" class="form-control" name="waitTimes" placeholder="Time at station" required>
                 </div>
             </c:if> <br/>
         </div>
         <c:if test="${!status.last}">
             <div class="row justify-content-center m-3">
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" name="timesEnRoute" placeholder="Time en route"><br/>
+                    <input type="text" class="form-control" name="timesEnRoute" placeholder="Time en route" required><br/>
                 </div>
             </div>
         </c:if>
