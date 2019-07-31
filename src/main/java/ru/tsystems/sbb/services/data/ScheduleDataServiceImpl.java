@@ -94,7 +94,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
                                                    final Station destination,
                                                    final LocalDateTime from) {
         List<TransferTrainsDto> connections = new ArrayList<>();
-        List<Station> transferStations = scheduleDao.getTransferStations();
+        List<Station> transferStations = scheduleDao
+                .getTransferStations(origin, destination);
         for (Station transfer : transferStations) {
             List<Journey> trainsToTransfer = scheduleDao
                     .trainsFromToByDeparture(origin, transfer, from);
@@ -126,7 +127,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
                                                     final Station destination,
                                                     final LocalDateTime by) {
         List<TransferTrainsDto> connections = new ArrayList<>();
-        List<Station> transferStations = scheduleDao.getTransferStations();
+        List<Station> transferStations = scheduleDao
+                .getTransferStations(origin, destination);
         for (Station transfer : transferStations) {
             List<Journey> trainsFromTransfer = scheduleDao
                     .trainsFromToByArrival(transfer, destination, by);

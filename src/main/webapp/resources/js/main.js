@@ -41,6 +41,10 @@ $(document).ready(function () {
         $('#routesSouthern').toggle();
     });
 
+    $('#trainModelsMenu').click(function () {
+        $('#trainModelsList').toggle();
+    });
+
 });
 
 function showAddStationForm(zone, order) {

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
 import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.sbb.model.entities.Train;
 import ru.tsystems.sbb.services.data.AdminDataService;
 import ru.tsystems.sbb.services.data.RouteDataService;
 
@@ -25,8 +26,10 @@ public class AdminViewServiceImpl implements AdminViewService {
     @Override
     public Map<String, Object> prepAdminPanel() {
         List<LineDto> lines = routeDataService.getAllLines();
+        List<Train> trainModels = adminDataService.getAllTrainModels();
         Map<String, Object> objects = new HashMap<>();
         objects.put("lines", lines);
+        objects.put("trainModels", trainModels);
         List<RouteDto> routes = new ArrayList<>();
         for (LineDto line : lines) {
             routes.addAll(routeDataService.getAllRoutes(line.getId()));

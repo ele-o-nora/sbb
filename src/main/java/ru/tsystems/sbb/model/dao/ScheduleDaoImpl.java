@@ -78,11 +78,17 @@ public class ScheduleDaoImpl implements ScheduleDao {
     }
 
     @Override
-    public List<Station> getTransferStations() {
+    public List<Station> getTransferStations(final Station origin,
+                                             final Station destination) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select distinct s from Station s "
-                + "join s.lines l1 join s.lines l2 "
-                + "where l1.id != l2.id", Station.class).getResultList();
+                + "join s.routes rs1 join s.routes rs2 "
+                + "join rs1.route r1 join rs2.route r2 "
+                + "join r1.stations rs3 join r2.stations rs4 "
+                + "where rs3.station = :origin "
+                + "and rs4.station = :dest", Station.class)
+                .setParameter("origin", origin)
+                .setParameter("dest", destination).getResultList();
     }
 
     @Override

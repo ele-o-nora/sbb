@@ -13,6 +13,10 @@
 <h4 class="m-4">Trains from ${origin} to ${destination}</h4>
 <div class="row">
     <div class="col-sm-8 offset-sm-2">
+        <c:if test="${!empty fail}">
+            <span class="text-danger">${fail}</span><br/>
+            <a href="javascript:history.back()">Back to search</a>
+        </c:if>
         <table class="table">
             <c:if test="${!empty trains}">
                 <thead class="thead-dark">

@@ -106,4 +106,9 @@ public class AdminDataServiceImpl implements AdminDataService {
             adminDao.update(ls);
         }
     }
+
+    @Override
+    public List<Train> getAllTrainModels() {
+        return adminDao.getAllTrainModels();
+    }
 }

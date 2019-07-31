@@ -1,10 +1,10 @@
 
 #addStationForm, #linesStationsList, #addTrainForm, #linesRoutesList,
-#routesNorthern, #routesSouthern, #routesEastern, #routesWestern {
+#routesNorthern, #routesSouthern, #routesEastern, #routesWestern, #trainModelsList {
     display: none;
 }
 
-#addStationMenu, #addTrainMenu, #Northern, #Southern, #Western, #Eastern {
+#addStationMenu, #addTrainMenu, #Northern, #Southern, #Western, #Eastern, #trainModelsMenu {
     cursor: pointer;
 }
 
@@ -35,4 +35,9 @@
 
 .stretched-link:hover {
     text-decoration: none;
+}
+
+.list-group-item.active {
+    background-color: #FF9999;
+    border-color: #FF9999;
 }

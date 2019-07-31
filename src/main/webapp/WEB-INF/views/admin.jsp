@@ -30,24 +30,6 @@
 </div>
 <div class="row">
     <div class="col-sm-6 offset-3">
-        <div id="addTrainMenu" class="bg-dark text-light m-3 rounded">Add new train model</div>
-    </div>
-</div>
-<form action="${pageContext.request.contextPath}/admin/addTrain" method="post" id="addTrainForm">
-    <div class="form-row">
-        <div class="col-sm-2 offset-4">
-            <input type="text" name="model" placeholder="Model name" class="form-control" required>
-        </div>
-        <div class="col-sm-1">
-            <input type="text" name="seats" placeholder="Seats" class="form-control" required>
-        </div>
-        <div class="col-sm-1">
-            <input type="submit" value="Add" class="btn btn-outline-secondary">
-        </div>
-    </div>
-</form>
-<div class="row">
-    <div class="col-sm-6 offset-3">
         <div id="modifyRouteMenu" class="bg-dark text-light m-3 rounded">Add/modify routes</div>
     </div>
 </div>
@@ -76,5 +58,38 @@
         </ul>
     </div>
 </div>
+<div class="row">
+    <div class="col-sm-6 offset-3">
+        <div id="trainModelsMenu" class="bg-dark text-light m-3 rounded">Train models</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4 offset-4">
+        <ul id="trainModelsList" class="list-group">
+            <c:forEach var="train" items="${trainModels}">
+                <li class="list-group-item">
+                    <span class="text-secondary">Model: <span class="text-danger">${train.model}</span>
+                        Seats: <span class="text-danger">${train.seats}</span></span>
+                </li>
+            </c:forEach>
+            <li class="list-group-item active">
+                <span class="text-dark" id="addTrainMenu">Add new train model</span>
+            </li>
+        </ul>
+    </div>
+</div>
+<form action="${pageContext.request.contextPath}/admin/addTrain" method="post" id="addTrainForm">
+    <div class="form-row m-3">
+        <div class="col-sm-2 offset-4">
+            <input type="text" name="model" placeholder="Model name" class="form-control" required>
+        </div>
+        <div class="col-sm-1">
+            <input type="text" name="seats" placeholder="Seats" class="form-control" required>
+        </div>
+        <div class="col-sm-1">
+            <input type="submit" value="Add" class="btn btn-outline-secondary float-right">
+        </div>
+    </div>
+</form>
 </body>
 </html>

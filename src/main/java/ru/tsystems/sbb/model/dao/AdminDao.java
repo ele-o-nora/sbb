@@ -8,6 +8,8 @@ import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Train;
 
+import java.util.List;
+
 public interface AdminDao {
     void add(Station station);
     void add(LineStation lineStation);
@@ -18,4 +20,5 @@ public interface AdminDao {
     void add(Journey journey);
     void add(ScheduledStop scheduledStop);
     void cleanRouteStopPattern(Route route);
+    List<Train> getAllTrainModels();
 }

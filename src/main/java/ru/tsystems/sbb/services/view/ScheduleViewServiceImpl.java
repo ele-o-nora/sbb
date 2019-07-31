@@ -24,6 +24,9 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     @Autowired
     private RouteDataService routeDataService;
 
+    private static final String FAIL = "Sorry, there were no trains found "
+            + "fulfilling your search criteria :(";
+
     @Override
     public Map<String, Object> getTrainsFromTo(final String origin,
                                                final String destination,
@@ -41,7 +44,11 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
             List<TransferTrainsDto> connections = scheduleDataService
                     .trainsWithTransfer(origin, destination,
                             moment, searchType);
-            objects.put("connections", connections);
+            if (!connections.isEmpty()) {
+                objects.put("connections", connections);
+            } else {
+                objects.put("fail", FAIL);
+            }
         }
         objects.put("origin", origin);
         objects.put("destination", destination);

@@ -12,6 +12,8 @@ import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Train;
 
+import java.util.List;
+
 @Component
 public class AdminDaoImpl implements AdminDao {
 
@@ -63,5 +65,11 @@ public class AdminDaoImpl implements AdminDao {
         Session session = sessionFactory.getCurrentSession();
         session.createQuery("delete from RouteStation rs "
                 + "where rs.route = :route").executeUpdate();
+    }
+
+    @Override
+    public List<Train> getAllTrainModels() {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Train", Train.class).getResultList();
     }
 }
