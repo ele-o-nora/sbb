@@ -72,7 +72,7 @@ public class AdminViewServiceImpl implements AdminViewService {
         Map<String, Object> objects = new HashMap<>();
         objects.put("line", line);
         objects.put("route", route);
-        objects.put("lineStations", lineStations);
+        objects.put("stations", lineStations);
         return objects;
     }
 
@@ -84,7 +84,7 @@ public class AdminViewServiceImpl implements AdminViewService {
         Map<String, Object> objects = new HashMap<>();
         objects.put("routeNumber", routeNumber);
         objects.put("line", line);
-        objects.put("stations", stations);
+        objects.put("routeStations", stations);
         return objects;
     }
 

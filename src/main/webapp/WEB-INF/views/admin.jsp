@@ -42,14 +42,14 @@
                     <ul class="list-group" id="routes${line.name}">
                         <c:forEach var="route" items="${routes}">
                             <c:if test="${route.line eq line.name}">
-                                <li class = list-group-item>
-                                    <a href="${pageContext.request.contextPath}/admin/editRoute/${route.id}"
+                                <li class="list-group-item">
+                                    <a href="${pageContext.request.contextPath}/admin/editRoute/${line.id}/${route.id}"
                                        class="text-secondary stretched-link">${route.number}</a>
                                 </li>
                             </c:if>
                         </c:forEach>
-                        <li class = list-group-item>
-                            <a href="${pageContext.request.contextPath}/admin/addRoute"
+                        <li class="list-group-item">
+                            <a href="${pageContext.request.contextPath}/admin/addRoute/${line.id}"
                                class="text-secondary stretched-link">Add new route</a>
                         </li>
                     </ul>

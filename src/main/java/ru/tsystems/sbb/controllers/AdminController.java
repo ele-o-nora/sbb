@@ -49,4 +49,26 @@ public class AdminController {
         viewService.addNewTrainModel(model, seats);
         return adminPanel();
     }
+
+    @GetMapping("/addRoute/{lineId}")
+    public ModelAndView addNewRoute(@PathVariable final int lineId) {
+        return new ModelAndView("routeStations",
+                viewService.getCurrentLineStations(lineId));
+    }
+
+    @GetMapping("/editRoute/{lineId}/{routeId}")
+    public ModelAndView editRoute(@PathVariable final int routeId,
+                                  @PathVariable final int lineId) {
+        return new ModelAndView("routeStations",
+                viewService.modifyRouteStations(lineId, routeId));
+    }
+
+    @PostMapping("/scheduleRoute")
+    public ModelAndView scheduleRoute(@RequestParam(value = "routeNumber")
+                                  final String routeNumber,
+                              @RequestParam(value = "lineId") final int lineId,
+                              @RequestParam(value = "stations")
+                                  final String[] stations) {
+        return null;
+    }
 }
