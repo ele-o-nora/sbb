@@ -69,5 +69,12 @@
         <option>${station.name}</option>
     </c:forEach>
 </datalist>
+<script>
+    $(window).bind("pageshow", function(event) {
+        if (event.originalEvent.persisted) {
+            window.location.reload()
+        }
+    });
+</script>
 </body>
 </html>

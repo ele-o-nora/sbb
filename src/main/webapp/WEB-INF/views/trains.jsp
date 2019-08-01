@@ -15,7 +15,7 @@
 <div class="row">
     <div class="col-sm-8 offset-sm-2">
         <c:if test="${!empty fail}">
-            <span class="text-danger">${fail}</span><br/>
+            ${fail}<br/>
             <a href="${pageContext.request.contextPath}/">Search anew</a>
         </c:if>
         <table class="table">
