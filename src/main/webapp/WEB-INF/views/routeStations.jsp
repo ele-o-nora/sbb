@@ -11,10 +11,11 @@
 <%@include file="header.jsp" %>
 <body class="text-center">
 <c:if test="${empty route}">
-    <h4 class="text-secondary m-4">Add new route to ${line.name} line</h4>
+    <h4 class="text-secondary m-4">Add new route to <span class="text-danger">${line.name}</span> line</h4>
 </c:if>
 <c:if test="${!empty route}">
-    <h4 class="text-secondary m-4">Modify route <span class="text-danger">${route.number}</span> on ${line.name} line</h4>
+    <h4 class="text-secondary m-4">Modify route <span class="text-danger">${route.number}</span>
+        on <span class="text-danger">${line.name}</span> line</h4>
 </c:if>
 <form action="${pageContext.request.contextPath}/admin/scheduleRoute" method="post">
     <input type="hidden" name="lineId" value="${line.id}">

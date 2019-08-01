@@ -11,7 +11,7 @@
 <body class="text-center">
 <%@include file="header.jsp" %>
 <h4 class="text-secondary m-4">Scheduling pattern for route <span class="text-danger">${routeNumber}</span></h4>
-<span class="text-muted">Enter duration in minutes</span>
+<span class="text-muted m-3">Enter stop duration in minutes</span>
 <form method="post"
       <c:if test="${empty route}">action="${pageContext.request.contextPath}/admin/addNewRoute"</c:if>
       <c:if test="${!empty route}">action="${pageContext.request.contextPath}/admin/modifyRoute"</c:if>>
@@ -24,21 +24,17 @@
     </c:if>
     <c:forEach var="station" items="${routeStations}" varStatus="status">
         <input type="hidden" name="stations" value="${station}">
-        <div class="row justify-content-center m-3">
-                ${station}
+        <div class="row m-4">
+            <div class="col-sm-4 offset-2 pt-2">
+            <span class="font-weight-bold align-bottom float-right">${station}</span>
+            </div>
             <c:if test="${!status.first and !status.last}">
-                <div class="col-sm-3">
-                    <input type="text" class="form-control" name="waitTimes" placeholder="Time at station" required>
+                <div class="col-sm-1">
+                    <input type="text" class="form-control" name="waitTimes"
+                           placeholder="Time at station" value="15" required>
                 </div>
             </c:if> <br/>
         </div>
-        <c:if test="${!status.last}">
-            <div class="row justify-content-center m-3">
-                <div class="col-sm-3">
-                    <input type="text" class="form-control" name="timesEnRoute" placeholder="Time en route" required><br/>
-                </div>
-            </div>
-        </c:if>
     </c:forEach>
     <input type="submit" class="btn btn-outline-secondary" value="Create route scheduling pattern">
 </form>

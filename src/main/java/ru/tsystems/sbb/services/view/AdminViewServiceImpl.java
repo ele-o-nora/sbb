@@ -99,14 +99,13 @@ public class AdminViewServiceImpl implements AdminViewService {
 
     @Override
     public void addNewRoute(final String routeNumber, final int lineId,
-                            final String[] stations, final int[] timesEnRoute,
-                            final int[] waitTimes) {
-        adminDataService.addNewRoute(routeNumber, lineId, stations, timesEnRoute, waitTimes);
+                            final String[] stations, final int[] waitTimes) {
+        adminDataService.addNewRoute(routeNumber, lineId, stations, waitTimes);
     }
 
     @Override
     public void modifyRoute(final int routeId, final String[] stations,
-                            final int[] timesEnRoute, final int[] waitTimes) {
-        adminDataService.modifyRoute(routeId, stations, timesEnRoute, waitTimes);
+                            final int[] waitTimes) {
+        adminDataService.modifyRoute(routeId, stations, waitTimes);
     }
 }

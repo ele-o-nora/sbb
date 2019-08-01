@@ -13,7 +13,6 @@ public interface AdminViewService {
     Map<String, Object> newRouteStopPattern(String routeNumber, int routeId,
                                             int lineId, String[] stations);
     void addNewRoute(String routeNumber, int lineId, String[] stations,
-                     int[] timesEnRoute, int[] waitTimes);
-    void modifyRoute(int routeId, String[] stations, int[] timesEnRoute,
                      int[] waitTimes);
+    void modifyRoute(int routeId, String[] stations, int[] waitTimes);
 }

@@ -92,12 +92,9 @@ public class AdminController {
                                              final int lineId,
                                          @RequestParam(value = "stations")
                                              final String[] stations,
-                                         @RequestParam(value = "timesEnRoute")
-                                             final int[] timesEnRoute,
                                          @RequestParam(value = "waitTimes")
                                              final int[] waitTimes) {
-        viewService.addNewRoute(routeNum, lineId, stations,
-                timesEnRoute, waitTimes);
+        viewService.addNewRoute(routeNum, lineId, stations, waitTimes);
         return adminPanel();
     }
 
@@ -106,11 +103,9 @@ public class AdminController {
                                              final int routeId,
                                          @RequestParam(value = "stations")
                                              final String[] stations,
-                                         @RequestParam(value = "timesEnRoute")
-                                             final int[] timesEnRoute,
                                          @RequestParam(value = "waitTimes")
                                              final int[] waitTimes) {
-        viewService.modifyRoute(routeId, stations, timesEnRoute, waitTimes);
+        viewService.modifyRoute(routeId, stations, waitTimes);
         return adminPanel();
     }
 }

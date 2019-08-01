@@ -59,27 +59,25 @@ public class AdminDataServiceImpl implements AdminDataService {
 
     @Override
     public void addNewRoute(final String routeNumber, final int lineId,
-                            final String[] stations, final int[] timesEnRoute,
-                            final int[] waitTimes) {
+                            final String[] stations, final int[] waitTimes) {
         Line line = routeDao.getLineById(lineId);
         Route route = new Route();
         route.setNumber(routeNumber);
         route.setLine(line);
         adminDao.add(route);
-        createRouteStopPattern(route, stations, timesEnRoute, waitTimes);
+        createRouteStopPattern(route, stations, waitTimes);
     }
 
     @Override
     public void modifyRoute(final int routeId, final String[] stations,
-                            final int[] timesEnRoute, final int[] waitTimes) {
+                            final int[] waitTimes) {
         Route route = routeDao.getRouteById(routeId);
         adminDao.cleanRouteStopPattern(route);
-        createRouteStopPattern(route, stations, timesEnRoute, waitTimes);
+        createRouteStopPattern(route, stations, waitTimes);
     }
 
     private void createRouteStopPattern(final Route route,
                                         final String[] stations,
-                                        final int[] timesEnRoute,
                                         final int[] waitTimes) {
         Station firstStation = scheduleDao.getStationByName(stations[0]);
         RouteStation firstRouteStation = new RouteStation();
@@ -91,7 +89,6 @@ public class AdminDataServiceImpl implements AdminDataService {
             RouteStation routeStation = new RouteStation();
             routeStation.setRoute(route);
             routeStation.setStation(station);
-            routeStation.setTimeEnRoute(timesEnRoute[i]);
             routeStation.setWaitTime(waitTimes[i]);
             adminDao.add(routeStation);
         }
@@ -100,7 +97,6 @@ public class AdminDataServiceImpl implements AdminDataService {
         RouteStation lastRouteStation = new RouteStation();
         lastRouteStation.setRoute(route);
         lastRouteStation.setStation(lastStation);
-        lastRouteStation.setTimeEnRoute(timesEnRoute[timesEnRoute.length - 1]);
         adminDao.add(lastRouteStation);
     }
 

@@ -9,8 +9,8 @@ public interface AdminDataService {
                        int distBefore, int distAfter);
     void addNewTrainModel(String model, int seats, int speed);
     void addNewRoute(String routeNumber, int lineId, String[] stations,
-                     int[] timesEnRoute, int[] waitTimes);
+                     int[] waitTimes);
     void modifyRoute(int routeId, String[] stations,
-                     int[] timesEnRoute, int[] waitTimes);
+                     int[] waitTimes);
     List<Train> getAllTrainModels();
 }
