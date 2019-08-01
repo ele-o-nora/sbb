@@ -1,6 +1,5 @@
 package ru.tsystems.sbb.services.view;
 
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.JourneyDto;
