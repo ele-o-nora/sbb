@@ -42,8 +42,11 @@ public class AdminViewServiceImpl implements AdminViewService {
     public Map<String, Object> addNewStation(final String stationName,
                                              final int lineId,
                                              final int zone,
-                                             final int order) {
-        adminDataService.addNewStation(stationName, lineId, zone, order);
+                                             final int order,
+                                             final int distBefore,
+                                             final int distAfter) {
+        adminDataService.addNewStation(stationName, lineId, zone, order,
+                distBefore, distAfter);
         return getCurrentLineStations(lineId);
     }
 

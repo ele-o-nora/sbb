@@ -1,5 +1,5 @@
 
-#addStationForm, #linesStationsList, #linesRoutesList,
+#linesStationsList, #linesRoutesList,
 #routesNorthern, #routesSouthern, #routesEastern, #routesWestern, #trainModelsList {
     display: none;
 }

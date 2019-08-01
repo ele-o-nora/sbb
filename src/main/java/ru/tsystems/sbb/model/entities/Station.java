@@ -35,4 +35,10 @@ public class Station extends AbstractEntity {
     @OneToMany(mappedBy = "station")
     private List<RouteStation> routes;
 
+    @OneToMany(mappedBy = "firstStation")
+    private List<StationsDistance> distancesFrom;
+
+    @OneToMany(mappedBy = "secondStation")
+    private List<StationsDistance> distancesTo;
+
 }

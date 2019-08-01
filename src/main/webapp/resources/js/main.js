@@ -47,9 +47,15 @@ $(document).ready(function () {
 
 });
 
-function showAddStationForm(zone, order) {
-    $("#addStationForm").show();
+function showAddStationForm(zone, order, before, after) {
     $("#zone").val(zone);
     $("#order").val(order);
-    $("#addStationName").focus();
+    $("#rowBefore, #rowAfter").hide();
+    if (before) {
+        $("#rowBefore").show();
+    }
+    if (after) {
+        $("#rowAfter").show();
+    }
+    $("#addStationModal").modal();
 }

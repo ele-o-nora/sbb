@@ -36,9 +36,16 @@ public class AdminController {
                                    @RequestParam(value = "zone")
                                                final int zone,
                                    @RequestParam(value = "order")
-                                               final int order) {
+                                               final int order,
+                                   @RequestParam(value = "distanceBefore",
+                                   required = false, defaultValue = "0")
+                                       final int before,
+                                   @RequestParam(value = "distanceAfter",
+                                   required = false, defaultValue = "0")
+                                       final int after) {
         return new ModelAndView("addStation",
-                viewService.addNewStation(newStation, lineId, zone, order));
+                viewService.addNewStation(newStation, lineId, zone, order,
+                        before, after));
     }
 
     @PostMapping("/addTrain")

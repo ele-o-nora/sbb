@@ -11,37 +11,24 @@
 <body class="text-center">
 <%@include file="header.jsp" %>
 <h4 class="text-secondary m-4">Add new station to ${line.name} line</h4>
-<form action="${pageContext.request.contextPath}/admin/addNewStation" method="post" id="addStationForm">
-    <input type="hidden" name="zone" id="zone" value="0">
-    <input type="hidden" name="order" id="order" value="0">
-    <input type="hidden" name="line" value="${line.id}">
-    <div class="form-row">
-        <div class="col-sm-3 offset-4">
-            <input type="text" placeholder="Station name" name="name"
-                   id="addStationName" class="form-control" required>
-        </div>
-        <div class="col-sm-1">
-            <input type="submit" value="Add station" class="btn btn-outline-secondary">
-        </div>
-    </div>
-</form>
 <div class="row">
     <div class="col-sm-6 offset-3">
         <c:forEach var="station" items="${stations}" varStatus="status">
             <c:if test="${status.first}">
                 <div class="m-3 p-3">
                 <span class="font-weight-bold">Zone: ${station.zone} </span><br/>
-                <input type="button" value="+" onclick="showAddStationForm(${station.zone}, 1)"
+                <input type="button" value="+" onclick="showAddStationForm(${station.zone}, 1, false, true)"
                        class="btn btn-outline-dark rounded-circle m-2"><br/></c:if>
             <span class="text-secondary">${station.name}</span><br/>
-            <input type="button" value="+" onclick="showAddStationForm(${station.zone}, ${status.index+2})"
+            <input type="button" value="+" onclick="showAddStationForm(${station.zone}, ${status.index+2}, true, true)"
                    class="btn btn-outline-dark rounded-circle m-2"><br/>
             <c:if test="${stations[status.index+1].zone gt station.zone}">
                 <c:forEach begin="${station.zone+1}" end="${stations[status.index+1].zone}" varStatus="loop">
                     </div>
                     <div class="border-top border-secondary m-3 p-3">
                     <span class="font-weight-bold">Zone: ${loop.index}</span><br/>
-                    <input type="button" value="+" onclick="showAddStationForm(${loop.index}, ${status.index+2})"
+                    <input type="button" value="+" onclick="showAddStationForm(${loop.index},
+                        ${status.index+2}, true, true)"
                            class="btn btn-outline-dark rounded-circle m-2"><br/>
                 </c:forEach>
             </c:if>
@@ -50,12 +37,58 @@
                     </div>
                     <div class="border-top border-secondary m-3 p-3">
                     <span class="font-weight-bold">Zone: ${loop.index}</span><br/>
-                    <input type="button" value="+" onclick="showAddStationForm(${loop.index}, ${status.index+2})"
+                    <input type="button" value="+" onclick="showAddStationForm(${loop.index},
+                        ${status.index+2}, true,
+                    <c:if test="${loop.index eq 7}">false</c:if>
+                    <c:if test="${loop.index lt 7}">true</c:if>)"
                            class="btn btn-outline-dark rounded-circle m-2"><br/>
                 </c:forEach>
                 </div>
             </c:if>
         </c:forEach>
+    </div>
+</div>
+
+<div class="modal fade" id="addStationModal" tabindex="-1" role="dialog" aria-labelledby="stationAddTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="stationAddTitle">Add new station</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/admin/addNewStation"
+                      method="post" id="addStationForm" class="form-horizontal">
+                    <input type="hidden" name="zone" id="zone" value="0">
+                    <input type="hidden" name="order" id="order" value="0">
+                    <input type="hidden" name="line" value="${line.id}">
+                    <div class="form-row justify-content-center m-2">
+                        <div class="col-sm-9">
+                            <input type="text" placeholder="Station name" name="name"
+                                   id="addStationName" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row justify-content-center m-2" id="rowBefore">
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="distanceBefore"
+                                   name="distanceBefore" placeholder="Distance to the previous station (miles)">
+                        </div>
+                    </div>
+                    <div class="form-row justify-content-center m-2" id="rowAfter">
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="distanceAfter"
+                                   name="distanceAfter" placeholder="Distance to the next station (miles)">
+                        </div>
+                    </div>
+                    <div class="form-row justify-content-center m-2">
+                        <input type="submit" value="Add station" class="btn btn-outline-secondary">
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 </body>

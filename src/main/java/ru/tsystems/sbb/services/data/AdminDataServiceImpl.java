@@ -11,6 +11,7 @@ import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.RouteStation;
 import ru.tsystems.sbb.model.entities.Station;
+import ru.tsystems.sbb.model.entities.StationsDistance;
 import ru.tsystems.sbb.model.entities.Train;
 
 import java.util.List;
@@ -30,14 +31,27 @@ public class AdminDataServiceImpl implements AdminDataService {
 
     @Override
     public void addNewStation(final String stationName, final int lineId,
-                              final int zone, final int order) {
+                              final int zone, final int order,
+                              final int distBefore, final int distAfter) {
+        if (distBefore > 0 && distAfter > 0) {
+            cleanOldDistance(lineId, order);
+        }
         recalculateOrders(lineId, order);
         Station station = new Station();
         station.setName(stationName);
         station.setZone(zone);
         adminDao.add(station);
+        Line line = routeDao.getLineById(lineId);
+        if (distAfter > 0) {
+            Station nextStation = adminDao.getStation(line, order + 1);
+            connectStations(station, nextStation, distAfter);
+        }
+        if (distBefore > 0) {
+            Station prevStation = adminDao.getStation(line, order - 1);
+            connectStations(station, prevStation, distBefore);
+        }
         LineStation lineStation = new LineStation();
-        lineStation.setLine(routeDao.getLineById(lineId));
+        lineStation.setLine(line);
         lineStation.setStation(station);
         lineStation.setOrder(order);
         adminDao.add(lineStation);
@@ -112,5 +126,26 @@ public class AdminDataServiceImpl implements AdminDataService {
     @Override
     public List<Train> getAllTrainModels() {
         return adminDao.getAllTrainModels();
+    }
+
+    private void cleanOldDistance(final int lineId, final int newStationOrder) {
+        Line line = routeDao.getLineById(lineId);
+        Station stationBefore = adminDao.getStation(line, newStationOrder - 1);
+        Station stationAfter = adminDao.getStation(line, newStationOrder);
+        adminDao.deleteDistance(stationBefore, stationAfter);
+    }
+
+    private void connectStations(final Station s1, final Station s2,
+                                 final int distance) {
+        StationsDistance sd1 = new StationsDistance();
+        sd1.setFirstStation(s1);
+        sd1.setSecondStation(s2);
+        sd1.setDistance(distance);
+        StationsDistance sd2 = new StationsDistance();
+        sd2.setFirstStation(s2);
+        sd2.setSecondStation(s1);
+        sd2.setDistance(distance);
+        adminDao.add(sd1);
+        adminDao.add(sd2);
     }
 }
