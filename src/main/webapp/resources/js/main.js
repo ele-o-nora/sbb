@@ -17,10 +17,6 @@ $(document).ready(function () {
         $('#linesStationsList').toggle();
     });
 
-    $('#addTrainMenu').click(function () {
-        $('#addTrainForm').toggle();
-    });
-
     $('#modifyRouteMenu').click(function () {
         $('#linesRoutesList').toggle();
     });
@@ -43,6 +39,10 @@ $(document).ready(function () {
 
     $('#trainModelsMenu').click(function () {
         $('#trainModelsList').toggle();
+    });
+
+    $('#addTrainMenu').click(function () {
+        $('#addTrainModal').modal();
     });
 
 });

@@ -23,6 +23,9 @@ public class Train extends AbstractEntity {
     @Column
     private int seats;
 
+    @Column
+    private int speed;
+
     @OneToMany(mappedBy = "trainType")
     private List<Journey> journeys;
 }

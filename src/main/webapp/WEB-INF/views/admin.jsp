@@ -68,28 +68,51 @@
         <ul id="trainModelsList" class="list-group">
             <c:forEach var="train" items="${trainModels}">
                 <li class="list-group-item">
-                    <span class="text-secondary">Model: <span class="text-danger">${train.model}</span>
-                        Seats: <span class="text-danger">${train.seats}</span></span>
+                    <span class="text-secondary">Model: <span class="text-danger">${train.model}</span><br>
+                        Seats: <span class="text-danger">${train.seats}</span>
+                        Speed: <span class="text-danger">${train.speed}</span> mph</span>
                 </li>
             </c:forEach>
             <li class="list-group-item active" id="addTrainMenu">
-                <span class="text-dark">Add new train model</span>
+                <span class="text-secondary">Add new train model</span>
             </li>
         </ul>
     </div>
 </div>
-<form action="${pageContext.request.contextPath}/admin/addTrain" method="post" id="addTrainForm">
-    <div class="form-row m-3">
-        <div class="col-sm-2 offset-4">
-            <input type="text" name="model" placeholder="Model name" class="form-control" required>
-        </div>
-        <div class="col-sm-1">
-            <input type="text" name="seats" placeholder="Seats" class="form-control" required>
-        </div>
-        <div class="col-sm-1">
-            <input type="submit" value="Add" class="btn btn-outline-secondary float-right">
+<div class="modal fade" id="addTrainModal" tabindex="-1" role="dialog" aria-labelledby="trainAddTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="trainAddTitle">Add new train model</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/admin/addTrain" method="post" id="addTrainForm">
+                    <div class="form-row justify-content-center m-3">
+                        <div class="col-sm-6">
+                            <input type="text" name="model" placeholder="Model name"
+                                   autocomplete="off" class="form-control" required>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="text" name="seats" placeholder="Seats" autocomplete="off"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row m-3">
+                        <div class="col-sm-4 offset-3">
+                            <input type="text" name="speed" placeholder="Speed (mph)" autocomplete="off"
+                                   class="form-control" required>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="submit" value="Add" class="btn btn-outline-secondary float-right">
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</form>
+</div>
 </body>
 </html>

@@ -48,8 +48,9 @@ public class AdminViewServiceImpl implements AdminViewService {
     }
 
     @Override
-    public void addNewTrainModel(String model, int seats) {
-        adminDataService.addNewTrainModel(model, seats);
+    public void addNewTrainModel(final String model,
+                                 final int seats, final int speed) {
+        adminDataService.addNewTrainModel(model, seats, speed);
     }
 
     @Override

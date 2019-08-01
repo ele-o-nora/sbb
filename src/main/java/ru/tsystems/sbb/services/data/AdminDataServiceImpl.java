@@ -91,10 +91,12 @@ public class AdminDataServiceImpl implements AdminDataService {
     }
 
     @Override
-    public void addNewTrainModel(String model, int seats) {
+    public void addNewTrainModel(final String model,
+                                 final int seats, final int speed) {
         Train train = new Train();
         train.setModel(model);
         train.setSeats(seats);
+        train.setSpeed(speed);
         adminDao.add(train);
     }
 

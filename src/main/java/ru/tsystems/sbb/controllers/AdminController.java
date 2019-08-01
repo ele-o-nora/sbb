@@ -45,8 +45,10 @@ public class AdminController {
     public ModelAndView addNewTrainModel(@RequestParam(value = "model")
                                              final String model,
                                          @RequestParam(value =  "seats")
-                                             final int seats) {
-        viewService.addNewTrainModel(model, seats);
+                                             final int seats,
+                                         @RequestParam(value = "speed")
+                                            final int speed) {
+        viewService.addNewTrainModel(model, seats, speed);
         return adminPanel();
     }
 

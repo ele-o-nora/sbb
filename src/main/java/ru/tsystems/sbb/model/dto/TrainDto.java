@@ -11,4 +11,5 @@ public class TrainDto {
     private int id;
     private String model;
     private int seats;
+    private int speed;
 }
