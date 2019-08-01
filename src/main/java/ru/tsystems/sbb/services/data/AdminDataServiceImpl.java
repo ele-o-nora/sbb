@@ -16,6 +16,7 @@ import ru.tsystems.sbb.model.entities.StationsDistance;
 import ru.tsystems.sbb.model.entities.Train;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -157,14 +158,15 @@ public class AdminDataServiceImpl implements AdminDataService {
                                  final boolean outbound) {
         Route route = routeDao.getRouteById(routeId);
         Train train = adminDao.getTrainById(trainId);
-        List<Station> stations = routeDao.allRouteStations(route);
+        List<RouteStation> stations = route.getStations();
         Journey journey = new Journey();
         journey.setRoute(route);
         journey.setTrainType(train);
         if (outbound) {
-            journey.setDestination(stations.get(stations.size() - 1));
+            journey.setDestination(stations
+                    .get(stations.size() - 1).getStation());
         } else {
-            journey.setDestination(stations.get(0));
+            journey.setDestination(stations.get(0).getStation());
         }
         adminDao.add(journey);
         if (outbound) {
@@ -178,16 +180,30 @@ public class AdminDataServiceImpl implements AdminDataService {
                                  final LocalTime departure,
                                  final LocalDate dayFrom,
                                  final LocalDate dayUntil,
-                                 final List<Station> stations) {
-
+                                 final List<RouteStation> stations) {
+        for (LocalDate day = dayFrom;
+             day.isBefore(dayUntil) || day.isEqual(dayUntil);
+             day = day.plusDays(1)) {
+            LocalDateTime lastUsedMoment = LocalDateTime.of(day, departure);
+            for (int i = stations.size() - 1; i >= 0; i--) {
+                //TODO: schedule stops
+            }
+        }
     }
 
     private void scheduleOutbound(final Journey journey,
                                  final LocalTime departure,
                                  final LocalDate dayFrom,
                                  final LocalDate dayUntil,
-                                 final List<Station> stations) {
-
+                                 final List<RouteStation> stations) {
+        for (LocalDate day = dayFrom;
+             day.isBefore(dayUntil) || day.isEqual(dayUntil);
+             day = day.plusDays(1)) {
+            LocalDateTime lastUsedMoment = LocalDateTime.of(day, departure);
+            for (int i = 0; i < stations.size(); i++) {
+                //TODO: schedule stops
+            }
+        }
     }
 
 }
