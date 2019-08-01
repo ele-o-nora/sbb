@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -30,5 +31,6 @@ public class Route extends AbstractEntity {
     private List<Journey> journeys;
 
     @OneToMany(mappedBy = "route")
+    @OrderBy("id asc")
     private List<RouteStation> stations;
 }
