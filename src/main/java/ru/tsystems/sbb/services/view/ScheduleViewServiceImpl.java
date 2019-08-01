@@ -1,5 +1,6 @@
 package ru.tsystems.sbb.services.view;
 
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.JourneyDto;
@@ -27,6 +28,8 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     private static final String FAIL = "Sorry, there were no trains found "
             + "fulfilling your search criteria :(";
 
+    private static final String ERROR = "There was an error processing your request";
+
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter
             .ofPattern("yyyy-MM-dd HH:mm");
 
@@ -35,24 +38,28 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
                                                final String destination,
                                                final String dateTime,
                                                final String searchType) {
-        LocalDateTime moment = LocalDateTime.parse(dateTime, FORMATTER);
-        List<JourneyDto> trains = scheduleDataService
-                .directTrainsFromTo(origin, destination, moment, searchType);
         Map<String, Object> objects = new HashMap<>();
-        if (!trains.isEmpty()) {
-            objects.put("trains", trains);
-        } else {
-            List<TransferTrainsDto> connections = scheduleDataService
-                    .trainsWithTransfer(origin, destination,
-                            moment, searchType);
-            if (!connections.isEmpty()) {
-                objects.put("connections", connections);
+        try {
+            LocalDateTime moment = LocalDateTime.parse(dateTime, FORMATTER);
+            List<JourneyDto> trains = scheduleDataService
+                    .directTrainsFromTo(origin, destination, moment, searchType);
+            if (!trains.isEmpty()) {
+                objects.put("trains", trains);
             } else {
-                objects.put("fail", FAIL);
+                List<TransferTrainsDto> connections = scheduleDataService
+                        .trainsWithTransfer(origin, destination,
+                                moment, searchType);
+                if (!connections.isEmpty()) {
+                    objects.put("connections", connections);
+                } else {
+                    objects.put("fail", FAIL);
+                }
             }
+            objects.put("origin", origin);
+            objects.put("destination", destination);
+        } catch (Exception e) {
+            objects.put("error", ERROR);
         }
-        objects.put("origin", origin);
-        objects.put("destination", destination);
 
         return objects;
     }
@@ -68,11 +75,17 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     @Override
     public Map<String, Object> getStationSchedule(final String stationName,
                                                   final String from) {
-        if (from == null || from.isEmpty()) {
-            return getStationSchedule(stationName, LocalDateTime.now());
-        } else {
-            LocalDateTime moment = LocalDateTime.parse(from, FORMATTER);
-            return getStationSchedule(stationName, moment);
+        try {
+            if (from == null || from.isEmpty()) {
+                return getStationSchedule(stationName, LocalDateTime.now());
+            } else {
+                LocalDateTime moment = LocalDateTime.parse(from, FORMATTER);
+                return getStationSchedule(stationName, moment);
+            }
+        } catch (Exception e) {
+            Map<String, Object> objects = new HashMap<>();
+            objects.put("error", ERROR);
+            return objects;
         }
     }
 

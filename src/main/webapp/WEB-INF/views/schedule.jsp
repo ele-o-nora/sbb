@@ -10,32 +10,40 @@
 </head>
 <body class="text-center">
 <%@include file="header.jsp" %>
-<h4 class="m-4">Station schedule for
-    <span class="text-danger">${stationName}</span> from
-    <span class="text-danger">${momentFrom}</span></h4>
-<div class="row">
-    <div class="col-sm-8 offset-sm-2">
-        <table class="table">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Route</th>
-                <th scope="col">Direction</th>
-                <th scope="col">Arrives</th>
-                <th scope="col">Departs</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="train" items="${trains}">
-                <tr>
-                    <td>${train.route}</td>
-                    <td>${train.direction}</td>
-                    <td>${train.arrival}</td>
-                    <td>${train.departure}</td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+<c:if test="${!empty error}">
+    <div class="m-5">
+        <span class="text-danger">${error}</span><br/>
+        <a href="${pageContext.request.contextPath}/">Search anew</a>
     </div>
-</div>
+</c:if>
+<c:if test="${empty error}">
+    <h4 class="m-4">Station schedule for
+        <span class="text-danger">${stationName}</span> from
+        <span class="text-danger">${momentFrom}</span></h4>
+    <div class="row">
+        <div class="col-sm-8 offset-sm-2">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Route</th>
+                    <th scope="col">Direction</th>
+                    <th scope="col">Arrives</th>
+                    <th scope="col">Departs</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="train" items="${trains}">
+                    <tr>
+                        <td>${train.route}</td>
+                        <td>${train.direction}</td>
+                        <td>${train.arrival}</td>
+                        <td>${train.departure}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</c:if>
 </body>
 </html>
