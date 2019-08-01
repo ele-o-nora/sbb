@@ -10,7 +10,9 @@
 </head>
 <body class="text-center">
 <%@include file="header.jsp" %>
-<h4 class="m-4">Current schedule for ${stationName}</h4>
+<h4 class="m-4">Station schedule for
+    <span class="text-danger">${stationName}</span> from
+    <span class="text-danger">${momentFrom}</span></h4>
 <div class="row">
     <div class="col-sm-8 offset-sm-2">
         <table class="table">

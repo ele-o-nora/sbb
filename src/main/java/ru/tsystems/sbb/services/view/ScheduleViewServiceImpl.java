@@ -27,14 +27,15 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     private static final String FAIL = "Sorry, there were no trains found "
             + "fulfilling your search criteria :(";
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm");
+
     @Override
     public Map<String, Object> getTrainsFromTo(final String origin,
                                                final String destination,
                                                final String dateTime,
                                                final String searchType) {
-        DateTimeFormatter formatter = DateTimeFormatter
-                .ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime moment = LocalDateTime.parse(dateTime, formatter);
+        LocalDateTime moment = LocalDateTime.parse(dateTime, FORMATTER);
         List<JourneyDto> trains = scheduleDataService
                 .directTrainsFromTo(origin, destination, moment, searchType);
         Map<String, Object> objects = new HashMap<>();
@@ -65,18 +66,24 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     }
 
     @Override
-    public Map<String, Object> getStationSchedule(final String stationName) {
-        return getStationSchedule(stationName, LocalDateTime.now());
+    public Map<String, Object> getStationSchedule(final String stationName,
+                                                  final String from) {
+        if (from == null || from.isEmpty()) {
+            return getStationSchedule(stationName, LocalDateTime.now());
+        } else {
+            LocalDateTime moment = LocalDateTime.parse(from, FORMATTER);
+            return getStationSchedule(stationName, moment);
+        }
     }
 
-    @Override
-    public Map<String, Object> getStationSchedule(final String stationName,
+    private Map<String, Object> getStationSchedule(final String stationName,
                                                   final LocalDateTime from) {
         List<ScheduledStopDto> trains = scheduleDataService
                 .stationSchedule(stationName, from);
         Map<String, Object> objects = new HashMap<>();
         objects.put("trains", trains);
         objects.put("stationName", stationName);
+        objects.put("momentFrom", from.format(FORMATTER));
         return objects;
     }
 

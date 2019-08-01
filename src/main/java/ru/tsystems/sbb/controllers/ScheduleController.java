@@ -15,9 +15,12 @@ public class ScheduleController {
 
     @PostMapping("/curSchedule")
     public ModelAndView stationSchedule(@RequestParam(value = "stationName")
-                                            final String stationName) {
+                                            final String stationName,
+                                        @RequestParam(value = "dateTime",
+                                        required = false)
+                                            final String dateTime) {
         return new ModelAndView("schedule",
-                viewService.getStationSchedule(stationName));
+                viewService.getStationSchedule(stationName, dateTime));
     }
 
     @PostMapping("/findTrains")

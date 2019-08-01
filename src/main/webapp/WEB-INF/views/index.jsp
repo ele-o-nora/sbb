@@ -26,7 +26,7 @@
         <div class="form-row m-1">
             <div class='col-sm-4 offset-2'>
                 <input type="text" class="form-control datetimepicker-input" name="dateTime"
-                       id="datetimepicker" data-toggle="datetimepicker" data-target="#datetimepicker" required/>
+                       id="datetimepickerTrains" data-toggle="datetimepicker" data-target="#datetimepickerTrains" required/>
             </div>
             <div class="col-sm-2 my-auto">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -47,12 +47,16 @@
     </form>
 </div>
 <div class="container m-5">
-    <h6 class="text-secondary">Or look up current schedule:</h6>
+    <h6 class="text-secondary">Or look up station schedule:</h6>
     <form action="${pageContext.request.contextPath}/curSchedule" method="post">
-        <div class="form-row">
-            <div class="col-sm-5 offset-sm-3">
+        <div class="form-row justify-content-center">
+            <div class="col-sm-3">
                 <input list="stations" class="form-control" name="stationName" placeholder="Station" autocomplete="off"
                        required/>
+            </div>
+            <div class='col-sm-3'>
+                <input type="text" class="form-control datetimepicker-input" name="dateTime"
+                       id="datetimepickerSchedule" data-toggle="datetimepicker" data-target="#datetimepickerSchedule" />
             </div>
             <div class="col-sm-1">
                 <input type="submit" value="Go" class="btn btn-outline-secondary"/>

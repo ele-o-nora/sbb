@@ -10,12 +10,13 @@
 </head>
 <body class="text-center">
 <%@include file="header.jsp" %>
-<h4 class="m-4">Trains from ${origin} to ${destination}</h4>
+<h4 class="m-4">Trains from <span class="text-danger">${origin}</span>
+    to <span class="text-danger">${destination}</span></h4>
 <div class="row">
     <div class="col-sm-8 offset-sm-2">
         <c:if test="${!empty fail}">
             <span class="text-danger">${fail}</span><br/>
-            <a href="javascript:history.back()">Back to search</a>
+            <a href="${pageContext.request.contextPath}/">Search anew</a>
         </c:if>
         <table class="table">
             <c:if test="${!empty trains}">
