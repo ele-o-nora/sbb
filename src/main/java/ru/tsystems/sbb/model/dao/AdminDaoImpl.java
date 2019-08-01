@@ -102,4 +102,9 @@ public class AdminDaoImpl implements AdminDao {
                 .setParameter("s2", s2)
                 .executeUpdate();
     }
+
+    @Override
+    public Train getTrainById(int trainId) {
+        return sessionFactory.getCurrentSession().get(Train.class, trainId);
+    }
 }

@@ -23,6 +23,7 @@ public interface AdminDao {
     void add(ScheduledStop scheduledStop);
     void cleanRouteStopPattern(Route route);
     List<Train> getAllTrainModels();
+    Train getTrainById(int trainId);
     void add(StationsDistance stationsDistance);
     Station getStation(Line line, int order);
     void deleteDistance(Station s1, Station s2);

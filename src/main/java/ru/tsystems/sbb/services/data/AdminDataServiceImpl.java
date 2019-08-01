@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tsystems.sbb.model.dao.AdminDao;
 import ru.tsystems.sbb.model.dao.RouteDao;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
+import ru.tsystems.sbb.model.entities.Journey;
 import ru.tsystems.sbb.model.entities.Line;
 import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Route;
@@ -14,6 +15,8 @@ import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.StationsDistance;
 import ru.tsystems.sbb.model.entities.Train;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -144,4 +147,47 @@ public class AdminDataServiceImpl implements AdminDataService {
         adminDao.add(sd1);
         adminDao.add(sd2);
     }
+
+    @Override
+    public void scheduleJourneys(final int routeId,
+                                 final LocalTime departure,
+                                 final LocalDate dayFrom,
+                                 final LocalDate dayUntil,
+                                 final int trainId,
+                                 final boolean outbound) {
+        Route route = routeDao.getRouteById(routeId);
+        Train train = adminDao.getTrainById(trainId);
+        List<Station> stations = routeDao.allRouteStations(route);
+        Journey journey = new Journey();
+        journey.setRoute(route);
+        journey.setTrainType(train);
+        if (outbound) {
+            journey.setDestination(stations.get(stations.size() - 1));
+        } else {
+            journey.setDestination(stations.get(0));
+        }
+        adminDao.add(journey);
+        if (outbound) {
+            scheduleOutbound(journey, departure, dayFrom, dayUntil, stations);
+        } else {
+            scheduleInbound(journey, departure, dayFrom, dayUntil, stations);
+        }
+    }
+
+    private void scheduleInbound(final Journey journey,
+                                 final LocalTime departure,
+                                 final LocalDate dayFrom,
+                                 final LocalDate dayUntil,
+                                 final List<Station> stations) {
+
+    }
+
+    private void scheduleOutbound(final Journey journey,
+                                 final LocalTime departure,
+                                 final LocalDate dayFrom,
+                                 final LocalDate dayUntil,
+                                 final List<Station> stations) {
+
+    }
+
 }
