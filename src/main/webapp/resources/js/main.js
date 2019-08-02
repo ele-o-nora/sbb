@@ -13,6 +13,54 @@ $(document).ready(function () {
         format: 'YYYY-MM-DD HH:mm'
     });
 
+    $('#datePickerFrom').datetimepicker({
+        icons: {
+            time: 'far fa-clock',
+            date: 'far fa-calendar',
+            up: 'fas fa-arrow-up',
+            down: 'fas fa-arrow-down',
+            previous: 'fas fa-chevron-left',
+            next: 'fas fa-chevron-right',
+        },
+        minDate: moment(),
+        maxDate: moment().add(3, 'months'),
+        format: 'YYYY-MM-DD'
+    });
+
+    $('#datePickerUntil').datetimepicker({
+        icons: {
+            time: 'far fa-clock',
+            date: 'far fa-calendar',
+            up: 'fas fa-arrow-up',
+            down: 'fas fa-arrow-down',
+            previous: 'fas fa-chevron-left',
+            next: 'fas fa-chevron-right',
+        },
+        minDate: moment(),
+        maxDate: moment().add(3, 'months'),
+        format: 'YYYY-MM-DD',
+        useCurrent: false
+    });
+
+    $("#datePickerFrom").on("change.datetimepicker", function (e) {
+        $('#datePickerUntil').datetimepicker('minDate', e.date);
+    });
+    $("#datePickerUntil").on("change.datetimepicker", function (e) {
+        $('#datePickerFrom').datetimepicker('maxDate', e.date);
+    });
+
+    $('#timePicker').datetimepicker({
+        icons: {
+            time: 'far fa-clock',
+            date: 'far fa-calendar',
+            up: 'fas fa-arrow-up',
+            down: 'fas fa-arrow-down',
+            previous: 'fas fa-chevron-left',
+            next: 'fas fa-chevron-right',
+        },
+        format: 'HH:mm'
+    });
+
     $('#addStationMenu').click(function () {
         $('#linesStationsList').toggle();
     });
@@ -45,6 +93,26 @@ $(document).ready(function () {
         $('#addTrainModal').modal();
     });
 
+    $('#scheduleRoutesMenu').click(function () {
+        $('#linesRoutesScheduleList').toggle();
+    })
+
+    $('#NorthernSchedule').click(function () {
+        $('#routesNorthernSchedule').toggle();
+    })
+
+    $('#EasternSchedule').click(function () {
+        $('#routesEasternSchedule').toggle();
+    })
+
+    $('#SouthernSchedule').click(function () {
+        $('#routesSouthernSchedule').toggle();
+    })
+
+    $('#WesternSchedule').click(function () {
+        $('#routesWesternSchedule').toggle();
+    })
+
 });
 
 function showAddStationForm(zone, order, before, after) {
@@ -61,4 +129,9 @@ function showAddStationForm(zone, order, before, after) {
         $("#distanceAfter").prop("required", true);
     }
     $("#addStationModal").modal();
+}
+
+function showScheduleRoutesForm(routeId) {
+    $('#routeId').val(routeId);
+    $('#scheduleRouteModal').modal();
 }

@@ -78,7 +78,8 @@ public class AdminDaoImpl implements AdminDao {
     @Override
     public List<Train> getAllTrainModels() {
         return sessionFactory.getCurrentSession()
-                .createQuery("from Train", Train.class).getResultList();
+                .createQuery("from Train t order by t.model", Train.class)
+                .getResultList();
     }
 
     @Override
@@ -111,40 +112,40 @@ public class AdminDaoImpl implements AdminDao {
     @Override
     public int outboundDistance(Station from, Station to, Line line) {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select sum(sd.distance) "
-                + "from StationsDistance sd "
+        return (int) session.createQuery("select sum(sd.distance) "
+                + "from StationsDistance sd, "
+                + "LineStation lsfrom, LineStation lsto "
                 + "join sd.firstStation s1 join sd.secondStation s2 "
                 + "join s1.lines ls1 join s2.lines ls2 "
-                + "join LineStation lsfrom join LineStation lsto "
                 + "where lsfrom.line = :line and lsto.line = :line "
                 + "and ls1.line = :line and ls2.line = :line "
                 + "and lsfrom.station = :from "
                 + "and lsto.station = :to "
                 + "and ls1.order >= lsfrom.order "
                 + "and ls2.order <= lsto.order "
-                + "and ls1.order < ls2.order", Integer.class)
+                + "and ls1.order < ls2.order", Long.class)
                 .setParameter("line", line)
                 .setParameter("from", from)
-                .setParameter("to", to).uniqueResult();
+                .setParameter("to", to).uniqueResult().intValue();
     }
 
     @Override
     public int inboundDistance(Station from, Station to, Line line) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select sum(sd.distance) "
-                + "from StationsDistance sd "
+                + "from StationsDistance sd, "
+                + "LineStation lsfrom, LineStation lsto "
                 + "join sd.firstStation s1 join sd.secondStation s2 "
                 + "join s1.lines ls1 join s2.lines ls2 "
-                + "join LineStation lsfrom join LineStation lsto "
                 + "where lsfrom.line = :line and lsto.line = :line "
                 + "and ls1.line = :line and ls2.line = :line "
                 + "and lsfrom.station = :from "
                 + "and lsto.station = :to "
                 + "and ls1.order <= lsfrom.order "
                 + "and ls2.order >= lsto.order "
-                + "and ls1.order > ls2.order", Integer.class)
+                + "and ls1.order > ls2.order", Long.class)
                 .setParameter("line", line)
                 .setParameter("from", from)
-                .setParameter("to", to).uniqueResult();
+                .setParameter("to", to).uniqueResult().intValue();
     }
 }

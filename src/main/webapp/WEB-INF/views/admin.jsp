@@ -60,6 +60,32 @@
 </div>
 <div class="row">
     <div class="col-sm-6 offset-3">
+        <div id="scheduleRoutesMenu" class="bg-dark text-light m-3 rounded">Schedule a route</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4 offset-4">
+        <ul id="linesRoutesScheduleList" class="list-group">
+            <c:forEach var="line" items="${lines}">
+                <li id="${line.name}Schedule" class="list-group-item">
+                    <span class="text-danger">${line.name} line</span>
+                    <ul class="list-group" id="routes${line.name}Schedule">
+                        <c:forEach var="route" items="${routes}">
+                            <c:if test="${route.line eq line.name}">
+                                <li class="list-group-item">
+                                    <a href="#" onclick="showScheduleRoutesForm(${route.id})"
+                                       class="text-secondary stretched-link">${route.number}</a>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+                </li>
+            </c:forEach>
+        </ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 offset-3">
         <div id="trainModelsMenu" class="bg-dark text-light m-3 rounded">Train models</div>
     </div>
 </div>
@@ -79,7 +105,8 @@
         </ul>
     </div>
 </div>
-<div class="modal fade" id="addTrainModal" tabindex="-1" role="dialog" aria-labelledby="trainAddTitle" aria-hidden="true">
+<div class="modal fade" id="addTrainModal" tabindex="-1" role="dialog" aria-labelledby="trainAddTitle"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,6 +134,67 @@
                         </div>
                         <div class="col-sm-2">
                             <input type="submit" value="Add" class="btn btn-outline-secondary float-right">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="scheduleRouteModal" tabindex="-1" role="dialog" aria-labelledby="scheduleRouteTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scheduleRouteTitle">Schedule route</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/admin/scheduleRouteJourneys"
+                      method="post" id="scheduleRouteForm">
+                    <input type="hidden" name="routeId" id="routeId">
+                    <div class="form-row justify-content-center m-3">
+                        <div class='col-sm-6'>
+                            <input type="text" class="form-control datetimepicker-input"
+                                   id="datePickerFrom" data-toggle="datetimepicker" name="dateFrom"
+                                   data-target="#datePickerFrom" placeholder="First day"/>
+                        </div>
+                        <div class='col-sm-6'>
+                            <input type="text" class="form-control datetimepicker-input"
+                                   id="datePickerUntil" data-toggle="datetimepicker" name="dateUntil"
+                                   data-target="#datePickerUntil" placeholder="Last day"/>
+                        </div>
+                    </div>
+                    <div class="form-row justify-content-center m-3">
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control datetimepicker-input"
+                                   id="timePicker" data-toggle="datetimepicker" name="departure"
+                                   data-target="#timePicker" placeholder="Departure time"/>
+                        </div>
+                        <div class="col-sm-6">
+                            <select name="trainId" class="custom-select">
+                                <c:forEach items="${trainModels}" var="train">
+                                    <option value="${train.id}">
+                                            ${train.model}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row justify-content-center m-3">
+                        <div class="col-sm-4 form-check form-check-inline">
+                            <input type="radio" name="direction" id="outbound" value="outbound"
+                                   class="form-check-input" checked>
+                            <label for="outbound" class="form-check-label">Outbound</label>
+                        </div>
+                        <div class="col-sm-4 form-check form-check-inline">
+                            <input type="radio" name="direction" id="inbound" value="inbound" class="form-check-input">
+                            <label for="inbound" class="form-check-label">Inbound</label>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="submit" class="btn btn-outline-secondary" value="Schedule">
                         </div>
                     </div>
                 </form>

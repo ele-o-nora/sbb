@@ -108,4 +108,22 @@ public class AdminController {
         viewService.modifyRoute(routeId, stations, waitTimes);
         return adminPanel();
     }
+
+    @PostMapping("/scheduleRouteJourneys")
+    public ModelAndView scheduleRouteJourneys(@RequestParam(value = "routeId")
+                                              final int routeId,
+                                              @RequestParam(value = "dateFrom")
+                                              final String dateFrom,
+                                              @RequestParam(value = "dateUntil")
+                                              final String dateUntil,
+                                              @RequestParam(value = "departure")
+                                              final String departureTime,
+                                              @RequestParam(value = "trainId")
+                                              final int trainId,
+                                              @RequestParam(value = "direction")
+                                              final String direction) {
+        viewService.scheduleRoute(routeId, departureTime, dateFrom, dateUntil,
+                trainId, direction);
+        return adminPanel();
+    }
 }

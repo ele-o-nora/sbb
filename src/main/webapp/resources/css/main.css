@@ -1,10 +1,14 @@
 
 #linesStationsList, #linesRoutesList,
-#routesNorthern, #routesSouthern, #routesEastern, #routesWestern, #trainModelsList {
+#routesNorthern, #routesSouthern, #routesEastern, #routesWestern, #trainModelsList,
+#linesRoutesScheduleList, #routesNorthernSchedule, #routesEasternSchedule,
+#routesSouthernSchedule, #routesWesternSchedule {
     display: none;
 }
 
-#addStationMenu, #addTrainMenu, #Northern, #Southern, #Western, #Eastern, #trainModelsMenu, #modifyRouteMenu {
+#addStationMenu, #addTrainMenu, #Northern, #Southern, #Western, #Eastern, #trainModelsMenu,
+#modifyRouteMenu, #scheduleRoutesMenu, #NorthernSchedule, #EasternSchedule, #SouthernSchedule,
+#WesternSchedule {
     cursor: pointer;
 }
 
