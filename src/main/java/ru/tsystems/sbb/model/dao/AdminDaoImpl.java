@@ -112,7 +112,7 @@ public class AdminDaoImpl implements AdminDao {
     @Override
     public int outboundDistance(Station from, Station to, Line line) {
         Session session = sessionFactory.getCurrentSession();
-        return (int) session.createQuery("select sum(sd.distance) "
+        return session.createQuery("select sum(sd.distance) "
                 + "from StationsDistance sd, "
                 + "LineStation lsfrom, LineStation lsto "
                 + "join sd.firstStation s1 join sd.secondStation s2 "
