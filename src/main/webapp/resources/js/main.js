@@ -51,11 +51,14 @@ function showAddStationForm(zone, order, before, after) {
     $("#zone").val(zone);
     $("#order").val(order);
     $("#rowBefore, #rowAfter").hide();
+    $("#distanceBefore, #distanceAfter").prop("required", false);
     if (before) {
         $("#rowBefore").show();
+        $("#distanceBefore").prop("required", true);
     }
     if (after) {
         $("#rowAfter").show();
+        $("#distanceAfter").prop("required", true);
     }
     $("#addStationModal").modal();
 }

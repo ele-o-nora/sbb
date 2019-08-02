@@ -9,6 +9,9 @@ import ru.tsystems.sbb.model.entities.Train;
 import ru.tsystems.sbb.services.data.AdminDataService;
 import ru.tsystems.sbb.services.data.RouteDataService;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +25,14 @@ public class AdminViewServiceImpl implements AdminViewService {
 
     @Autowired
     private AdminDataService adminDataService;
+
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter
+            .ofPattern("HH:mm");
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter
+            .ISO_LOCAL_DATE;
+
+    private static final String OUTBOUND = "outbound";
 
     @Override
     public Map<String, Object> prepAdminPanel() {
@@ -107,5 +118,17 @@ public class AdminViewServiceImpl implements AdminViewService {
     public void modifyRoute(final int routeId, final String[] stations,
                             final int[] waitTimes) {
         adminDataService.modifyRoute(routeId, stations, waitTimes);
+    }
+
+    @Override
+    public void scheduleRoute(final int routeId, final String departureTime,
+                              final String dateFrom, final String dateUntil,
+                              final int trainId, final String direction) {
+        boolean outbound = direction.equalsIgnoreCase(OUTBOUND);
+        LocalDate dayFrom = LocalDate.parse(dateFrom, DATE_FORMATTER);
+        LocalDate dayUntil = LocalDate.parse(dateUntil, DATE_FORMATTER);
+        LocalTime departure = LocalTime.parse(departureTime, TIME_FORMATTER);
+        adminDataService.scheduleJourneys(routeId, departure, dayFrom, dayUntil,
+                trainId, outbound);
     }
 }

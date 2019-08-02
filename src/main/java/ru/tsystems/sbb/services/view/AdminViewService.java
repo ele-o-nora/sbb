@@ -15,4 +15,7 @@ public interface AdminViewService {
     void addNewRoute(String routeNumber, int lineId, String[] stations,
                      int[] waitTimes);
     void modifyRoute(int routeId, String[] stations, int[] waitTimes);
+    void scheduleRoute(int routeId, String departureTime,
+                       String dateFrom, String dateUntil,
+                       int trainId, String direction);
 }

@@ -196,7 +196,6 @@ public class AdminDataServiceImpl implements AdminDataService {
             departureStop.setDeparture(curMoment);
             adminDao.add(departureStop);
             for (int i = stations.size() - 2; i >= 0; i--) {
-                //TODO: schedule stops
                 int distanceFromPrevStop = adminDao
                         .inboundDistance(stations.get(i + 1).getStation(),
                                 stations.get(i).getStation(),

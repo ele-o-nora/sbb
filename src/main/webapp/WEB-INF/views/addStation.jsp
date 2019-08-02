@@ -10,7 +10,7 @@
 </head>
 <body class="text-center">
 <%@include file="header.jsp" %>
-<h4 class="text-secondary m-4">Add new station to ${line.name} line</h4>
+<h4 class="text-secondary m-4">Add new station to <span class="text-danger">${line.name}</span> line</h4>
 <div class="row">
     <div class="col-sm-6 offset-3">
         <c:forEach var="station" items="${stations}" varStatus="status">
@@ -20,8 +20,14 @@
                 <input type="button" value="+" onclick="showAddStationForm(${station.zone}, 1, false, true)"
                        class="btn btn-outline-dark rounded-circle m-2"><br/></c:if>
             <span class="text-secondary">${station.name}</span><br/>
+            <c:if test="${!status.last}">
             <input type="button" value="+" onclick="showAddStationForm(${station.zone}, ${status.index+2}, true, true)"
                    class="btn btn-outline-dark rounded-circle m-2"><br/>
+            </c:if>
+            <c:if test="${status.last}">
+                <input type="button" value="+" onclick="showAddStationForm(${station.zone}, ${status.index+2}, true, false)"
+                       class="btn btn-outline-dark rounded-circle m-2"><br/>
+            </c:if>
             <c:if test="${stations[status.index+1].zone gt station.zone}">
                 <c:forEach begin="${station.zone+1}" end="${stations[status.index+1].zone}" varStatus="loop">
                     </div>
@@ -38,9 +44,7 @@
                     <div class="border-top border-secondary m-3 p-3">
                     <span class="font-weight-bold">Zone: ${loop.index}</span><br/>
                     <input type="button" value="+" onclick="showAddStationForm(${loop.index},
-                        ${status.index+2}, true,
-                    <c:if test="${loop.index eq 7}">false</c:if>
-                    <c:if test="${loop.index lt 7}">true</c:if>)"
+                        ${status.index+2}, true, false)"
                            class="btn btn-outline-dark rounded-circle m-2"><br/>
                 </c:forEach>
                 </div>
@@ -73,14 +77,14 @@
                     </div>
                     <div class="form-row justify-content-center m-2" id="rowBefore">
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="distanceBefore"
-                                   name="distanceBefore" placeholder="Distance to the previous station (miles)">
+                            <input type="text" class="form-control" id="distanceBefore" name="distanceBefore"
+                                   placeholder="Distance to the previous station (miles)">
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-2" id="rowAfter">
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="distanceAfter"
-                                   name="distanceAfter" placeholder="Distance to the next station (miles)">
+                            <input type="text" class="form-control" id="distanceAfter" name="distanceAfter"
+                                   placeholder="Distance to the next station (miles)">
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-2">

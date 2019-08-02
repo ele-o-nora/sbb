@@ -26,7 +26,8 @@
         <div class="form-row m-1">
             <div class='col-sm-4 offset-2'>
                 <input type="text" class="form-control datetimepicker-input" name="dateTime"
-                       id="datetimepickerTrains" data-toggle="datetimepicker" data-target="#datetimepickerTrains" required/>
+                       id="datetimepickerTrains" data-toggle="datetimepicker" data-target="#datetimepickerTrains"
+                       placeholder="Date and time" required/>
             </div>
             <div class="col-sm-2 my-auto">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -56,7 +57,8 @@
             </div>
             <div class='col-sm-3'>
                 <input type="text" class="form-control datetimepicker-input" name="dateTime"
-                       id="datetimepickerSchedule" data-toggle="datetimepicker" data-target="#datetimepickerSchedule" />
+                       id="datetimepickerSchedule" data-toggle="datetimepicker" data-target="#datetimepickerSchedule"
+                       placeholder="Date and time"/>
             </div>
             <div class="col-sm-1">
                 <input type="submit" value="Go" class="btn btn-outline-secondary"/>
