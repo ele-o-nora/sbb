@@ -195,8 +195,25 @@ public class AdminDataServiceImpl implements AdminDataService {
                     .getStation());
             departureStop.setDeparture(curMoment);
             adminDao.add(departureStop);
-            for (int i = stations.size() - 2; i > 0; i--) {
+            for (int i = stations.size() - 2; i >= 0; i--) {
                 //TODO: schedule stops
+                int distanceFromPrevStop = adminDao
+                        .inboundDistance(stations.get(i + 1).getStation(),
+                                stations.get(i).getStation(),
+                                journey.getRoute().getLine());
+                int timeEnRoute = calcTimeEnRoute(distanceFromPrevStop,
+                        trainSpeed);
+                curMoment = curMoment.plusMinutes(timeEnRoute);
+                ScheduledStop curStop = new ScheduledStop();
+                curStop.setJourney(journey);
+                curStop.setStation(stations.get(i).getStation());
+                curStop.setArrival(curMoment);
+                if (i > 0) {
+                    curMoment = curMoment.plusMinutes(stations.get(i)
+                            .getWaitTime());
+                    curStop.setDeparture(curMoment);
+                }
+                adminDao.add(curStop);
             }
         }
     }
@@ -216,10 +233,30 @@ public class AdminDataServiceImpl implements AdminDataService {
             departureStop.setStation(stations.get(0).getStation());
             departureStop.setDeparture(curMoment);
             adminDao.add(departureStop);
-            for (int i = 1; i < stations.size() - 1; i++) {
-                //TODO: schedule stops
+            for (int i = 1; i < stations.size(); i++) {
+                int distanceFromPrevStop = adminDao
+                        .outboundDistance(stations.get(i - 1).getStation(),
+                                stations.get(i).getStation(),
+                                journey.getRoute().getLine());
+                int timeEnRoute = calcTimeEnRoute(distanceFromPrevStop,
+                        trainSpeed);
+                curMoment = curMoment.plusMinutes(timeEnRoute);
+                ScheduledStop curStop = new ScheduledStop();
+                curStop.setJourney(journey);
+                curStop.setStation(stations.get(i).getStation());
+                curStop.setArrival(curMoment);
+                if (i < stations.size() - 1) {
+                    curMoment = curMoment.plusMinutes(stations.get(i).getWaitTime());
+                    curStop.setDeparture(curMoment);
+                }
+                adminDao.add(curStop);
             }
         }
+    }
+
+    private int calcTimeEnRoute(int distance, int speed) {
+        float hours = distance / (float) speed;
+        return (int) Math.ceil(hours * 60);
     }
 
 }

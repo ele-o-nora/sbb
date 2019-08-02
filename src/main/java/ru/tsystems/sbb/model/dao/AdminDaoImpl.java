@@ -109,14 +109,42 @@ public class AdminDaoImpl implements AdminDao {
     }
 
     @Override
-    public int outboundDistance(Station from, Station to) {
-        //TODO sum(distance) query station order asc
-        return 0;
+    public int outboundDistance(Station from, Station to, Line line) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select sum(sd.distance) "
+                + "from StationsDistance sd "
+                + "join sd.firstStation s1 join sd.secondStation s2 "
+                + "join s1.lines ls1 join s2.lines ls2 "
+                + "join LineStation lsfrom join LineStation lsto "
+                + "where lsfrom.line = :line and lsto.line = :line "
+                + "and ls1.line = :line and ls2.line = :line "
+                + "and lsfrom.station = :from "
+                + "and lsto.station = :to "
+                + "and ls1.order >= lsfrom.order "
+                + "and ls2.order <= lsto.order "
+                + "and ls1.order < ls2.order", Integer.class)
+                .setParameter("line", line)
+                .setParameter("from", from)
+                .setParameter("to", to).uniqueResult();
     }
 
     @Override
-    public int inboundDistance(Station from, Station to) {
-        //TODO: sum(distance) query station order desc
-        return 0;
+    public int inboundDistance(Station from, Station to, Line line) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select sum(sd.distance) "
+                + "from StationsDistance sd "
+                + "join sd.firstStation s1 join sd.secondStation s2 "
+                + "join s1.lines ls1 join s2.lines ls2 "
+                + "join LineStation lsfrom join LineStation lsto "
+                + "where lsfrom.line = :line and lsto.line = :line "
+                + "and ls1.line = :line and ls2.line = :line "
+                + "and lsfrom.station = :from "
+                + "and lsto.station = :to "
+                + "and ls1.order <= lsfrom.order "
+                + "and ls2.order >= lsto.order "
+                + "and ls1.order > ls2.order", Integer.class)
+                .setParameter("line", line)
+                .setParameter("from", from)
+                .setParameter("to", to).uniqueResult();
     }
 }

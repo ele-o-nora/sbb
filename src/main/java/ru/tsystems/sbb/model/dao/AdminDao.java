@@ -27,6 +27,6 @@ public interface AdminDao {
     void add(StationsDistance stationsDistance);
     Station getStation(Line line, int order);
     void deleteDistance(Station s1, Station s2);
-    int outboundDistance(Station from, Station to);
-    int inboundDistance(Station from, Station to);
+    int outboundDistance(Station from, Station to, Line line);
+    int inboundDistance(Station from, Station to, Line line);
 }
