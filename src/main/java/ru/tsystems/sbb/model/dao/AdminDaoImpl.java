@@ -107,4 +107,16 @@ public class AdminDaoImpl implements AdminDao {
     public Train getTrainById(int trainId) {
         return sessionFactory.getCurrentSession().get(Train.class, trainId);
     }
+
+    @Override
+    public int outboundDistance(Station from, Station to) {
+        //TODO sum(distance) query station order asc
+        return 0;
+    }
+
+    @Override
+    public int inboundDistance(Station from, Station to) {
+        //TODO: sum(distance) query station order desc
+        return 0;
+    }
 }
