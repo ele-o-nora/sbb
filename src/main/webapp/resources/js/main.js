@@ -61,6 +61,19 @@ $(document).ready(function () {
         format: 'HH:mm'
     });
 
+    $('#dateOfBirthPicker').datetimepicker({
+        icons: {
+            time: 'far fa-clock',
+            date: 'far fa-calendar',
+            up: 'fas fa-arrow-up',
+            down: 'fas fa-arrow-down',
+            previous: 'fas fa-chevron-left',
+            next: 'fas fa-chevron-right',
+        },
+        format: 'YYYY-MM-DD',
+        viewMode: 'years'
+    });
+
     $('#addStationMenu').click(function () {
         $('#linesStationsList').toggle();
     });
@@ -111,6 +124,10 @@ $(document).ready(function () {
 
     $('#WesternSchedule').click(function () {
         $('#routesWesternSchedule').toggle();
+    })
+
+    $('#signUpButton').click(function () {
+        $('#signUpModal').modal();
     })
 
 });
