@@ -15,39 +15,16 @@
     <div class="col-sm-6 offset-3">
         <c:forEach var="station" items="${stations}" varStatus="status">
             <c:if test="${status.first}">
-                <div class="m-3 p-3">
-                <span class="font-weight-bold">Zone: ${station.zone} </span><br/>
-                <input type="button" value="+" onclick="showAddStationForm(${station.zone}, 1, false, true)"
+                <input type="button" value="+" onclick="showAddStationForm(1, false, true)"
                        class="btn btn-outline-dark rounded-circle m-2"><br/></c:if>
             <span class="text-secondary">${station.name}</span><br/>
             <c:if test="${!status.last}">
-            <input type="button" value="+" onclick="showAddStationForm(${station.zone}, ${status.index+2}, true, true)"
+            <input type="button" value="+" onclick="showAddStationForm(${status.index+2}, true, true)"
                    class="btn btn-outline-dark rounded-circle m-2"><br/>
             </c:if>
             <c:if test="${status.last}">
-                <input type="button" value="+" onclick="showAddStationForm(${station.zone}, ${status.index+2}, true, false)"
+                <input type="button" value="+" onclick="showAddStationForm(${status.index+2}, true, false)"
                        class="btn btn-outline-dark rounded-circle m-2"><br/>
-            </c:if>
-            <c:if test="${stations[status.index+1].zone gt station.zone}">
-                <c:forEach begin="${station.zone+1}" end="${stations[status.index+1].zone}" varStatus="loop">
-                    </div>
-                    <div class="border-top border-secondary m-3 p-3">
-                    <span class="font-weight-bold">Zone: ${loop.index}</span><br/>
-                    <input type="button" value="+" onclick="showAddStationForm(${loop.index},
-                        ${status.index+2}, true, true)"
-                           class="btn btn-outline-dark rounded-circle m-2"><br/>
-                </c:forEach>
-            </c:if>
-            <c:if test="${status.last}">
-                <c:forEach begin="${station.zone+1}" end="7" varStatus="loop">
-                    </div>
-                    <div class="border-top border-secondary m-3 p-3">
-                    <span class="font-weight-bold">Zone: ${loop.index}</span><br/>
-                    <input type="button" value="+" onclick="showAddStationForm(${loop.index},
-                        ${status.index+2}, true, false)"
-                           class="btn btn-outline-dark rounded-circle m-2"><br/>
-                </c:forEach>
-                </div>
             </c:if>
         </c:forEach>
     </div>
@@ -66,7 +43,6 @@
             <div class="modal-body">
                 <form action="${pageContext.request.contextPath}/admin/addNewStation"
                       method="post" id="addStationForm" class="form-horizontal">
-                    <input type="hidden" name="zone" id="zone" value="0">
                     <input type="hidden" name="order" id="order" value="0">
                     <input type="hidden" name="line" value="${line.id}">
                     <div class="form-row justify-content-center m-2">

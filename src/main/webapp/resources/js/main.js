@@ -115,8 +115,7 @@ $(document).ready(function () {
 
 });
 
-function showAddStationForm(zone, order, before, after) {
-    $("#zone").val(zone);
+function showAddStationForm(order, before, after) {
     $("#order").val(order);
     $("#rowBefore, #rowAfter").hide();
     $("#distanceBefore, #distanceAfter").prop("required", false);

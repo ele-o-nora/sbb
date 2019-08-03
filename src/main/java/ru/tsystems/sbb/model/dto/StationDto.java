@@ -10,5 +10,4 @@ import lombok.Setter;
 public class StationDto {
     private int id;
     private String name;
-    private int zone;
 }

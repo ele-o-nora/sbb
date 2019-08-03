@@ -36,15 +36,14 @@ public class AdminDataServiceImpl implements AdminDataService {
 
     @Override
     public void addNewStation(final String stationName, final int lineId,
-                              final int zone, final int order,
-                              final int distBefore, final int distAfter) {
+                              final int order, final int distBefore,
+                              final int distAfter) {
         if (distBefore > 0 && distAfter > 0) {
             cleanOldDistance(lineId, order);
         }
         recalculateOrders(lineId, order);
         Station station = new Station();
         station.setName(stationName);
-        station.setZone(zone);
         adminDao.add(station);
         Line line = routeDao.getLineById(lineId);
         if (distAfter > 0) {

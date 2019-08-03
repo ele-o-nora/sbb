@@ -52,11 +52,10 @@ public class AdminViewServiceImpl implements AdminViewService {
     @Override
     public Map<String, Object> addNewStation(final String stationName,
                                              final int lineId,
-                                             final int zone,
                                              final int order,
                                              final int distBefore,
                                              final int distAfter) {
-        adminDataService.addNewStation(stationName, lineId, zone, order,
+        adminDataService.addNewStation(stationName, lineId, order,
                 distBefore, distAfter);
         return getCurrentLineStations(lineId);
     }

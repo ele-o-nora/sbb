@@ -20,9 +20,6 @@ public class Station extends AbstractEntity {
     @Column
     private String name;
 
-    @Column
-    private int zone;
-
     @OneToMany(mappedBy = "station")
     private List<LineStation> lines;
 
