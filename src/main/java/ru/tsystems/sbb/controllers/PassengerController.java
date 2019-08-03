@@ -1,12 +1,17 @@
 package ru.tsystems.sbb.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ru.tsystems.sbb.services.view.ScheduleViewService;
 
 @Controller
 public class PassengerController {
+
+    @Autowired
+    private ScheduleViewService scheduleViewService;
 
     @PostMapping("/register")
     public ModelAndView signUp(@RequestParam(name = "firstName")
@@ -19,6 +24,6 @@ public class PassengerController {
                                     final String email,
                                @RequestParam(name = "password")
                                     final String password) {
-        return null;
+        return new ModelAndView("index", scheduleViewService.getStationsList());
     }
 }

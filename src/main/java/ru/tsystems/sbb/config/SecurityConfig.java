@@ -21,10 +21,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setForceEncoding(true);
         http.addFilterBefore(filter, CsrfFilter.class);
         http.authorizeRequests()
-                .antMatchers("/webjars/**", "/resources/**",
-                        "/", "/curSchedule", "/findTrains").permitAll()
                 .antMatchers("/admin", "admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated();
+                .antMatchers("/webjars/**", "/resources/**", "/",
+                        "/curSchedule", "/findTrains", "/login", "/register").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/perform_login")
+                .defaultSuccessUrl("/", false)
+                .failureUrl("/login?error=true")
+                .and()
+                .logout()
+                .logoutSuccessUrl("/");
     }
 
     @Bean

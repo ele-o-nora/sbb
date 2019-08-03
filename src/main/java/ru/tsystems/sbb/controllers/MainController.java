@@ -16,4 +16,9 @@ public class MainController {
     public ModelAndView homePage() {
         return new ModelAndView("index", viewService.getStationsList());
     }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
 }
