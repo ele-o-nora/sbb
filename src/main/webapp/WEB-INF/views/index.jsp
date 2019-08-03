@@ -45,6 +45,7 @@
                 <input type="submit" value="Find trains" class="btn btn-outline-secondary float-right">
             </div>
         </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
 </div>
 <div class="container m-5">
@@ -64,6 +65,7 @@
                 <input type="submit" value="Go" class="btn btn-outline-secondary"/>
             </div>
         </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
 </div>
 <datalist id="stations">

@@ -37,6 +37,7 @@
         </div>
     </c:forEach>
     <input type="submit" class="btn btn-outline-secondary" value="Create route scheduling pattern">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 </body>
 </html>

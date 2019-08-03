@@ -21,7 +21,7 @@ import java.util.Set;
 public class User extends AbstractEntity {
 
     @Column(name = "e-mail")
-    private String eMail;
+    private String email;
 
     @Column
     private String password;

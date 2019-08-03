@@ -66,6 +66,7 @@
                     <div class="form-row justify-content-center m-2">
                         <input type="submit" value="Add station" class="btn btn-outline-secondary">
                     </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
             </div>
         </div>

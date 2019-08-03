@@ -159,96 +159,89 @@ public class AdminDataServiceImpl implements AdminDataService {
         Route route = routeDao.getRouteById(routeId);
         Train train = adminDao.getTrainById(trainId);
         List<RouteStation> stations = route.getStations();
-        Journey journey = new Journey();
-        journey.setRoute(route);
-        journey.setTrainType(train);
-        if (outbound) {
-            journey.setDestination(stations
-                    .get(stations.size() - 1).getStation());
-        } else {
-            journey.setDestination(stations.get(0).getStation());
-        }
-        adminDao.add(journey);
-        if (outbound) {
-            scheduleOutbound(journey, departure, dayFrom, dayUntil,
-                    stations, train.getSpeed());
-        } else {
-            scheduleInbound(journey, departure, dayFrom, dayUntil,
-                    stations, train.getSpeed());
+        for (LocalDate day = dayFrom;
+             day.isBefore(dayUntil) || day.isEqual(dayUntil);
+             day = day.plusDays(1)) {
+            LocalDateTime departDateTime = LocalDateTime.of(day, departure);
+            Journey journey = new Journey();
+            journey.setRoute(route);
+            journey.setTrainType(train);
+            if (outbound) {
+                journey.setDestination(stations
+                        .get(stations.size() - 1).getStation());
+            } else {
+                journey.setDestination(stations.get(0).getStation());
+            }
+            adminDao.add(journey);
+            if (outbound) {
+                scheduleOutbound(journey, departDateTime, stations,
+                        train.getSpeed());
+            } else {
+                scheduleInbound(journey, departDateTime, stations,
+                        train.getSpeed());
+            }
         }
     }
 
     private void scheduleInbound(final Journey journey,
-                                 final LocalTime departure,
-                                 final LocalDate dayFrom,
-                                 final LocalDate dayUntil,
+                                 final LocalDateTime departure,
                                  final List<RouteStation> stations,
                                  final int trainSpeed) {
-        for (LocalDate day = dayFrom;
-             day.isBefore(dayUntil) || day.isEqual(dayUntil);
-             day = day.plusDays(1)) {
-            LocalDateTime curMoment = LocalDateTime.of(day, departure);
-            ScheduledStop departureStop = new ScheduledStop();
-            departureStop.setJourney(journey);
-            departureStop.setStation(stations.get(stations.size() - 1)
-                    .getStation());
-            departureStop.setDeparture(curMoment);
-            adminDao.add(departureStop);
-            for (int i = stations.size() - 2; i >= 0; i--) {
-                int distanceFromPrevStop = adminDao
-                        .inboundDistance(stations.get(i + 1).getStation(),
-                                stations.get(i).getStation(),
-                                journey.getRoute().getLine());
-                int timeEnRoute = calcTimeEnRoute(distanceFromPrevStop,
-                        trainSpeed);
-                curMoment = curMoment.plusMinutes(timeEnRoute);
-                ScheduledStop curStop = new ScheduledStop();
-                curStop.setJourney(journey);
-                curStop.setStation(stations.get(i).getStation());
-                curStop.setArrival(curMoment);
-                if (i > 0) {
-                    curMoment = curMoment.plusMinutes(stations.get(i)
-                            .getWaitTime());
-                    curStop.setDeparture(curMoment);
-                }
-                adminDao.add(curStop);
+        LocalDateTime curMoment = departure;
+        ScheduledStop departureStop = new ScheduledStop();
+        departureStop.setJourney(journey);
+        departureStop.setStation(stations.get(stations.size() - 1)
+                .getStation());
+        departureStop.setDeparture(curMoment);
+        adminDao.add(departureStop);
+        for (int i = stations.size() - 2; i >= 0; i--) {
+            int distanceFromPrevStop = adminDao
+                    .inboundDistance(stations.get(i + 1).getStation(),
+                            stations.get(i).getStation(),
+                            journey.getRoute().getLine());
+            int timeEnRoute = calcTimeEnRoute(distanceFromPrevStop,
+                    trainSpeed);
+            curMoment = curMoment.plusMinutes(timeEnRoute);
+            ScheduledStop curStop = new ScheduledStop();
+            curStop.setJourney(journey);
+            curStop.setStation(stations.get(i).getStation());
+            curStop.setArrival(curMoment);
+            if (i > 0) {
+                curMoment = curMoment.plusMinutes(stations.get(i)
+                        .getWaitTime());
+                curStop.setDeparture(curMoment);
             }
+            adminDao.add(curStop);
         }
     }
 
     private void scheduleOutbound(final Journey journey,
-                                  final LocalTime departure,
-                                  final LocalDate dayFrom,
-                                  final LocalDate dayUntil,
+                                  final LocalDateTime departure,
                                   final List<RouteStation> stations,
                                   final int trainSpeed) {
-        for (LocalDate day = dayFrom;
-             day.isBefore(dayUntil) || day.isEqual(dayUntil);
-             day = day.plusDays(1)) {
-            LocalDateTime curMoment = LocalDateTime.of(day, departure);
-            ScheduledStop departureStop = new ScheduledStop();
-            departureStop.setJourney(journey);
-            departureStop.setStation(stations.get(0).getStation());
-            departureStop.setDeparture(curMoment);
-            adminDao.add(departureStop);
-            for (int i = 1; i < stations.size(); i++) {
-                int distanceFromPrevStop = adminDao
-                        .outboundDistance(stations.get(i - 1).getStation(),
-                                stations.get(i).getStation(),
-                                journey.getRoute().getLine());
-                int timeEnRoute = calcTimeEnRoute(distanceFromPrevStop,
-                        trainSpeed);
-                curMoment = curMoment.plusMinutes(timeEnRoute);
-                ScheduledStop curStop = new ScheduledStop();
-                curStop.setJourney(journey);
-                curStop.setStation(stations.get(i).getStation());
-                curStop.setArrival(curMoment);
-                if (i < stations.size() - 1) {
-                    curMoment = curMoment.plusMinutes(stations.get(i).getWaitTime());
-                    curStop.setDeparture(curMoment);
-                }
-                adminDao.add(curStop);
+        LocalDateTime curMoment = departure;
+        ScheduledStop departureStop = new ScheduledStop();
+        departureStop.setJourney(journey);
+        departureStop.setStation(stations.get(0).getStation());
+        departureStop.setDeparture(curMoment);
+        adminDao.add(departureStop);
+        for (int i = 1; i < stations.size(); i++) {
+            int distanceFromPrevStop = adminDao
+                    .outboundDistance(stations.get(i - 1).getStation(),
+                            stations.get(i).getStation(),
+                            journey.getRoute().getLine());
+            int timeEnRoute = calcTimeEnRoute(distanceFromPrevStop,
+                    trainSpeed);
+            curMoment = curMoment.plusMinutes(timeEnRoute);
+            ScheduledStop curStop = new ScheduledStop();
+            curStop.setJourney(journey);
+            curStop.setStation(stations.get(i).getStation());
+            curStop.setArrival(curMoment);
+            if (i < stations.size() - 1) {
+                curMoment = curMoment.plusMinutes(stations.get(i).getWaitTime());
+                curStop.setDeparture(curMoment);
             }
+            adminDao.add(curStop);
         }
     }
 

@@ -63,7 +63,7 @@
                                    data-toggle="datetimepicker" data-target="#dateOfBirthPicker" required>
                         </div>
                         <div class="col-sm-6">
-                            <input type="email" name="eMail" placeholder="E-mail" class="form-control" required>
+                            <input type="email" name="email" placeholder="E-mail" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-3">
@@ -71,13 +71,14 @@
                             <input type="password" name="password" placeholder="Password" class="form-control" required>
                         </div>
                         <div class="col-sm-6">
-                            <input type="text" name="passwordAgain" placeholder="Repeat password"
+                            <input type="text" name="matchingPassword" placeholder="Confirm password"
                                    class="form-control" required>
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-3">
                         <input type="submit" value="Sign up" class="btn btn-outline-secondary">
                     </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
             </div>
         </div>

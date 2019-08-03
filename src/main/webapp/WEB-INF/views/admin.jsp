@@ -136,6 +136,7 @@
                             <input type="submit" value="Add" class="btn btn-outline-secondary float-right">
                         </div>
                     </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
             </div>
         </div>
@@ -197,6 +198,7 @@
                             <input type="submit" class="btn btn-outline-secondary" value="Schedule">
                         </div>
                     </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
             </div>
         </div>

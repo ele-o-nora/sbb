@@ -47,6 +47,7 @@
         </c:if>
         <input type="submit" class="btn btn-outline-secondary" value="Proceed to scheduling pattern">
     </div>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 </body>
 </html>
