@@ -11,7 +11,7 @@
 <body class="text-center">
 <%@include file="header.jsp" %>
 <c:if test="${!empty status}">
-    <span class="text-danger m-4">${status}</span>
+    <p class="text-danger m-4">${status}</p>
 </c:if>
 <div class="container m-5">
     <h6 class="text-secondary">Search for connection:</h6>

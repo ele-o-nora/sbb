@@ -148,4 +148,13 @@ public class AdminDaoImpl implements AdminDao {
                 .setParameter("from", from)
                 .setParameter("to", to).uniqueResult().intValue();
     }
+
+    @Override
+    public int getStationOrder(Line line, Station station) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select ls.order from LineStation ls "
+                + "where ls.line = :line and ls.station = :station", Integer.class)
+                .setParameter("line", line)
+                .setParameter("station", station).getSingleResult();
+    }
 }
