@@ -7,7 +7,7 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,8 +16,8 @@ import java.time.LocalDate;
 @Table
 public class Tariff extends AbstractEntity {
 
-    @Column(name = "date_from")
-    private LocalDate dateFrom;
+    @Column(name = "moment_from")
+    private LocalDateTime momentFrom;
 
     @Column(name = "price_per_ten_leagues")
     private float pricePerTenLeagues;

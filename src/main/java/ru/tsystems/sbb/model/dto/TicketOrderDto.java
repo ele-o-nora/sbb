@@ -14,11 +14,12 @@ public class TicketOrderDto {
     private ScheduledStopDto destination;
     private float price;
     private String formattedPrice;
+    private PassengerDto passenger;
 
-    public String setFormattedPrice(final float price) {
+    public void setFormattedPrice(final float price) {
         int stags = (int) price;
         int stars = (int) ((price - stags) / 0.14) * 100;
-        return String.format("%d silver stags, %d copper stars", stags, stars);
+        formattedPrice = String.format("%d silver stags, %d copper stars", stags, stars);
     }
 
 }

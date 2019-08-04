@@ -54,7 +54,7 @@ public class PassengerDaoImpl implements PassengerDao {
     public float getCurrentTariff() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select t.pricePerTenLeagues "
-                        + "from Tariff t order by t.dateFrom desc",
+                        + "from Tariff t order by t.momentFrom desc",
                 Float.class).setMaxResults(1).getSingleResult();
     }
 

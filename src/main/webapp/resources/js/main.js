@@ -61,7 +61,7 @@ $(document).ready(function () {
         format: 'HH:mm'
     });
 
-    $('#dateOfBirthPicker').datetimepicker({
+    $('#dateOfBirthPicker, #dateOfBirthPicker2').datetimepicker({
         icons: {
             time: 'far fa-clock',
             date: 'far fa-calendar',
@@ -109,27 +109,27 @@ $(document).ready(function () {
 
     $('#scheduleRoutesMenu').click(function () {
         $('#linesRoutesScheduleList').toggle();
-    })
+    });
 
     $('#NorthernSchedule').click(function () {
         $('#routesNorthernSchedule').toggle();
-    })
+    });
 
     $('#EasternSchedule').click(function () {
         $('#routesEasternSchedule').toggle();
-    })
+    });
 
     $('#SouthernSchedule').click(function () {
         $('#routesSouthernSchedule').toggle();
-    })
+    });
 
     $('#WesternSchedule').click(function () {
         $('#routesWesternSchedule').toggle();
-    })
+    });
 
     $('#signUpButton').click(function () {
         $('#signUpModal').modal();
-    })
+    });
 
     $('#signInButton').click(function () {
         $('#signInModal').modal();

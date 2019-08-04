@@ -86,13 +86,15 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
-    public boolean buyTicket(final int journeyId, final int stopFromId,
-                          final int stopToId, final float price,
+    public boolean buyTicket(final TicketOrderDto ticketOrder,
                           final String firstName, final String lastName,
                           final LocalDate dateOfBirth) {
-        Journey journey = passengerDao.getJourneyById(journeyId);
-        ScheduledStop from = passengerDao.getStopById(stopFromId);
-        ScheduledStop to = passengerDao.getStopById(stopToId);
+        Journey journey = passengerDao.getJourneyById(ticketOrder
+                .getJourney().getId());
+        ScheduledStop from = passengerDao.getStopById(ticketOrder
+                .getOrigin().getId());
+        ScheduledStop to = passengerDao.getStopById(ticketOrder
+                .getDestination().getId());
         Passenger passenger = passengerDao
                 .getPassengerByInfo(firstName, lastName, dateOfBirth);
         if (passengerDao.currentTickets(journey, from, to)
@@ -105,7 +107,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
             ticket.setJourney(journey);
             ticket.setFrom(from);
             ticket.setTo(to);
-            ticket.setPrice(price);
+            ticket.setPrice(ticketOrder.getPrice());
             if (passenger != null) {
                 ticket.setPassenger(passenger);
             } else {
@@ -124,12 +126,14 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
-    public boolean buyTicket(final int journeyId, final int stopFromId,
-                          final int stopToId, final float price,
+    public boolean buyTicket(final TicketOrderDto ticketOrder,
                           final String email) {
-        Journey journey = passengerDao.getJourneyById(journeyId);
-        ScheduledStop from = passengerDao.getStopById(stopFromId);
-        ScheduledStop to = passengerDao.getStopById(stopToId);
+        Journey journey = passengerDao.getJourneyById(ticketOrder
+                .getJourney().getId());
+        ScheduledStop from = passengerDao.getStopById(ticketOrder
+                .getOrigin().getId());
+        ScheduledStop to = passengerDao.getStopById(ticketOrder
+                .getDestination().getId());
         User user = passengerDao.getUserByEmail(email);
         Passenger passenger = passengerDao.getUserPassenger(user);
         if (passengerDao.currentTickets(journey, from, to)
@@ -141,7 +145,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
             ticket.setJourney(journey);
             ticket.setFrom(from);
             ticket.setTo(to);
-            ticket.setPrice(price);
+            ticket.setPrice(ticketOrder.getPrice());
             ticket.setPassenger(passenger);
             passengerDao.add(ticket);
             return true;
@@ -194,35 +198,19 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
-    public boolean buyTickets(final int firstJourneyId,
-                              final int secondJourneyId,
-                              final int stopFromId,
-                              final int stopToId,
-                              final int transferArrivalId,
-                              final int transferDepartId,
-                              final float firstPrice,
-                              final float secondPrice,
+    public boolean buyTickets(final TransferTicketOrderDto tickets,
                               final String firstName,
                               final String lastName,
                               final LocalDate dateOfBirth) {
-        return buyTicket(firstJourneyId, stopFromId, transferArrivalId,
-                firstPrice, firstName, lastName, dateOfBirth)
-                && buyTicket(secondJourneyId, transferDepartId, stopToId,
-                secondPrice, firstName, lastName, dateOfBirth);
+        return buyTicket(tickets.getFirstTrain(), firstName, lastName,
+                dateOfBirth) && buyTicket(tickets.getSecondTrain(),
+                firstName, lastName, dateOfBirth);
     }
 
     @Override
-    public boolean buyTickets(final int firstJourneyId,
-                              final int secondJourneyId,
-                              final int stopFromId,
-                              final int stopToId,
-                              final int transferArrivalId,
-                              final int transferDepartId,
-                              final float firstPrice,
-                              final float secondPrice,
+    public boolean buyTickets(final TransferTicketOrderDto tickets,
                               final String email) {
-        return buyTicket(firstJourneyId, stopFromId, transferArrivalId,
-                firstPrice, email) && buyTicket(secondJourneyId,
-                transferDepartId, stopToId, secondPrice, email);
+        return buyTicket(tickets.getFirstTrain(), email)
+                && buyTicket(tickets.getSecondTrain(), email);
     }
 }

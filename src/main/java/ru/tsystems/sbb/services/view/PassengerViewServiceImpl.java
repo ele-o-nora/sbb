@@ -114,6 +114,32 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         return objects;
     }
 
+    @Override
+    public Map<String, Object> finalizeTicketSaleLogged(
+            final TicketOrderDto ticketOrder, final String email) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> finalizeTicketsSaleLogged(
+            final TransferTicketOrderDto order, final String email) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> finalizeTicketSaleAnon(
+            final TicketOrderDto ticketOrder, final String firstName,
+            final String lastName, final String dateOfBirth) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> finalizeTicketsSaleAnon(
+            final TransferTicketOrderDto order, final String firstName,
+            final String lastName, final String dateOfBirth) {
+        return null;
+    }
+
     private boolean validateName(final String name) {
         return name != null && !name.isEmpty();
     }

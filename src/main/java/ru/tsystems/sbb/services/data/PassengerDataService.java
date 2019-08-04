@@ -9,20 +9,13 @@ import java.time.LocalDate;
 public interface PassengerDataService {
     void register(String firstName, String lastName, LocalDate dateOfBirth,
                   String email, String password);
-    boolean buyTicket(int journeyId, int stopFromId, int stopToId, float price,
-                   String firstName, String lastName, LocalDate dateOfBirth);
-    boolean buyTicket(int journeyId, int stopFromId, int stopToId, float price,
-                   String email);
+    boolean buyTicket(TicketOrderDto ticket, String firstName, String lastName,
+                      LocalDate dateOfBirth);
+    boolean buyTicket(TicketOrderDto ticket, String email);
     PassengerDto getPassenger(String email);
-    boolean buyTickets(int firstJourneyId, int secondJourneyId, int stopFromId,
-                       int stopToId, int transferArrivalId,
-                       int transferDepartId, float firstPrice,
-                       float secondPrice, String firstName, String lastName,
+    boolean buyTickets(TransferTicketOrderDto tickets, String firstName, String lastName,
                        LocalDate dateOfBirth);
-    boolean buyTickets(int firstJourneyId, int secondJourneyId, int stopFromId,
-                       int stopToId, int transferArrivalId,
-                       int transferDepartId, float firstPrice,
-                       float secondPrice, String email);
+    boolean buyTickets(TransferTicketOrderDto tickets, String email);
     TicketOrderDto prepareTicketOrder(int journeyId, String stationFrom,
                                       String stationTo);
     TransferTicketOrderDto prepareTicketsOrder(int firstJourneyId,

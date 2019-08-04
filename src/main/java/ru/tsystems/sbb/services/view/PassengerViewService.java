@@ -1,5 +1,8 @@
 package ru.tsystems.sbb.services.view;
 
+import ru.tsystems.sbb.model.dto.TicketOrderDto;
+import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
+
 import java.util.Map;
 
 public interface PassengerViewService {
@@ -24,4 +27,16 @@ public interface PassengerViewService {
                                                 String stationFrom,
                                                 String stationTo,
                                                 String transfer);
+    Map<String, Object> finalizeTicketSaleLogged(TicketOrderDto ticketOrder,
+                                                 String email);
+    Map<String, Object> finalizeTicketsSaleLogged(TransferTicketOrderDto order,
+                                                  String email);
+    Map<String, Object> finalizeTicketSaleAnon(TicketOrderDto ticketOrder,
+                                               String firstName,
+                                               String lastName,
+                                               String dateOfBirth);
+    Map<String, Object> finalizeTicketsSaleAnon(TransferTicketOrderDto order,
+                                                String firstName,
+                                                String lastName,
+                                                String dateOfBirth);
 }

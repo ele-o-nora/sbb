@@ -58,6 +58,7 @@
                                            value="${origin}">
                                     <input type="hidden" name="to"
                                            value="${destination}">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                     <input type="submit" class="btn btn-outline-danger" value="Buy ticket"/>
                                 </form>
                             </td>
@@ -99,6 +100,7 @@
                                     <input type="hidden" name="from" value="${origin}">
                                     <input type="hidden" name="transfer" value="${connection.transferStation}">
                                     <input type="hidden" name="to" value="${destination}">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                 <input type="submit" class="btn btn-outline-danger" value="Buy tickets"/>
                                 </form>
                             </td>
