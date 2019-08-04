@@ -21,6 +21,6 @@ public interface PassengerDao {
     ScheduledStop getStopById(int id);
     Passenger getPassengerByInfo(String firstName, String lastName,
                                  LocalDate dateOfBirth);
-    Passenger getPassengerById(int id);
+    Passenger getUserPassenger(User user);
     Ticket getTicket(Journey journey, Passenger passenger);
 }

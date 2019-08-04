@@ -43,6 +43,9 @@
             </button>
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
+            <span class="navbar-text float-right m-1">Logged as:
+                <sec:authentication property="principal.username" />
+            </span>
             <form action="${pageContext.request.contextPath}/logout" method="POST" class="form-inline">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <input type="submit" value="Logout" class="btn btn-sm btn-outline-light float-right m-1"/>

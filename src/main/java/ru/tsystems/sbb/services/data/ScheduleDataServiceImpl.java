@@ -3,6 +3,7 @@ package ru.tsystems.sbb.services.data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.tsystems.sbb.model.dao.PassengerDao;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
@@ -25,6 +26,9 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 
     @Autowired
     private ScheduleDao scheduleDao;
+
+    @Autowired
+    private PassengerDao passengerDao;
 
     @Autowired
     private EntityToDtoMapper mapper;
@@ -156,4 +160,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         return connections;
     }
 
+    @Override
+    public JourneyDto getJourneyById(int journeyId) {
+        return mapper.convert(passengerDao.getJourneyById(journeyId));
+    }
 }

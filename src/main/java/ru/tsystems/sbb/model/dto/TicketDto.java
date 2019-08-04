@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TicketDto {
     private String route;
+    private String direction;
     private PassengerDto passenger;
     private ScheduledStopDto stationFrom;
     private ScheduledStopDto stationTo;

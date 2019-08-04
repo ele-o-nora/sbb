@@ -33,6 +33,7 @@
                         <th scope="col">Direction</th>
                         <th scope="col">Departs from ${origin}</th>
                         <th scope="col">Arrives at ${destination}</th>
+                        <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -50,6 +51,16 @@
                                     ${stop.arrival}
                                 </c:if>
                             </c:forEach></td>
+                            <td class="align-middle">
+                                <form action="${pageContext.request.contextPath}/buyTicket" method="post">
+                                    <input type="hidden" name="journeyId" value="${train.id}">
+                                    <input type="hidden" name="from"
+                                           value="${origin}">
+                                    <input type="hidden" name="to"
+                                           value="${destination}">
+                                    <input type="submit" class="btn btn-outline-danger" value="Buy ticket"/>
+                                </form>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -62,6 +73,7 @@
                         <th scope="col">Departs from ${origin}</th>
                         <th scope="col">Transfer</th>
                         <th scope="col">Arrives at ${destination}</th>
+                        <th scope="col">Action</th>
                     </tr>
                     <c:forEach var="connection" items="${connections}">
                         <tbody>
@@ -80,6 +92,16 @@
                                 </c:if>
                             </c:forEach></td>
                             <td class="align-middle">-</td>
+                            <td rowspan="2" class="align-middle">
+                                <form action="${pageContext.request.contextPath}/buyTickets" method="post">
+                                    <input type="hidden" name="firstJourneyId" value="${connection.firstTrain.id}">
+                                    <input type="hidden" name="secondJourneyId" value="${connection.secondTrain.id}">
+                                    <input type="hidden" name="from" value="${origin}">
+                                    <input type="hidden" name="transfer" value="${connection.transferStation}">
+                                    <input type="hidden" name="to" value="${destination}">
+                                <input type="submit" class="btn btn-outline-danger" value="Buy tickets"/>
+                                </form>
+                            </td>
                         </tr>
                         <tr>
                             <td class="align-middle">${connection.secondTrain.route}</td>

@@ -91,6 +91,7 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     public TicketDto convert(final Ticket ticket) {
         TicketDto ticketDto = mapper.map(ticket, TicketDto.class);
         ticketDto.setRoute(ticket.getJourney().getRoute().getNumber());
+        ticketDto.setDirection(ticket.getJourney().getDestination().getName());
         ticketDto.setStationFrom(convert(ticket.getFrom()));
         ticketDto.setStationTo(convert(ticket.getTo()));
         return ticketDto;

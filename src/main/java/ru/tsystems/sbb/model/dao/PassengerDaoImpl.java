@@ -1,6 +1,5 @@
 package ru.tsystems.sbb.model.dao;
 
-import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,12 +67,11 @@ public class PassengerDaoImpl implements PassengerDao {
     public int currentTickets(final Journey journey, final ScheduledStop from,
                               final ScheduledStop to) {
         Session session = sessionFactory.getCurrentSession();
-        session.lock(journey, LockMode.PESSIMISTIC_WRITE);
-        return session.createQuery("select count(t) from Ticket t "
+        return session.createQuery("select count(distinct t) from Ticket t "
                 + "join t.from st1 join t.to st2 "
                 + "where t.journey = :journey "
-                + "and st1.departure >= :departure "
-                + "and st2.arrival <= :arrival", Long.class)
+                + "and st1.departure < :arrival "
+                + "and st2.arrival > :departure", Long.class)
                 .setParameter("journey", journey)
                 .setParameter("departure", from.getDeparture())
                 .setParameter("arrival", to.getArrival())
@@ -100,8 +98,11 @@ public class PassengerDaoImpl implements PassengerDao {
     }
 
     @Override
-    public Passenger getPassengerById(final int id) {
-        return sessionFactory.getCurrentSession().get(Passenger.class, id);
+    public Passenger getUserPassenger(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("from Passenger p "
+                + "where p.user = :user", Passenger.class)
+                .setParameter("user", user).getSingleResult();
     }
 
     @Override
