@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -20,7 +21,7 @@ import java.util.Set;
 @Table
 public class User extends AbstractEntity {
 
-    @Column(name = "e-mail")
+    @Column
     private String email;
 
     @Column
@@ -30,7 +31,7 @@ public class User extends AbstractEntity {
     @JoinColumn(name = "passenger_id")
     private Passenger passenger;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

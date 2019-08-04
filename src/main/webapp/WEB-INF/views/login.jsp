@@ -18,7 +18,7 @@
     <div class="form-row">
         <div class="col-sm-4 offset-sm-2">
             <input type="text" class="form-control" name="username"
-                   placeholder="Username" />
+                   placeholder="E-mail" />
         </div>
         <div class="col-sm-4">
             <input type="password" class="form-control" name="password"

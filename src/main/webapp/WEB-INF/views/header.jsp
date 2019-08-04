@@ -120,7 +120,7 @@ with at least one number, one lowercase and one uppercase letter" onkeyup="
                     <div class="form-row justify-content-center">
                         <div class="col-sm-5">
                             <input type="text" class="form-control" name="username"
-                                   placeholder="Username"/>
+                                   placeholder="E-mail"/>
                         </div>
                         <div class="col-sm-5">
                             <input type="password" class="form-control" name="password"
