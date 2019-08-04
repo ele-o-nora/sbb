@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.tsystems.sbb.model.dto.SignUpDto;
 import ru.tsystems.sbb.services.view.PassengerViewService;
 
 @Controller
@@ -25,12 +24,7 @@ public class PassengerController {
                                     final String email,
                                @RequestParam(name = "password")
                                     final String password) {
-        SignUpDto signUpDto = new SignUpDto();
-        signUpDto.setFirstName(firstName);
-        signUpDto.setLastName(lastName);
-        signUpDto.setDateOfBirth(dateOfBirth);
-        signUpDto.setEmail(email);
-        signUpDto.setPassword(password);
-        return new ModelAndView("index", viewService.register(signUpDto));
+        return new ModelAndView("index", viewService
+                .register(firstName, lastName, dateOfBirth, email, password));
     }
 }

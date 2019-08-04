@@ -156,13 +156,6 @@
             <version>${spring-security.version}</version>
         </dependency>
 
-        <!-- Hibernate Validator -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>6.0.17.Final</version>
-        </dependency>
-
     </dependencies>
 
     <build>
