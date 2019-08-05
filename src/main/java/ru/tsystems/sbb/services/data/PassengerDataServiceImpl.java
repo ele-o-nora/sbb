@@ -20,6 +20,7 @@ import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.User;
 import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
+import javax.persistence.NoResultException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -49,15 +50,8 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     public void register(final String firstName, final String lastName,
                          final LocalDate dateOfBirth, final String email,
                          final String password) {
-        Passenger passenger = passengerDao
-                .getPassengerByInfo(firstName, lastName, dateOfBirth);
-        if (passenger == null) {
-            passenger = new Passenger();
-            passenger.setFirstName(firstName);
-            passenger.setLastName(lastName);
-            passenger.setDateOfBirth(dateOfBirth);
-            passengerDao.add(passenger);
-        }
+        Passenger passenger = getOrCreatePassenger(firstName, lastName,
+                dateOfBirth);
         User user = new User();
         user.setEmail(email);
         user.setPassenger(passenger);
@@ -99,29 +93,19 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 .getOrigin().getId());
         ScheduledStop to = passengerDao.getStopById(ticketOrder
                 .getDestination().getId());
-        Passenger passenger = passengerDao
-                .getPassengerByInfo(firstName, lastName, dateOfBirth);
+        Passenger passenger = getOrCreatePassenger(firstName, lastName,
+                dateOfBirth);
         if (passengerDao.currentTickets(journey, from, to)
                 < journey.getTrainType().getSeats() &&
                 ChronoUnit.MINUTES.between(LocalDateTime.now(),
                         from.getDeparture()) >= 10  &&
-                (passenger == null || passengerDao
-                        .getTicket(journey, passenger) == null)) {
+                passengerDao.getTickets(journey, passenger).isEmpty()) {
             Ticket ticket = new Ticket();
             ticket.setJourney(journey);
             ticket.setFrom(from);
             ticket.setTo(to);
             ticket.setPrice(ticketOrder.getPrice());
-            if (passenger != null) {
-                ticket.setPassenger(passenger);
-            } else {
-                Passenger newPassenger = new Passenger();
-                newPassenger.setFirstName(firstName);
-                newPassenger.setLastName(lastName);
-                newPassenger.setDateOfBirth(dateOfBirth);
-                passengerDao.add(newPassenger);
-                ticket.setPassenger(newPassenger);
-            }
+            ticket.setPassenger(passenger);
             passengerDao.add(ticket);
             return true;
         } else {
@@ -180,6 +164,23 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         return buyTicket(tickets.getFirstTrain(), firstName, lastName,
                 dateOfBirth) && buyTicket(tickets.getSecondTrain(),
                 firstName, lastName, dateOfBirth);
+    }
+
+    private Passenger getOrCreatePassenger(final String firstName,
+                                           final String lastName,
+                                           final LocalDate dateOfBirth) {
+        Passenger passenger;
+        try {
+            passenger = passengerDao
+                    .getPassengerByInfo(firstName, lastName, dateOfBirth);
+        } catch (NoResultException e) {
+            passenger = new Passenger();
+            passenger.setFirstName(firstName);
+            passenger.setLastName(lastName);
+            passenger.setDateOfBirth(dateOfBirth);
+            passengerDao.add(passenger);
+        }
+        return passenger;
     }
 
 }

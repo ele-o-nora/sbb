@@ -11,8 +11,9 @@
     <meta charset="UTF-8">
     <title>Buy tickets</title>
 </head>
-<body>
+<body class="text-center">
 <%@include file="header.jsp" %>
+<h5 class="text-secondary m-3">Passenger details:</h5>
 <c:if test="${!empty ticketOrder}">
     <form:form modelAttribute="ticketOrder" method="post"
                action="${pageContext.request.contextPath}/finalizeTicketSale" autocomplete="off">
@@ -33,15 +34,16 @@
                        data-toggle="datetimepicker" data-target="#dateOfBirthPicker2" required/>
             </div>
         </div>
+        <h5 class="text-secondary m-3">Travel info:</h5>
         <div class="row justify-content-center m-2">
             <div class="col-sm-6 m-1 border">
-                Route: ${ticketOrder.journey.route}
-                Direction: ${ticketOrder.journey.destination} <br/>
-                From: ${ticketOrder.origin.station}
-                Departs: ${ticketOrder.origin.departure}<br/>
-                To: ${ticketOrder.destination.station}
-                Arrives: ${ticketOrder.destination.arrival}<br/>
-                Price: ${ticketOrder.formattedPrice}
+                Route: <span class="text-danger m-1">${ticketOrder.journey.route}</span>
+                Direction: <span class="text-danger m-1">${ticketOrder.journey.destination}</span> <br/>
+                From: <span class="text-danger m-1">${ticketOrder.origin.station}</span>
+                Departs: <span class="text-danger m-1">${ticketOrder.origin.departure}</span><br/>
+                To: <span class="text-danger m-1">${ticketOrder.destination.station}</span>
+                Arrives: <span class="text-danger m-1">${ticketOrder.destination.arrival}</span><br/>
+                Price: <span class="text-danger m-1">${ticketOrder.formattedPrice}</span>
                 <form:input type="hidden" path="journey.id" value="${ticketOrder.journey.id}"/>
                 <form:input type="hidden" path="origin.id" value="${ticketOrder.origin.id}"/>
                 <form:input type="hidden" path="destination.id" value="${ticketOrder.destination.id}"/>
@@ -49,13 +51,13 @@
             </div>
         </div>
         <div class="form-row justify-content-center m-2">
-            <input type="submit" class="btn btn-outline-secondary" value="Buy ticket"/>
+            <input type="submit" class="btn btn-outline-danger" value="Buy ticket"/>
         </div>
     </form:form>
 </c:if>
 <c:if test="${!empty transferTickets}">
     <form:form modelAttribute="transferTickets" method="post"
-               action="${pageContext.request.contextPath}/finalizeTicketSale" autocomplete="off">
+               action="${pageContext.request.contextPath}/finalizeTicketsSale" autocomplete="off">
         <div class="form-row justify-content-center m-1">
             <div class="col-sm-4">
                 <input type="text" class="form-control" name="firstName" placeholder="First name"
@@ -73,15 +75,16 @@
                        data-toggle="datetimepicker" data-target="#dateOfBirthPicker2" required/>
             </div>
         </div>
+        <h5 class="text-secondary m-3">Travel info:</h5>
         <div class="row justify-content-center m-2">
-            <div class="col-sm-6 m-1 border">
-                Route: ${transferTickets.firstTrain.journey.route}
-                Direction: ${transferTickets.firstTrain.journey.destination} <br/>
-                From: ${transferTickets.firstTrain.origin.station}
-                Departs: ${transferTickets.firstTrain.origin.departure}<br/>
-                To: ${transferTickets.firstTrain.destination.station}
-                Arrives: ${transferTickets.firstTrain.destination.arrival}<br/>
-                Price: ${transferTickets.firstTrain.formattedPrice}
+            <div class="col-sm-5 m-1 border">
+                Route: <span class="text-danger m-1">${transferTickets.firstTrain.journey.route}</span>
+                Direction: <span class="text-danger m-1">${transferTickets.firstTrain.journey.destination}</span> <br/>
+                From: <span class="text-danger m-1">${transferTickets.firstTrain.origin.station}</span>
+                Departs: <span class="text-danger m-1">${transferTickets.firstTrain.origin.departure}</span><br/>
+                To: <span class="text-danger m-1">${transferTickets.firstTrain.destination.station}</span>
+                Arrives: <span class="text-danger m-1">${transferTickets.firstTrain.destination.arrival}</span><br/>
+                Price: <span class="text-danger m-1">${transferTickets.firstTrain.formattedPrice}</span>
                 <form:input type="hidden" path="firstTrain.journey.id"
                             value="${transferTickets.firstTrain.journey.id}"/>
                 <form:input type="hidden" path="firstTrain.origin.id" value="${transferTickets.firstTrain.origin.id}"/>
@@ -89,14 +92,14 @@
                             value="${transferTickets.firstTrain.destination.id}"/>
                 <form:input type="hidden" path="firstTrain.price" value="${transferTickets.firstTrain.price}"/>
             </div>
-            <div class="col-sm-6 m-1 border">
-                Route: ${transferTickets.secondTrain.journey.route}
-                Direction: ${transferTickets.secondTrain.journey.destination} <br/>
-                From: ${transferTickets.secondTrain.origin.station}
-                Departs: ${transferTickets.secondTrain.origin.departure}<br/>
-                To: ${transferTickets.secondTrain.destination.station}
-                Arrives: ${transferTickets.secondTrain.destination.arrival}<br/>
-                Price: ${transferTickets.secondTrain.formattedPrice}
+            <div class="col-sm-5 m-1 border">
+                Route: <span class="text-danger m-1">${transferTickets.secondTrain.journey.route}</span>
+                Direction: <span class="text-danger m-1">${transferTickets.secondTrain.journey.destination}</span> <br/>
+                From: <span class="text-danger m-1">${transferTickets.secondTrain.origin.station}</span>
+                Departs: <span class="text-danger m-1">${transferTickets.secondTrain.origin.departure}</span><br/>
+                To: <span class="text-danger m-1">${transferTickets.secondTrain.destination.station}</span>
+                Arrives: <span class="text-danger m-1">${transferTickets.secondTrain.destination.arrival}</span><br/>
+                Price: <span class="text-danger m-1">${transferTickets.secondTrain.formattedPrice}</span>
                 <form:input type="hidden" path="secondTrain.journey.id"
                             value="${transferTickets.secondTrain.journey.id}"/>
                 <form:input type="hidden" path="secondTrain.origin.id"
@@ -107,7 +110,7 @@
             </div>
         </div>
         <div class="form-row justify-content-center m-2">
-            <input type="submit" value="Buy tickets" class="btn btn-outline-secondary">
+            <input type="submit" value="Buy tickets" class="btn btn-outline-danger">
         </div>
     </form:form>
 </c:if>

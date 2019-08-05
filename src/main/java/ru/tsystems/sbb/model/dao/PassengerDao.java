@@ -8,6 +8,7 @@ import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.User;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface PassengerDao {
     User getUserByEmail(String email);
@@ -22,5 +23,5 @@ public interface PassengerDao {
     Passenger getPassengerByInfo(String firstName, String lastName,
                                  LocalDate dateOfBirth);
     Passenger getUserPassenger(User user);
-    Ticket getTicket(Journey journey, Passenger passenger);
+    List<Ticket> getTickets(Journey journey, Passenger passenger);
 }

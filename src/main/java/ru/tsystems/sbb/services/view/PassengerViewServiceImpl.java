@@ -36,8 +36,10 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter
             .ISO_LOCAL_DATE;
 
-    private static final String SUCCESS = "Registration successful. You may now sign in.";
-    private static final String FAIL = "Registration failed. Please try again.";
+    private static final String SIGN_UP_SUCCESS = "Registration successful. You may now sign in.";
+    private static final String SIGN_UP_FAIL = "Registration failed. Please try again.";
+    private static final String TICKET_SUCCESS = "Ticket sale successful. Thank you for traveling with us.";
+    private static final String TICKET_FAIL = "Something went wrong. Couldn't complete the sale.";
     private static final String STATUS = "status";
 
     @Override
@@ -46,12 +48,10 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                                         final String dateOfBirth,
                                         final String email,
                                         final String password) {
-        Map<String, Object> objects = new HashMap<>();
-        List<LineDto> lines = routeDataService.getAllLines();
-        objects.put("lines", lines);
+        Map<String, Object> objects = getLines();
         if (!validateName(firstName) || !validateName(lastName) ||
                 !validatePassword(password) || !validateEmail(email)) {
-            objects.put(STATUS, FAIL);
+            objects.put(STATUS, SIGN_UP_FAIL);
             return objects;
         }
         try {
@@ -59,9 +59,9 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                     DATE_FORMATTER);
             passengerDataService.register(firstName, lastName, dob,
                     email, password);
-            objects.put(STATUS, SUCCESS);
+            objects.put(STATUS, SIGN_UP_SUCCESS);
         } catch (Exception e) {
-            objects.put(STATUS, FAIL);
+            objects.put(STATUS, SIGN_UP_FAIL);
         }
         return objects;
     }
@@ -109,14 +109,46 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     public Map<String, Object> finalizeTicketSale(
             final TicketOrderDto ticketOrder, final String firstName,
             final String lastName, final String dateOfBirth) {
-        return null;
+        Map<String, Object> objects = getLines();
+        if (!validateName(firstName) || !validateName(lastName)) {
+            objects.put(STATUS, TICKET_FAIL);
+            return objects;
+        }
+        try {
+            LocalDate dob = LocalDate.parse(dateOfBirth, DATE_FORMATTER);
+            if (passengerDataService.buyTicket(ticketOrder,
+                    firstName, lastName, dob)) {
+                objects.put(STATUS, TICKET_SUCCESS);
+            } else {
+                objects.put(STATUS, TICKET_FAIL);
+            }
+        } catch (Exception e) {
+            objects.put(STATUS, TICKET_FAIL);
+        }
+        return objects;
     }
 
     @Override
     public Map<String, Object> finalizeTicketsSale(
             final TransferTicketOrderDto order, final String firstName,
             final String lastName, final String dateOfBirth) {
-        return null;
+        Map<String, Object> objects = getLines();
+        if (!validateName(firstName) || !validateName(lastName)) {
+            objects.put(STATUS, TICKET_FAIL);
+            return objects;
+        }
+        try {
+            LocalDate dob = LocalDate.parse(dateOfBirth, DATE_FORMATTER);
+            if (passengerDataService.buyTickets(order,
+                    firstName, lastName, dob)) {
+                objects.put(STATUS, TICKET_SUCCESS);
+            } else {
+                objects.put(STATUS, TICKET_FAIL);
+            }
+        } catch (Exception e) {
+            objects.put(STATUS, TICKET_FAIL);
+        }
+        return objects;
     }
 
     private boolean validateName(final String name) {
@@ -139,6 +171,13 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         Pattern p = Pattern.compile("^(.+)@(.+)$");
         Matcher m = p.matcher(email);
         return m.find();
+    }
+
+    private Map<String, Object> getLines() {
+        Map<String, Object> objects = new HashMap<>();
+        List<LineDto> lines = routeDataService.getAllLines();
+        objects.put("lines", lines);
+        return objects;
     }
 
 }

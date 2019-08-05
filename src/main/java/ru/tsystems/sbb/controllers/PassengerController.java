@@ -69,7 +69,8 @@ public class PassengerController {
                                                 final String dateOfBirth,
                                            @ModelAttribute(name = "ticketOrder")
                                            final TicketOrderDto order) {
-        return null;
+        return new ModelAndView("index", viewService
+                .finalizeTicketSale(order, firstName, lastName, dateOfBirth));
     }
 
     @PostMapping("/finalizeTicketsSale")
@@ -81,6 +82,7 @@ public class PassengerController {
                                                 final String dateOfBirth,
                                             @ModelAttribute("transferTickets")
                                        final TransferTicketOrderDto order) {
-        return null;
+        return new ModelAndView("index", viewService
+                .finalizeTicketsSale(order, firstName, lastName, dateOfBirth));
     }
 }

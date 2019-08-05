@@ -12,6 +12,7 @@ import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.User;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Component
 public class PassengerDaoImpl implements PassengerDao {
@@ -106,11 +107,11 @@ public class PassengerDaoImpl implements PassengerDao {
     }
 
     @Override
-    public Ticket getTicket(Journey journey, Passenger passenger) {
+    public List<Ticket> getTickets(Journey journey, Passenger passenger) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from Ticket t where t.journey = :journey "
                 + "and t.passenger = :passenger", Ticket.class)
                 .setParameter("journey", journey)
-                .setParameter("passenger", passenger).getSingleResult();
+                .setParameter("passenger", passenger).getResultList();
     }
 }
