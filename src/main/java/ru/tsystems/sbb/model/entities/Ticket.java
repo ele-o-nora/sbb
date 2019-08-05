@@ -1,5 +1,7 @@
 package ru.tsystems.sbb.model.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +15,10 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table
+@Builder
 public class Ticket extends AbstractEntity {
 
     @ManyToOne

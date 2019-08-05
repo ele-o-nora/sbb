@@ -27,7 +27,7 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     private static final String FAIL = "Sorry, there were no trains found "
             + "fulfilling your search criteria :(";
 
-    private static final String ERROR = "There was an error processing your request";
+    private static final String ERROR = "There was an error processing your request. Please check your inputs.";
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter
             .ofPattern("yyyy-MM-dd HH:mm");

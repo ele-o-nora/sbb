@@ -13,7 +13,11 @@
 </head>
 <body class="text-center">
 <%@include file="header.jsp" %>
-<h5 class="text-secondary m-3">Passenger details:</h5>
+<c:if test="${!empty status}">
+    <span class="text-danger m-5">${status}</span>
+    <a href="${pageContext.request.contextPath}/">Back to main page</a>
+</c:if>
+<c:if test="${empty status}"><h5 class="text-secondary m-3">Passenger details:</h5></c:if>
 <c:if test="${!empty ticketOrder}">
     <form:form modelAttribute="ticketOrder" method="post"
                action="${pageContext.request.contextPath}/finalizeTicketSale" autocomplete="off">

@@ -5,8 +5,8 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
+import ru.tsystems.sbb.model.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TicketOrderDto;
 import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
 import ru.tsystems.sbb.services.data.PassengerDataService;
@@ -37,9 +37,12 @@ public class PassengerViewServiceImpl implements PassengerViewService {
             .ISO_LOCAL_DATE;
 
     private static final String SIGN_UP_SUCCESS = "Registration successful. You may now sign in.";
-    private static final String SIGN_UP_FAIL = "Registration failed. Please try again.";
+    private static final String SIGN_UP_FAIL = "Registration failed. "
+            + "Please make sure you fill all the required fields correctly.";
     private static final String TICKET_SUCCESS = "Ticket sale successful. Thank you for traveling with us.";
-    private static final String TICKET_FAIL = "Something went wrong. Couldn't complete the sale.";
+    private static final String TICKET_FAIL = "Couldn't complete ticket sale. ";
+    private static final String TICKET_PREP_FAIL = "Couldn't prepare ticket sale. ";
+    private static final String SUCCESS = "success";
     private static final String STATUS = "status";
 
     @Override
@@ -73,6 +76,11 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         Map<String, Object> objects = new HashMap<>();
         TicketOrderDto ticketOrder = passengerDataService
                 .prepareTicketOrder(journeyId, stationFrom, stationTo);
+        if (ticketOrder.getStatus() != null && !ticketOrder
+                .getStatus().isEmpty()) {
+            objects.put(STATUS, TICKET_PREP_FAIL + ticketOrder.getStatus());
+            return objects;
+        }
         objects.put("ticketOrder", ticketOrder);
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
@@ -94,6 +102,17 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         TransferTicketOrderDto transferTickets = passengerDataService
                 .prepareTicketsOrder(firstJourneyId, secondJourneyId,
                         stationFrom, stationTo, transfer);
+        if (transferTickets.getFirstTrain().getStatus() != null
+                && !transferTickets.getFirstTrain().getStatus().isEmpty()) {
+            objects.put(STATUS, TICKET_PREP_FAIL + transferTickets
+                    .getFirstTrain().getStatus());
+            return objects;
+        } else if (transferTickets.getSecondTrain().getStatus() != null
+                && !transferTickets.getSecondTrain().getStatus().isEmpty()) {
+            objects.put(STATUS, TICKET_PREP_FAIL + transferTickets
+                    .getSecondTrain().getStatus());
+            return objects;
+        }
         objects.put("transferTickets", transferTickets);
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
@@ -116,11 +135,12 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         }
         try {
             LocalDate dob = LocalDate.parse(dateOfBirth, DATE_FORMATTER);
-            if (passengerDataService.buyTicket(ticketOrder,
-                    firstName, lastName, dob)) {
+            String saleResult = passengerDataService.buyTicket(ticketOrder,
+                    firstName, lastName, dob);
+            if (saleResult.equalsIgnoreCase(SUCCESS)) {
                 objects.put(STATUS, TICKET_SUCCESS);
             } else {
-                objects.put(STATUS, TICKET_FAIL);
+                objects.put(STATUS, TICKET_FAIL + saleResult);
             }
         } catch (Exception e) {
             objects.put(STATUS, TICKET_FAIL);
@@ -139,11 +159,12 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         }
         try {
             LocalDate dob = LocalDate.parse(dateOfBirth, DATE_FORMATTER);
-            if (passengerDataService.buyTickets(order,
-                    firstName, lastName, dob)) {
+            String saleResult = passengerDataService.buyTickets(order,
+                    firstName, lastName, dob);
+            if (saleResult.equalsIgnoreCase(SUCCESS)) {
                 objects.put(STATUS, TICKET_SUCCESS);
             } else {
-                objects.put(STATUS, TICKET_FAIL);
+                objects.put(STATUS, TICKET_FAIL + saleResult);
             }
         } catch (Exception e) {
             objects.put(STATUS, TICKET_FAIL);
@@ -175,8 +196,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
 
     private Map<String, Object> getLines() {
         Map<String, Object> objects = new HashMap<>();
-        List<LineDto> lines = routeDataService.getAllLines();
-        objects.put("lines", lines);
+        List<StationDto> stations = routeDataService.allStations();
+        objects.put("stations", stations);
         return objects;
     }
 

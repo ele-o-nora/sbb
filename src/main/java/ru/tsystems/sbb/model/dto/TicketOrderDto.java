@@ -14,6 +14,7 @@ public class TicketOrderDto {
     private ScheduledStopDto destination;
     private float price;
     private String formattedPrice;
+    private String status;
 
     public void setFormattedPrice(final float price) {
         int stags = (int) price;

@@ -3,6 +3,7 @@ package ru.tsystems.sbb.services.data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tsystems.sbb.model.dao.AdminDao;
 import ru.tsystems.sbb.model.dao.PassengerDao;
@@ -46,20 +47,24 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     @Autowired
     private EntityToDtoMapper mapper;
 
+    private static final String NO_TIME = "Not enough time before departure";
+    private static final String NO_SEATS = "No available seats";
+    private static final String SAME_PASSENGER = "You already have a ticket "
+            + "for this journey";
+    private static final String SUCCESS = "success";
+
     @Override
     public void register(final String firstName, final String lastName,
                          final LocalDate dateOfBirth, final String email,
                          final String password) {
         Passenger passenger = getOrCreatePassenger(firstName, lastName,
                 dateOfBirth);
-        User user = new User();
-        user.setEmail(email);
-        user.setPassenger(passenger);
-        user.setPassword(passwordEncoder.encode(password));
         Set<Role> roles = new HashSet<>();
         Role userRole = passengerDao.getRoleByName("USER");
         roles.add(userRole);
-        user.setRoles(roles);
+        User user = User.builder().email(email).passenger(passenger)
+                .password(passwordEncoder.encode(password)).roles(roles)
+                .build();
         passengerDao.add(user);
     }
 
@@ -84,7 +89,8 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
-    public boolean buyTicket(final TicketOrderDto ticketOrder,
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public String buyTicket(final TicketOrderDto ticketOrder,
                           final String firstName, final String lastName,
                           final LocalDate dateOfBirth) {
         Journey journey = passengerDao.getJourneyById(ticketOrder
@@ -95,21 +101,19 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 .getDestination().getId());
         Passenger passenger = getOrCreatePassenger(firstName, lastName,
                 dateOfBirth);
-        if (passengerDao.currentTickets(journey, from, to)
-                < journey.getTrainType().getSeats() &&
-                ChronoUnit.MINUTES.between(LocalDateTime.now(),
-                        from.getDeparture()) >= 10  &&
-                passengerDao.getTickets(journey, passenger).isEmpty()) {
-            Ticket ticket = new Ticket();
-            ticket.setJourney(journey);
-            ticket.setFrom(from);
-            ticket.setTo(to);
-            ticket.setPrice(ticketOrder.getPrice());
-            ticket.setPassenger(passenger);
+        if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
+                from.getDeparture()) < 10) {
+            return NO_TIME;
+        } else if (!passengerDao.getTickets(journey, passenger).isEmpty()) {
+            return SAME_PASSENGER;
+        } else if (passengerDao.currentTickets(journey, from, to)
+                < journey.getTrainType().getSeats()) {
+            Ticket ticket = Ticket.builder().from(from).to(to).journey(journey)
+                    .price(ticketOrder.getPrice()).passenger(passenger).build();
             passengerDao.add(ticket);
-            return true;
+            return SUCCESS;
         } else {
-            return false;
+            return NO_SEATS;
         }
     }
 
@@ -127,11 +131,20 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 .filter(scheduledStop -> scheduledStop.getStation()
                         .getName().equals(stationFrom)).findFirst()
                 .orElse(new ScheduledStop());
+        if (ChronoUnit.MINUTES.between(LocalDateTime.now(), stopFrom.getDeparture()) < 10) {
+            ticketOrder.setStatus(NO_TIME);
+            return ticketOrder;
+        }
         ticketOrder.setOrigin(mapper.convert(stopFrom));
         ScheduledStop stopTo = journey.getStops().stream()
                 .filter(scheduledStop -> scheduledStop.getStation()
                         .getName().equals(stationTo)).findFirst()
                 .orElse(new ScheduledStop());
+        if (passengerDao.currentTickets(journey, stopFrom, stopTo)
+                == journey.getTrainType().getSeats()) {
+            ticketOrder.setStatus(NO_SEATS);
+            return ticketOrder;
+        }
         ticketOrder.setDestination(mapper.convert(stopTo));
         return ticketOrder;
     }
@@ -157,13 +170,46 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
-    public boolean buyTickets(final TransferTicketOrderDto tickets,
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public String buyTickets(final TransferTicketOrderDto tickets,
                               final String firstName,
                               final String lastName,
                               final LocalDate dateOfBirth) {
-        return buyTicket(tickets.getFirstTrain(), firstName, lastName,
-                dateOfBirth) && buyTicket(tickets.getSecondTrain(),
-                firstName, lastName, dateOfBirth);
+        Journey firstJourney = passengerDao.getJourneyById(tickets
+                .getFirstTrain().getJourney().getId());
+        Journey secondJourney = passengerDao.getJourneyById(tickets
+                .getSecondTrain().getJourney().getId());
+        ScheduledStop firstFrom = passengerDao.getStopById(tickets
+                .getFirstTrain().getOrigin().getId());
+        ScheduledStop firstTo = passengerDao.getStopById(tickets
+                .getFirstTrain().getDestination().getId());
+        ScheduledStop secondFrom = passengerDao.getStopById(tickets
+                .getSecondTrain().getOrigin().getId());
+        ScheduledStop secondTo = passengerDao.getStopById(tickets
+                .getSecondTrain().getDestination().getId());
+        Passenger passenger = getOrCreatePassenger(firstName, lastName,
+                dateOfBirth);
+        if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
+                firstFrom.getDeparture()) < 10) {
+            return NO_TIME;
+        } else if (!passengerDao.getTickets(firstJourney, passenger).isEmpty()
+        || !passengerDao.getTickets(secondJourney, passenger).isEmpty()) {
+            return SAME_PASSENGER;
+        } else if (passengerDao.currentTickets(firstJourney, firstFrom,
+                firstTo) < firstJourney.getTrainType().getSeats()
+                && passengerDao.currentTickets(secondJourney, secondFrom,
+                secondTo) < secondJourney.getTrainType().getSeats()) {
+            Ticket firstTicket = Ticket.builder().from(firstFrom).to(firstTo)
+                    .journey(firstJourney).price(tickets.getFirstTrain()
+                            .getPrice()).passenger(passenger).build();
+            Ticket secondTicket = Ticket.builder().from(secondFrom).to(secondTo)
+                    .journey(secondJourney).price(tickets.getSecondTrain()
+                            .getPrice()).passenger(passenger).build();
+            passengerDao.add(firstTicket);
+            passengerDao.add(secondTicket);
+            return SUCCESS;
+        }
+        return NO_SEATS;
     }
 
     private Passenger getOrCreatePassenger(final String firstName,

@@ -9,10 +9,10 @@ import java.time.LocalDate;
 public interface PassengerDataService {
     void register(String firstName, String lastName, LocalDate dateOfBirth,
                   String email, String password);
-    boolean buyTicket(TicketOrderDto ticket, String firstName, String lastName,
+    String buyTicket(TicketOrderDto ticket, String firstName, String lastName,
                       LocalDate dateOfBirth);
     PassengerDto getPassenger(String email);
-    boolean buyTickets(TransferTicketOrderDto tickets, String firstName, String lastName,
+    String buyTickets(TransferTicketOrderDto tickets, String firstName, String lastName,
                        LocalDate dateOfBirth);
     TicketOrderDto prepareTicketOrder(int journeyId, String stationFrom,
                                       String stationTo);
