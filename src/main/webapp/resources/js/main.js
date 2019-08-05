@@ -71,7 +71,7 @@ $(document).ready(function () {
             next: 'fas fa-chevron-right',
         },
         format: 'YYYY-MM-DD',
-        maxDate: moment().subtract(16, 'years'),
+        maxDate: moment().subtract(10, 'years'),
         viewMode: 'years'
     });
 

@@ -1,6 +1,9 @@
 package ru.tsystems.sbb.services.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
@@ -64,44 +67,25 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     }
 
     @Override
-    public Map<String, Object> prepTicketSaleLogged(final int journeyId,
-                                                    final String stationFrom,
-                                                    final String stationTo,
-                                                    final String email) {
-        Map<String, Object> objects = prepTicketSaleAnon(journeyId,
-                stationFrom, stationTo);
-        PassengerDto passenger = passengerDataService.getPassenger(email);
-        objects.put("passenger", passenger);
-        return objects;
-    }
-
-    @Override
-    public Map<String, Object> prepTicketsSaleLogged(final int firstJourneyId,
-                                                     final int secondJourneyId,
-                                                     final String stationFrom,
-                                                     final String stationTo,
-                                                     final String transfer,
-                                                     final String email) {
-        Map<String, Object> objects = prepTicketsSaleAnon(firstJourneyId,
-                secondJourneyId, stationFrom, stationTo, transfer);
-        PassengerDto passenger = passengerDataService.getPassenger(email);
-        objects.put("passenger", passenger);
-        return objects;
-    }
-
-    @Override
-    public Map<String, Object> prepTicketSaleAnon(final int journeyId,
+    public Map<String, Object> prepTicketSale(final int journeyId,
                                                   final String stationFrom,
                                                   final String stationTo) {
         Map<String, Object> objects = new HashMap<>();
         TicketOrderDto ticketOrder = passengerDataService
                 .prepareTicketOrder(journeyId, stationFrom, stationTo);
         objects.put("ticketOrder", ticketOrder);
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            PassengerDto passenger = passengerDataService
+                    .getPassenger(auth.getName());
+            objects.put("passenger", passenger);
+        }
         return objects;
     }
 
     @Override
-    public Map<String, Object> prepTicketsSaleAnon(final int firstJourneyId,
+    public Map<String, Object> prepTicketsSale(final int firstJourneyId,
                                                    final int secondJourneyId,
                                                    final String stationFrom,
                                                    final String stationTo,
@@ -111,30 +95,25 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                 .prepareTicketsOrder(firstJourneyId, secondJourneyId,
                         stationFrom, stationTo, transfer);
         objects.put("transferTickets", transferTickets);
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            PassengerDto passenger = passengerDataService
+                    .getPassenger(auth.getName());
+            objects.put("passenger", passenger);
+        }
         return objects;
     }
 
     @Override
-    public Map<String, Object> finalizeTicketSaleLogged(
-            final TicketOrderDto ticketOrder, final String email) {
-        return null;
-    }
-
-    @Override
-    public Map<String, Object> finalizeTicketsSaleLogged(
-            final TransferTicketOrderDto order, final String email) {
-        return null;
-    }
-
-    @Override
-    public Map<String, Object> finalizeTicketSaleAnon(
+    public Map<String, Object> finalizeTicketSale(
             final TicketOrderDto ticketOrder, final String firstName,
             final String lastName, final String dateOfBirth) {
         return null;
     }
 
     @Override
-    public Map<String, Object> finalizeTicketsSaleAnon(
+    public Map<String, Object> finalizeTicketsSale(
             final TransferTicketOrderDto order, final String firstName,
             final String lastName, final String dateOfBirth) {
         return null;

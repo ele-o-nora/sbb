@@ -9,33 +9,19 @@ public interface PassengerViewService {
     Map<String, Object> register(String firstName, String lastName,
                                  String dateOfBirth, String email,
                                  String password);
-    Map<String, Object> prepTicketSaleLogged(int journeyId,
-                                               String stationFrom,
-                                               String stationTo,
-                                               String email);
-    Map<String, Object> prepTicketsSaleLogged(int firstJourneyId,
-                                                int secondJourneyId,
-                                                String stationFrom,
-                                                String stationTo,
-                                                String transfer,
-                                                String email);
-    Map<String, Object> prepTicketSaleAnon(int journeyId,
+    Map<String, Object> prepTicketSale(int journeyId,
                                                String stationFrom,
                                                String stationTo);
-    Map<String, Object> prepTicketsSaleAnon(int firstJourneyId,
+    Map<String, Object> prepTicketsSale(int firstJourneyId,
                                                 int secondJourneyId,
                                                 String stationFrom,
                                                 String stationTo,
                                                 String transfer);
-    Map<String, Object> finalizeTicketSaleLogged(TicketOrderDto ticketOrder,
-                                                 String email);
-    Map<String, Object> finalizeTicketsSaleLogged(TransferTicketOrderDto order,
-                                                  String email);
-    Map<String, Object> finalizeTicketSaleAnon(TicketOrderDto ticketOrder,
+    Map<String, Object> finalizeTicketSale(TicketOrderDto ticketOrder,
                                                String firstName,
                                                String lastName,
                                                String dateOfBirth);
-    Map<String, Object> finalizeTicketsSaleAnon(TransferTicketOrderDto order,
+    Map<String, Object> finalizeTicketsSale(TransferTicketOrderDto order,
                                                 String firstName,
                                                 String lastName,
                                                 String dateOfBirth);

@@ -49,11 +49,15 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     public void register(final String firstName, final String lastName,
                          final LocalDate dateOfBirth, final String email,
                          final String password) {
-        Passenger passenger = new Passenger();
-        passenger.setFirstName(firstName);
-        passenger.setLastName(lastName);
-        passenger.setDateOfBirth(dateOfBirth);
-        passengerDao.add(passenger);
+        Passenger passenger = passengerDao
+                .getPassengerByInfo(firstName, lastName, dateOfBirth);
+        if (passenger == null) {
+            passenger = new Passenger();
+            passenger.setFirstName(firstName);
+            passenger.setLastName(lastName);
+            passenger.setDateOfBirth(dateOfBirth);
+            passengerDao.add(passenger);
+        }
         User user = new User();
         user.setEmail(email);
         user.setPassenger(passenger);
@@ -126,35 +130,6 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
-    public boolean buyTicket(final TicketOrderDto ticketOrder,
-                          final String email) {
-        Journey journey = passengerDao.getJourneyById(ticketOrder
-                .getJourney().getId());
-        ScheduledStop from = passengerDao.getStopById(ticketOrder
-                .getOrigin().getId());
-        ScheduledStop to = passengerDao.getStopById(ticketOrder
-                .getDestination().getId());
-        User user = passengerDao.getUserByEmail(email);
-        Passenger passenger = passengerDao.getUserPassenger(user);
-        if (passengerDao.currentTickets(journey, from, to)
-                < journey.getTrainType().getSeats() &&
-                ChronoUnit.MINUTES.between(LocalDateTime.now(),
-                        from.getDeparture()) >= 10  &&
-                passengerDao.getTicket(journey, passenger) == null) {
-            Ticket ticket = new Ticket();
-            ticket.setJourney(journey);
-            ticket.setFrom(from);
-            ticket.setTo(to);
-            ticket.setPrice(ticketOrder.getPrice());
-            ticket.setPassenger(passenger);
-            passengerDao.add(ticket);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
     public TicketOrderDto prepareTicketOrder(final int journeyId,
                                              final String stationFrom,
                                              final String stationTo) {
@@ -207,10 +182,4 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 firstName, lastName, dateOfBirth);
     }
 
-    @Override
-    public boolean buyTickets(final TransferTicketOrderDto tickets,
-                              final String email) {
-        return buyTicket(tickets.getFirstTrain(), email)
-                && buyTicket(tickets.getSecondTrain(), email);
-    }
 }

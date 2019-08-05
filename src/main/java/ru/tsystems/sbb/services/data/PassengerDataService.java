@@ -11,11 +11,9 @@ public interface PassengerDataService {
                   String email, String password);
     boolean buyTicket(TicketOrderDto ticket, String firstName, String lastName,
                       LocalDate dateOfBirth);
-    boolean buyTicket(TicketOrderDto ticket, String email);
     PassengerDto getPassenger(String email);
     boolean buyTickets(TransferTicketOrderDto tickets, String firstName, String lastName,
                        LocalDate dateOfBirth);
-    boolean buyTickets(TransferTicketOrderDto tickets, String email);
     TicketOrderDto prepareTicketOrder(int journeyId, String stationFrom,
                                       String stationTo);
     TransferTicketOrderDto prepareTicketsOrder(int firstJourneyId,

@@ -1,9 +1,6 @@
 package ru.tsystems.sbb.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,16 +44,9 @@ public class PassengerController {
                                        final String to,
                                        @RequestParam(value = "transfer")
                                        final String transfer) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            return new ModelAndView(BUY_TICKETS, viewService
-                    .prepTicketsSaleLogged(firstJourneyId, secondJourneyId,
-                            from, to, transfer, auth.getName()));
-        } else {
-            return new ModelAndView(BUY_TICKETS, viewService
-                    .prepTicketsSaleAnon(firstJourneyId, secondJourneyId,
-                            from, to, transfer));
-        }
+        return new ModelAndView(BUY_TICKETS, viewService
+                .prepTicketsSale(firstJourneyId, secondJourneyId,
+                        from, to, transfer));
     }
 
     @PostMapping("/buyTicket")
@@ -66,53 +56,31 @@ public class PassengerController {
                                           final String from,
                                       @RequestParam(value = "to")
                                           final String to) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            return new ModelAndView(BUY_TICKETS, viewService
-                    .prepTicketSaleLogged(journeyId, from, to, auth.getName()));
-        } else {
-            return new ModelAndView(BUY_TICKETS, viewService
-                    .prepTicketSaleAnon(journeyId, from, to));
-        }
+        return new ModelAndView(BUY_TICKETS, viewService
+                .prepTicketSale(journeyId, from, to));
     }
 
     @PostMapping("/finalizeTicketSale")
-    public ModelAndView finalizeTicketSale(@RequestParam(value = "firstName",
-                                           required = false)
+    public ModelAndView finalizeTicketSale(@RequestParam(value = "firstName")
                                                final String firstName,
-                                           @RequestParam(value = "lastName",
-                                           required = false)
+                                           @RequestParam(value = "lastName")
                                                 final String lastName,
-                                           @RequestParam(value = "dateOfBirth",
-                                           required = false)
+                                           @RequestParam(value = "dateOfBirth")
                                                 final String dateOfBirth,
                                            @ModelAttribute(name = "ticketOrder")
                                            final TicketOrderDto order) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            return null;
-        } else {
-            return null;
-        }
+        return null;
     }
 
     @PostMapping("/finalizeTicketsSale")
-    public ModelAndView finalizeTicketsSale(@RequestParam(value = "firstName",
-                                            required = false)
+    public ModelAndView finalizeTicketsSale(@RequestParam(value = "firstName")
                                                 final String firstName,
-                                            @RequestParam(value = "lastName",
-                                                    required = false)
+                                            @RequestParam(value = "lastName")
                                                 final String lastName,
-                                            @RequestParam(value = "dateOfBirth",
-                                                    required = false)
+                                            @RequestParam(value = "dateOfBirth")
                                                 final String dateOfBirth,
                                             @ModelAttribute("transferTickets")
                                        final TransferTicketOrderDto order) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            return null;
-        } else {
-            return null;
-        }
+        return null;
     }
 }
