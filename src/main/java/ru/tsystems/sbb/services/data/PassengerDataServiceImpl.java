@@ -47,10 +47,10 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     @Autowired
     private EntityToDtoMapper mapper;
 
-    private static final String NO_TIME = "Not enough time before departure";
-    private static final String NO_SEATS = "No available seats";
+    private static final String NO_TIME = "Not enough time before departure.";
+    private static final String NO_SEATS = "No available seats.";
     private static final String SAME_PASSENGER = "You already have a ticket "
-            + "for this journey";
+            + "for this journey.";
     private static final String SUCCESS = "success";
 
     @Override

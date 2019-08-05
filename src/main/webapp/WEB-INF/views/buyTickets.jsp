@@ -14,7 +14,7 @@
 <body class="text-center">
 <%@include file="header.jsp" %>
 <c:if test="${!empty status}">
-    <span class="text-danger m-5">${status}</span>
+    <p class="text-danger m-5">${status}</p>
     <a href="${pageContext.request.contextPath}/">Back to main page</a>
 </c:if>
 <c:if test="${empty status}"><h5 class="text-secondary m-3">Passenger details:</h5></c:if>
