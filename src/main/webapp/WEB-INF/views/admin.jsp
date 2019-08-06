@@ -100,6 +100,14 @@
 </div>
 <div class="row">
     <div class="col-sm-6 offset-3">
+        <div class="bg-dark text-light m-3 rounded">
+            <a href="${pageContext.request.contextPath}/admin/journeys/${today}"
+               class="text-light stretched-link">List all scheduled journeys</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 offset-3">
         <div id="trainModelsMenu" class="bg-dark text-light m-3 rounded">Train models</div>
     </div>
 </div>

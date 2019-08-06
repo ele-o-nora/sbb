@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class Journey extends AbstractEntity {
     private List<Ticket> tickets;
 
     @OneToMany(mappedBy = "journey")
+    @OrderBy("id asc")
     private List<ScheduledStop> stops;
 
     @ManyToOne

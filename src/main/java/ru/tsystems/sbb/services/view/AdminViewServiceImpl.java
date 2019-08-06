@@ -2,14 +2,16 @@ package ru.tsystems.sbb.services.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
 import ru.tsystems.sbb.model.dto.StationDto;
-import ru.tsystems.sbb.model.entities.Train;
+import ru.tsystems.sbb.model.dto.TrainDto;
 import ru.tsystems.sbb.services.data.AdminDataService;
 import ru.tsystems.sbb.services.data.RouteDataService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,13 +35,16 @@ public class AdminViewServiceImpl implements AdminViewService {
             .ISO_LOCAL_DATE;
 
     private static final String OUTBOUND = "outbound";
+    private static final int DAY_STEP = 1;
 
     @Override
     public Map<String, Object> prepAdminPanel() {
         List<LineDto> lines = routeDataService.getAllLines();
-        List<Train> trainModels = adminDataService.getAllTrainModels();
+        List<TrainDto> trainModels = adminDataService.getAllTrainModels();
         Map<String, Object> objects = new HashMap<>();
         float currentTariff = adminDataService.currentTariff();
+        String today = LocalDate.now().format(DATE_FORMATTER);
+        objects.put("today", today);
         objects.put("tariff", currentTariff);
         objects.put("lines", lines);
         objects.put("trainModels", trainModels);
@@ -84,7 +89,8 @@ public class AdminViewServiceImpl implements AdminViewService {
                                                    final int routeId) {
         LineDto line = routeDataService.getLine(lineId);
         RouteDto route = routeDataService.getRoute(routeId);
-        List<StationDto> lineStations = routeDataService.getAllLineStations(lineId);
+        List<StationDto> lineStations = routeDataService
+                .getAllLineStations(lineId);
         Map<String, Object> objects = new HashMap<>();
         objects.put("line", line);
         objects.put("route", route);
@@ -136,5 +142,32 @@ public class AdminViewServiceImpl implements AdminViewService {
     @Override
     public void updateTariff(final float price) {
         adminDataService.updateTariff(price);
+    }
+
+    @Override
+    public Map<String, Object> lookUpJourneys(final String date, final int page) {
+        LocalDate day = LocalDate.parse(date, DATE_FORMATTER);
+        LocalDateTime searchFrom = LocalDateTime.of(day,
+                LocalTime.MIDNIGHT);
+        Map<String, Object> objects = new HashMap<>();
+        objects.put("today", date);
+        if (day.isAfter(LocalDate.now())) {
+            String previousDay = day.minusDays(DAY_STEP)
+                    .format(DATE_FORMATTER);
+            objects.put("previousDay", previousDay);
+        }
+        String nextDay = day.plusDays(DAY_STEP).format(DATE_FORMATTER);
+        objects.put("nextDay", nextDay);
+        if (page > 1) {
+            objects.put("previousPage", (page - 1));
+        }
+        int maxPages = adminDataService.maxPages(searchFrom);
+        if (page < maxPages) {
+            objects.put("nextPage", (page + 1));
+        }
+        List<JourneyDto> journeys = adminDataService
+                .getJourneys(searchFrom, page);
+        objects.put("journeys", journeys);
+        return objects;
     }
 }

@@ -12,6 +12,11 @@
     cursor: pointer;
 }
 
+#trainModelsMenu:hover, #addStationMenu:hover, #modifyRouteMenu:hover, #scheduleRoutesMenu:hover,
+#tariffMenu:hover {
+    color: #cbd3da !important;
+}
+
 .form-control:focus {
     border-color: #FF9999;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);

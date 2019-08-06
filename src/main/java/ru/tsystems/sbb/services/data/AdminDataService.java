@@ -1,8 +1,11 @@
 package ru.tsystems.sbb.services.data;
 
-import ru.tsystems.sbb.model.entities.Train;
+import ru.tsystems.sbb.model.dto.JourneyDto;
+import ru.tsystems.sbb.model.dto.TicketDto;
+import ru.tsystems.sbb.model.dto.TrainDto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -14,10 +17,13 @@ public interface AdminDataService {
                      int[] waitTimes);
     void modifyRoute(int routeId, String[] stations,
                      int[] waitTimes);
-    List<Train> getAllTrainModels();
+    List<TrainDto> getAllTrainModels();
     void scheduleJourneys(int routeId, LocalTime departure,
                           LocalDate dayFrom, LocalDate dayUntil,
                           int trainId, boolean outbound);
     void updateTariff(float price);
     float currentTariff();
+    List<JourneyDto> getJourneys(LocalDateTime start, int page);
+    List<TicketDto> getTickets(int journeyId, int page);
+    int maxPages(LocalDateTime start);
 }

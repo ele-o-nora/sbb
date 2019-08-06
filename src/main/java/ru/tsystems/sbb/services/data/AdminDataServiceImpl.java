@@ -7,6 +7,9 @@ import ru.tsystems.sbb.model.dao.AdminDao;
 import ru.tsystems.sbb.model.dao.PassengerDao;
 import ru.tsystems.sbb.model.dao.RouteDao;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
+import ru.tsystems.sbb.model.dto.JourneyDto;
+import ru.tsystems.sbb.model.dto.TicketDto;
+import ru.tsystems.sbb.model.dto.TrainDto;
 import ru.tsystems.sbb.model.entities.Journey;
 import ru.tsystems.sbb.model.entities.Line;
 import ru.tsystems.sbb.model.entities.LineStation;
@@ -17,11 +20,13 @@ import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.StationsDistance;
 import ru.tsystems.sbb.model.entities.Tariff;
 import ru.tsystems.sbb.model.entities.Train;
+import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -38,6 +43,11 @@ public class AdminDataServiceImpl implements AdminDataService {
 
     @Autowired
     private PassengerDao passengerDao;
+
+    @Autowired
+    private EntityToDtoMapper mapper;
+
+    private static final int SEARCH_RESULTS_STEP = 10;
 
     @Override
     public void addNewStation(final String stationName, final int lineId,
@@ -129,8 +139,10 @@ public class AdminDataServiceImpl implements AdminDataService {
     }
 
     @Override
-    public List<Train> getAllTrainModels() {
-        return adminDao.getAllTrainModels();
+    public List<TrainDto> getAllTrainModels() {
+        return adminDao.getAllTrainModels().stream()
+                .map(train -> mapper.convert(train))
+                .collect(Collectors.toList());
     }
 
     private void cleanOldDistance(final int lineId, final int newStationOrder) {
@@ -267,4 +279,24 @@ public class AdminDataServiceImpl implements AdminDataService {
         return (int) Math.ceil(hours * 60);
     }
 
+    @Override
+    public List<JourneyDto> getJourneys(LocalDateTime start, int page) {
+        return passengerDao.getJourneys(start, page).stream()
+                .map(journey -> mapper.convert(journey))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TicketDto> getTickets(int journeyId, int page) {
+        Journey journey = passengerDao.getJourneyById(journeyId);
+        return passengerDao.getTickets(journey, page).stream()
+                .map(ticket -> mapper.convert(ticket))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public int maxPages(final LocalDateTime start) {
+        int journeysCount = passengerDao.journeysCount(start);
+        return (journeysCount + SEARCH_RESULTS_STEP - 1) / SEARCH_RESULTS_STEP;
+    }
 }

@@ -131,4 +131,12 @@ public class AdminController {
         viewService.updateTariff(price);
         return adminPanel();
     }
+
+    @GetMapping("journeys/{today}")
+    public ModelAndView lookUpJourneys(@PathVariable final String today,
+                                       @RequestParam(defaultValue = "1")
+                                       final int page) {
+        return new ModelAndView("journeys", viewService
+                .lookUpJourneys(today, page));
+    }
 }

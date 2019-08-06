@@ -16,5 +16,4 @@ public interface ScheduleDataService {
                                                String stationTo,
                                                LocalDateTime from,
                                                String searchType);
-    JourneyDto getJourneyById(int journeyId);
 }

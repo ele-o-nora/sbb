@@ -12,6 +12,7 @@ import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -19,6 +20,9 @@ public class PassengerDaoImpl implements PassengerDao {
 
     @Autowired
     private SessionFactory sessionFactory;
+
+    private static final int SEARCH_TIME_STEP = 1;
+    private static final int SEARCH_RESULTS_STEP = 10;
 
     @Override
     public User getUserByEmail(final String email) {
@@ -113,5 +117,43 @@ public class PassengerDaoImpl implements PassengerDao {
                 + "and t.passenger = :passenger", Ticket.class)
                 .setParameter("journey", journey)
                 .setParameter("passenger", passenger).getResultList();
+    }
+
+    @Override
+    public List<Journey> getJourneys(LocalDateTime start, int page) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select j from Journey j "
+                + "join j.stops st where st.arrival is null "
+                + "and st.departure >= :start "
+                + "and st.departure < :end "
+                + "order by st.departure asc", Journey.class)
+                .setParameter("start", start)
+                .setParameter("end", start.plusDays(SEARCH_TIME_STEP))
+                .setFirstResult(SEARCH_RESULTS_STEP * (page - 1))
+                .setMaxResults(SEARCH_RESULTS_STEP).getResultList();
+    }
+
+    @Override
+    public List<Ticket> getTickets(Journey journey, int page) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("from Ticket t "
+                + "join t.from st1 join t.to st2 "
+                + "where t.journey = :journey "
+                + "order by st1.departure asc, st2.arrival asc", Ticket.class)
+                .setParameter("journey", journey)
+                .setFirstResult(SEARCH_RESULTS_STEP * (page - 1))
+                .setMaxResults(SEARCH_RESULTS_STEP).getResultList();
+    }
+
+    @Override
+    public int journeysCount(LocalDateTime start) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select count(j) from Journey j "
+                + "join j.stops st where st.arrival is null "
+                + "and st.departure >= :start "
+                + "and st.departure < :end", Long.class)
+                .setParameter("start", start)
+                .setParameter("end", start.plusDays(SEARCH_TIME_STEP))
+                .getSingleResult().intValue();
     }
 }
