@@ -7,6 +7,7 @@ import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
+import ru.tsystems.sbb.model.dto.RouteStationDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TicketDto;
@@ -21,7 +22,6 @@ import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.Train;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,11 +58,8 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     public RouteDto convert(final Route route) {
         RouteDto routeDto = mapper.map(route, RouteDto.class);
         routeDto.setLine(route.getLine().getName());
-        List<String> stations = new ArrayList<>();
-        for (RouteStation rs: route.getStations()) {
-            StationDto station = convert(rs.getStation());
-            stations.add(station.getName());
-        }
+        List<RouteStationDto> stations = route.getStations().stream()
+                .map(this::convert).collect(Collectors.toList());
         routeDto.setStations(stations);
         return routeDto;
     }
@@ -101,4 +98,13 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     public TrainDto convert(final Train train) {
         return mapper.map(train, TrainDto.class);
     }
+
+    @Override
+    public RouteStationDto convert(RouteStation routeStation) {
+        RouteStationDto routeStationDto = mapper.map(routeStation,
+                RouteStationDto.class);
+        routeStationDto.setName(routeStation.getStation().getName());
+        return routeStationDto;
+    }
+
 }

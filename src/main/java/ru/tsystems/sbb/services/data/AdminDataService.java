@@ -18,4 +18,6 @@ public interface AdminDataService {
     void scheduleJourneys(int routeId, LocalTime departure,
                           LocalDate dayFrom, LocalDate dayUntil,
                           int trainId, boolean outbound);
+    void updateTariff(float price);
+    float currentTariff();
 }

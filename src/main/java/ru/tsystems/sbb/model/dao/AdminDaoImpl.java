@@ -12,6 +12,7 @@ import ru.tsystems.sbb.model.entities.RouteStation;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.StationsDistance;
+import ru.tsystems.sbb.model.entities.Tariff;
 import ru.tsystems.sbb.model.entities.Train;
 
 import java.util.List;
@@ -60,6 +61,11 @@ public class AdminDaoImpl implements AdminDao {
     @Override
     public void add(final LineStation lineStation) {
         sessionFactory.getCurrentSession().persist(lineStation);
+    }
+
+    @Override
+    public void add(Tariff tariff) {
+        sessionFactory.getCurrentSession().persist(tariff);
     }
 
     @Override

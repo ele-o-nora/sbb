@@ -124,4 +124,11 @@ public class AdminController {
                 trainId, direction);
         return adminPanel();
     }
+
+    @PostMapping("/updateTariff")
+    public ModelAndView updateTariff(@RequestParam(value = "price")
+                                     final float price) {
+        viewService.updateTariff(price);
+        return adminPanel();
+    }
 }

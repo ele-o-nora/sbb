@@ -4,6 +4,7 @@ import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
+import ru.tsystems.sbb.model.dto.RouteStationDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TicketDto;
@@ -12,6 +13,7 @@ import ru.tsystems.sbb.model.entities.Journey;
 import ru.tsystems.sbb.model.entities.Line;
 import ru.tsystems.sbb.model.entities.Passenger;
 import ru.tsystems.sbb.model.entities.Route;
+import ru.tsystems.sbb.model.entities.RouteStation;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Ticket;
@@ -26,4 +28,5 @@ public interface EntityToDtoMapper {
     StationDto convert(Station station);
     TicketDto convert(Ticket ticket);
     TrainDto convert(Train train);
+    RouteStationDto convert(RouteStation routeStation);
 }

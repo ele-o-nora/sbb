@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 </head>
 <body>
-<nav class="navbar navbar-dark navbar-expand-md bg-dark">
+<nav class="navbar navbar-dark navbar-expand-md bg-dark mb-5">
     <a href="${pageContext.request.contextPath}/"
        class="navbar-brand text-danger text-uppercase font-weight-bold">Westerosi Railways</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse"

@@ -8,6 +8,7 @@ import ru.tsystems.sbb.model.entities.RouteStation;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.StationsDistance;
+import ru.tsystems.sbb.model.entities.Tariff;
 import ru.tsystems.sbb.model.entities.Train;
 
 import java.util.List;
@@ -30,4 +31,5 @@ public interface AdminDao {
     int outboundDistance(Station from, Station to, Line line);
     int inboundDistance(Station from, Station to, Line line);
     int getStationOrder(Line line, Station station);
+    void add(Tariff tariff);
 }

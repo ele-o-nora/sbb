@@ -28,8 +28,8 @@
     <c:forEach var="station" items="${stations}">
         <c:set var="contains" value="false"/>
         <c:if test="${!empty route}">
-            <c:forEach var="item" items="${route.stations}">
-                <c:if test="${item eq station.name}">
+            <c:forEach var="stop" items="${route.stations}">
+                <c:if test="${stop.name eq station.name}">
                     <c:set var="contains" value="true"/>
                 </c:if>
             </c:forEach>

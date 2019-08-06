@@ -15,12 +15,12 @@
 </c:if>
 <h2 class="text-muted">Please sign in</h2>
 <form action="${pageContext.request.contextPath}/perform_login" method="POST">
-    <div class="form-row">
-        <div class="col-sm-4 offset-sm-2">
+    <div class="form-row m-3">
+        <div class="col-sm-3 offset-sm-3">
             <input type="text" class="form-control" name="username"
                    placeholder="E-mail" />
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <input type="password" class="form-control" name="password"
                    placeholder="Password" />
         </div>

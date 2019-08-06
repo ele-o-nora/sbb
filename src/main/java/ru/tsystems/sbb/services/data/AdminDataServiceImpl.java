@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tsystems.sbb.model.dao.AdminDao;
+import ru.tsystems.sbb.model.dao.PassengerDao;
 import ru.tsystems.sbb.model.dao.RouteDao;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.entities.Journey;
@@ -14,6 +15,7 @@ import ru.tsystems.sbb.model.entities.RouteStation;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.StationsDistance;
+import ru.tsystems.sbb.model.entities.Tariff;
 import ru.tsystems.sbb.model.entities.Train;
 
 import java.time.LocalDate;
@@ -33,6 +35,9 @@ public class AdminDataServiceImpl implements AdminDataService {
 
     @Autowired
     private ScheduleDao scheduleDao;
+
+    @Autowired
+    private PassengerDao passengerDao;
 
     @Override
     public void addNewStation(final String stationName, final int lineId,
@@ -243,6 +248,18 @@ public class AdminDataServiceImpl implements AdminDataService {
             }
             adminDao.add(curStop);
         }
+    }
+
+    @Override
+    public void updateTariff(final float price) {
+        Tariff tariff = Tariff.builder().momentFrom(LocalDateTime.now())
+                .pricePerTenLeagues(price).build();
+        adminDao.add(tariff);
+    }
+
+    @Override
+    public float currentTariff() {
+        return passengerDao.getCurrentTariff();
     }
 
     private int calcTimeEnRoute(int distance, int speed) {

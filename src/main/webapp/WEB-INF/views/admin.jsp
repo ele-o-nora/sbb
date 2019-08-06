@@ -22,7 +22,7 @@
             <c:forEach var="line" items="${lines}">
                 <li class="list-group-item">
                     <a href="${pageContext.request.contextPath}/admin/addStation/${line.id}"
-                       class="text-danger stretched-link">${line.name} line</a>
+                       class="text-danger">${line.name} line</a>
                 </li>
             </c:forEach>
         </ul>
@@ -37,20 +37,34 @@
     <div class="col-sm-4 offset-4">
         <ul id="linesRoutesList" class="list-group">
             <c:forEach var="line" items="${lines}">
-                <li id="${line.name}" class="list-group-item">
-                    <span class="text-danger">${line.name} line</span>
+                <li class="list-group-item">
+                    <a href="#" id="${line.name}" class="text-danger">${line.name} line</a>
                     <ul class="list-group" id="routes${line.name}">
                         <c:forEach var="route" items="${routes}">
                             <c:if test="${route.line eq line.name}">
                                 <li class="list-group-item">
-                                    <a href="${pageContext.request.contextPath}/admin/editRoute/${line.id}/${route.id}"
-                                       class="text-secondary stretched-link">${route.number}</a>
+                                    <a href="#" onclick="showRouteStations('#${route.id}')"
+                                       class="text-secondary">${route.number}</a>
+                                    <ul class="list-group m-3" style="display:none" id="${route.id}">
+                                        <c:forEach var="stop" items="${route.stations}">
+                                            <li class="list-group-item">
+                                                <span class="font-weight-bold">${stop.name}</span>
+                                                <c:if test="${!empty stop.waitTime}">
+                                                    <br/>Time at station: ${stop.waitTime} minutes
+                                                </c:if>
+                                            </li>
+                                        </c:forEach>
+                                        <li class="list-group-item">
+                                            <a href="${pageContext.request.contextPath}/admin/editRoute/${line.id}/${route.id}"
+                                               class="text-secondary">Modify route</a>
+                                        </li>
+                                    </ul>
                                 </li>
                             </c:if>
                         </c:forEach>
                         <li class="list-group-item">
                             <a href="${pageContext.request.contextPath}/admin/addRoute/${line.id}"
-                               class="text-secondary stretched-link">Add new route</a>
+                               class="text-secondary">Add new route</a>
                         </li>
                     </ul>
                 </li>
@@ -67,14 +81,14 @@
     <div class="col-sm-4 offset-4">
         <ul id="linesRoutesScheduleList" class="list-group">
             <c:forEach var="line" items="${lines}">
-                <li id="${line.name}Schedule" class="list-group-item">
-                    <span class="text-danger">${line.name} line</span>
+                <li class="list-group-item">
+                    <a href="#" id="${line.name}Schedule" class="text-danger">${line.name} line</a>
                     <ul class="list-group" id="routes${line.name}Schedule">
                         <c:forEach var="route" items="${routes}">
                             <c:if test="${route.line eq line.name}">
                                 <li class="list-group-item">
                                     <a href="#" onclick="showScheduleRoutesForm(${route.id})"
-                                       class="text-secondary stretched-link">${route.number}</a>
+                                       class="text-secondary">${route.number}</a>
                                 </li>
                             </c:if>
                         </c:forEach>
@@ -103,6 +117,41 @@
                 <span class="text-secondary">Add new train model</span>
             </li>
         </ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 offset-3">
+        <div id="tariffMenu" class="bg-dark text-light m-3 rounded">Update tariff</div>
+    </div>
+</div>
+<div class="modal fade" id="updateTariffModal" tabindex="-1" role="dialog" aria-labelledby="updateTariffTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateTariffTitle">Update tariff</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/admin/updateTariff" method="post" id="updateTariffForm">
+                    <div class="form-row justify-content-center m-3">
+                        <div class="form-group col-sm-6">
+                            <label for="price">Silver stags per ten leagues:</label>
+                            <input type="number" name="price" value="${tariff}" autocomplete="off"
+                                   class="form-control" step="0.01" id="price" required>
+                        </div>
+                    </div>
+                    <div class="form-row justify-content-center m-3">
+                        <div class="col-sm-2">
+                            <input type="submit" value="Update" class="btn btn-outline-secondary float-right">
+                        </div>
+                    </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 <div class="modal fade" id="addTrainModal" tabindex="-1" role="dialog" aria-labelledby="trainAddTitle"

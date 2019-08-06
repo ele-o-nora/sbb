@@ -85,18 +85,22 @@ $(document).ready(function () {
 
     $('#Northern').click(function () {
         $('#routesNorthern').toggle();
+        return false;
     });
 
     $('#Eastern').click(function () {
         $('#routesEastern').toggle();
+        return false;
     });
 
     $('#Western').click(function () {
         $('#routesWestern').toggle();
+        return false;
     });
 
     $('#Southern').click(function () {
         $('#routesSouthern').toggle();
+        return false;
     });
 
     $('#trainModelsMenu').click(function () {
@@ -107,24 +111,32 @@ $(document).ready(function () {
         $('#addTrainModal').modal();
     });
 
+    $('#tariffMenu').click(function () {
+        $('#updateTariffModal').modal();
+    });
+
     $('#scheduleRoutesMenu').click(function () {
         $('#linesRoutesScheduleList').toggle();
     });
 
     $('#NorthernSchedule').click(function () {
         $('#routesNorthernSchedule').toggle();
+        return false;
     });
 
     $('#EasternSchedule').click(function () {
         $('#routesEasternSchedule').toggle();
+        return false;
     });
 
     $('#SouthernSchedule').click(function () {
         $('#routesSouthernSchedule').toggle();
+        return false;
     });
 
     $('#WesternSchedule').click(function () {
         $('#routesWesternSchedule').toggle();
+        return false;
     });
 
     $('#signUpButton').click(function () {
@@ -155,4 +167,10 @@ function showAddStationForm(order, before, after) {
 function showScheduleRoutesForm(routeId) {
     $('#routeId').val(routeId);
     $('#scheduleRouteModal').modal();
+    return false;
+}
+
+function showRouteStations(id) {
+    $(id).toggle();
+    return false;
 }

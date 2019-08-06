@@ -4,14 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class RouteDto {
+public class RouteStationDto {
+
     private int id;
-    private String number;
-    private String line;
-    private List<RouteStationDto> stations;
+    private String name;
+    private Integer waitTime;
+
 }

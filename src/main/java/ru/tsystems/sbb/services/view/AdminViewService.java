@@ -18,4 +18,5 @@ public interface AdminViewService {
     void scheduleRoute(int routeId, String departureTime,
                        String dateFrom, String dateUntil,
                        int trainId, String direction);
+    void updateTariff(float price);
 }

@@ -15,6 +15,7 @@ import ru.tsystems.sbb.services.data.ScheduleDataService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +38,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
             .ISO_LOCAL_DATE;
 
     private static final String SIGN_UP_SUCCESS = "Registration successful. You may now sign in.";
-    private static final String SIGN_UP_FAIL = "Registration failed. "
-            + "Please make sure you fill all the required fields correctly.";
+    private static final String SIGN_UP_FAIL = "Registration failed. ";
+    private static final String BAD_INPUT = "Please make sure you fill all the required fields correctly.";
     private static final String TICKET_SUCCESS = "Ticket sale successful. Thank you for traveling with us.";
     private static final String TICKET_FAIL = "Couldn't complete ticket sale. ";
     private static final String TICKET_PREP_FAIL = "Couldn't prepare ticket sale. ";
@@ -54,12 +55,16 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         Map<String, Object> objects = getLines();
         if (!validateName(firstName) || !validateName(lastName) ||
                 !validatePassword(password) || !validateEmail(email)) {
-            objects.put(STATUS, SIGN_UP_FAIL);
+            objects.put(STATUS, SIGN_UP_FAIL + BAD_INPUT);
             return objects;
         }
         try {
             LocalDate dob = LocalDate.parse(dateOfBirth,
                     DATE_FORMATTER);
+            if (!validateDateOfBirth(dob)) {
+                objects.put(STATUS, SIGN_UP_FAIL + BAD_INPUT);
+                return objects;
+            }
             passengerDataService.register(firstName, lastName, dob,
                     email, password);
             objects.put(STATUS, SIGN_UP_SUCCESS);
@@ -130,11 +135,15 @@ public class PassengerViewServiceImpl implements PassengerViewService {
             final String lastName, final String dateOfBirth) {
         Map<String, Object> objects = getLines();
         if (!validateName(firstName) || !validateName(lastName)) {
-            objects.put(STATUS, TICKET_FAIL);
+            objects.put(STATUS, TICKET_FAIL + BAD_INPUT);
             return objects;
         }
         try {
             LocalDate dob = LocalDate.parse(dateOfBirth, DATE_FORMATTER);
+            if (!validateDateOfBirth(dob)) {
+                objects.put(STATUS, TICKET_FAIL + BAD_INPUT);
+                return objects;
+            }
             String saleResult = passengerDataService.buyTicket(ticketOrder,
                     firstName, lastName, dob);
             if (saleResult.equalsIgnoreCase(SUCCESS)) {
@@ -154,11 +163,15 @@ public class PassengerViewServiceImpl implements PassengerViewService {
             final String lastName, final String dateOfBirth) {
         Map<String, Object> objects = getLines();
         if (!validateName(firstName) || !validateName(lastName)) {
-            objects.put(STATUS, TICKET_FAIL);
+            objects.put(STATUS, TICKET_FAIL + BAD_INPUT);
             return objects;
         }
         try {
             LocalDate dob = LocalDate.parse(dateOfBirth, DATE_FORMATTER);
+            if (!validateDateOfBirth(dob)) {
+                objects.put(STATUS, TICKET_FAIL + BAD_INPUT);
+                return objects;
+            }
             String saleResult = passengerDataService.buyTickets(order,
                     firstName, lastName, dob);
             if (saleResult.equalsIgnoreCase(SUCCESS)) {
@@ -173,7 +186,16 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     }
 
     private boolean validateName(final String name) {
-        return name != null && !name.isEmpty();
+        if (name == null || name.isEmpty()) {
+            return false;
+        }
+        Pattern p = Pattern.compile("[A-Za-z\\s-']{2,30}");
+        Matcher m = p.matcher(name);
+        return m.find();
+    }
+
+    private boolean validateDateOfBirth(final LocalDate dateOfBirth) {
+        return ChronoUnit.YEARS.between(dateOfBirth, LocalDate.now()) >= 10;
     }
 
     private boolean validatePassword(final String password) {

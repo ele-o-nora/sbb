@@ -39,6 +39,8 @@ public class AdminViewServiceImpl implements AdminViewService {
         List<LineDto> lines = routeDataService.getAllLines();
         List<Train> trainModels = adminDataService.getAllTrainModels();
         Map<String, Object> objects = new HashMap<>();
+        float currentTariff = adminDataService.currentTariff();
+        objects.put("tariff", currentTariff);
         objects.put("lines", lines);
         objects.put("trainModels", trainModels);
         List<RouteDto> routes = new ArrayList<>();
@@ -129,5 +131,10 @@ public class AdminViewServiceImpl implements AdminViewService {
         LocalTime departure = LocalTime.parse(departureTime, TIME_FORMATTER);
         adminDataService.scheduleJourneys(routeId, departure, dayFrom, dayUntil,
                 trainId, outbound);
+    }
+
+    @Override
+    public void updateTariff(final float price) {
+        adminDataService.updateTariff(price);
     }
 }

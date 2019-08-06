@@ -17,6 +17,7 @@ public class PassengerController {
     private PassengerViewService viewService;
 
     private static final String BUY_TICKETS = "buyTickets";
+    private static final String INDEX = "index";
 
     @PostMapping("/register")
     public ModelAndView signUp(@RequestParam(name = "firstName")
@@ -29,7 +30,7 @@ public class PassengerController {
                                     final String email,
                                @RequestParam(name = "password")
                                     final String password) {
-        return new ModelAndView("index", viewService
+        return new ModelAndView(INDEX, viewService
                 .register(firstName, lastName, dateOfBirth, email, password));
     }
 
@@ -69,7 +70,7 @@ public class PassengerController {
                                                 final String dateOfBirth,
                                            @ModelAttribute(name = "ticketOrder")
                                            final TicketOrderDto order) {
-        return new ModelAndView("index", viewService
+        return new ModelAndView(INDEX, viewService
                 .finalizeTicketSale(order, firstName, lastName, dateOfBirth));
     }
 
@@ -82,7 +83,7 @@ public class PassengerController {
                                                 final String dateOfBirth,
                                             @ModelAttribute("transferTickets")
                                        final TransferTicketOrderDto order) {
-        return new ModelAndView("index", viewService
+        return new ModelAndView(INDEX, viewService
                 .finalizeTicketsSale(order, firstName, lastName, dateOfBirth));
     }
 }
