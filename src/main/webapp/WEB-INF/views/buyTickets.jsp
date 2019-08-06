@@ -20,22 +20,25 @@
 <c:if test="${empty status}"><h5 class="text-secondary m-3">Passenger details:</h5></c:if>
 <c:if test="${!empty ticketOrder}">
     <form:form modelAttribute="ticketOrder" method="post"
-               action="${pageContext.request.contextPath}/finalizeTicketSale" autocomplete="off">
+               action="${pageContext.request.contextPath}/finalizeTicketSale">
         <div class="form-row justify-content-center m-1">
             <div class="col-sm-4">
                 <input type="text" class="form-control" name="firstName" placeholder="First name"
-                       <c:if test="${!empty passenger}">value="${passenger.firstName}"</c:if> required/>
+                       <c:if test="${!empty passenger}">value="${passenger.firstName}"</c:if>
+                       autocomplete="off" required/>
             </div>
             <div class="col-sm-4">
                 <input type="text" class="form-control" name="lastName" placeholder="Last name"
-                       <c:if test="${!empty passenger}">value="${passenger.lastName}"</c:if> required/>
+                       <c:if test="${!empty passenger}">value="${passenger.lastName}"</c:if>
+                       autocomplete="off" required/>
             </div>
         </div>
         <div class="form-row justify-content-center m-1">
             <div class="col-sm-4">
                 <input type="text" name="dateOfBirth" placeholder="Date of birth"
                        class="form-control datetimepicker-input" id="dateOfBirthPicker2"
-                       data-toggle="datetimepicker" data-target="#dateOfBirthPicker2" required/>
+                       data-toggle="datetimepicker" data-target="#dateOfBirthPicker2"
+                       autocomplete="off" required/>
             </div>
         </div>
         <h5 class="text-secondary m-3">Travel info:</h5>
@@ -65,18 +68,21 @@
         <div class="form-row justify-content-center m-1">
             <div class="col-sm-4">
                 <input type="text" class="form-control" name="firstName" placeholder="First name"
-                       <c:if test="${!empty passenger}">value="${passenger.firstName}"</c:if> required/>
+                       <c:if test="${!empty passenger}">value="${passenger.firstName}"</c:if>
+                       autocomplete="off" required/>
             </div>
             <div class="col-sm-4">
                 <input type="text" class="form-control" name="lastName" placeholder="Last name"
-                       <c:if test="${!empty passenger}">value="${passenger.lastName}"</c:if> required/>
+                       <c:if test="${!empty passenger}">value="${passenger.lastName}"</c:if>
+                       autocomplete="off" required/>
             </div>
         </div>
         <div class="form-row justify-content-center m-1">
             <div class="col-sm-4">
                 <input type="text" name="dateOfBirth" placeholder="Date of birth"
                        class="form-control datetimepicker-input" id="dateOfBirthPicker2"
-                       data-toggle="datetimepicker" data-target="#dateOfBirthPicker2" required/>
+                       data-toggle="datetimepicker" data-target="#dateOfBirthPicker2"
+                       autocomplete="off" required/>
             </div>
         </div>
         <h5 class="text-secondary m-3">Travel info:</h5>
