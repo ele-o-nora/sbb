@@ -151,7 +151,7 @@ public class AdminViewServiceImpl implements AdminViewService {
                 LocalTime.MIDNIGHT);
         Map<String, Object> objects = new HashMap<>();
         objects.put("today", date);
-        if (day.isAfter(LocalDate.now())) {
+        if (day.isAfter(LocalDate.now()) || day.isEqual(LocalDate.now())) {
             String previousDay = day.minusDays(DAY_STEP)
                     .format(DATE_FORMATTER);
             objects.put("previousDay", previousDay);

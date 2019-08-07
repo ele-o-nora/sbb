@@ -22,6 +22,12 @@
            class="btn btn-outline-danger float-right">Next day</a>
     </div>
 </div>
+<c:if test="${empty journeys}">
+    <div class="m-5">
+        There are no journeys scheduled for the day.
+    </div>
+</c:if>
+<c:if test="${!empty journeys}">
 <div class="row justify-content-center">
     <div class="col-sm-8">
         <table class="table">
@@ -30,12 +36,14 @@
                 <th scope="col">Route</th>
                 <th scope="col">Direction</th>
                 <th scope="col">Departure</th>
+                <th scope="col">Train model</th>
+                <th scope="col">Links</th>
             </tr>
             </thead>
             <tbody>
             <c:forEach var="train" items="${journeys}">
                 <tr>
-                    <td class="align-middle">${train.route}</td>
+                    <th scope="row" class="align-middle">${train.route}</th>
                     <td class="align-middle">${train.destination}</td>
                     <td class="align-middle">
                         <c:forEach var="stop" items="${train.stops}" varStatus="status">
@@ -44,16 +52,22 @@
                             </c:if>
                         </c:forEach>
                     </td>
+                    <td class="align-middle">${train.trainType.model}</td>
+                    <td class="align-middle">
+                        <a href="${pageContext.request.contextPath}/admin/journeys/${train.id}" class="text-danger">
+                            Detailed schedule</a><br/>
+                        <a href="${pageContext.request.contextPath}/admin/journeys/${train.id}/passengers"
+                           class="text-danger">Passenger list</a>
+                    </td>
                 </tr>
             </c:forEach>
             <tr>
-                <td class="align-middle">
+                <td class="align-middle" colspan="4">
                     <c:if test="${!empty previousPage}">
                         <a href="${pageContext.request.contextPath}/admin/journeys/${today}?page=${previousPage}"
                            class="btn btn-outline-dark float-left">Previous 10</a>
                     </c:if>
                 </td>
-                <td class="align-middle"></td>
                 <td class="align-middle">
                     <c:if test="${!empty nextPage}">
                         <a href="${pageContext.request.contextPath}/admin/journeys/${today}?page=${nextPage}"
@@ -65,5 +79,6 @@
         </table>
     </div>
 </div>
+</c:if>
 </body>
 </html>

@@ -299,4 +299,9 @@ public class AdminDataServiceImpl implements AdminDataService {
         int journeysCount = passengerDao.journeysCount(start);
         return (journeysCount + SEARCH_RESULTS_STEP - 1) / SEARCH_RESULTS_STEP;
     }
+
+    @Override
+    public JourneyDto getJourneyById(int journeyId) {
+        return mapper.convert(passengerDao.getJourneyById(journeyId));
+    }
 }
