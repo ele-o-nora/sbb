@@ -91,6 +91,7 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
         ticketDto.setDirection(ticket.getJourney().getDestination().getName());
         ticketDto.setStationFrom(convert(ticket.getFrom()));
         ticketDto.setStationTo(convert(ticket.getTo()));
+        ticketDto.setFormattedPrice(formatPrice(ticket.getPrice()));
         return ticketDto;
     }
 
@@ -105,6 +106,18 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
                 RouteStationDto.class);
         routeStationDto.setName(routeStation.getStation().getName());
         return routeStationDto;
+    }
+
+    public String formatPrice(final float price) {
+        int stags = (int) price;
+        int stars = (int) ((price - stags) / 0.15);
+        if (stags > 0 && stars > 0) {
+            return String.format("%d silver stags, %d copper stars", stags, stars);
+        } else if (stags > 0) {
+            return String.format("%d silver stags", stags);
+        } else {
+            return String.format("%d copper stars", stars);
+        }
     }
 
 }

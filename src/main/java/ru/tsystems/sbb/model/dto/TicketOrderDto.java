@@ -16,16 +16,4 @@ public class TicketOrderDto {
     private String formattedPrice;
     private String status;
 
-    public void setFormattedPrice(final float price) {
-        int stags = (int) price;
-        int stars = (int) ((price - stags) / 0.15);
-        if (stags > 0 && stars > 0) {
-            formattedPrice = String.format("%d silver stags, %d copper stars", stags, stars);
-        } else if (stags > 0) {
-            formattedPrice = String.format("%d silver stags", stags);
-        } else {
-            formattedPrice = String.format("%d copper stars", stars);
-        }
-    }
-
 }

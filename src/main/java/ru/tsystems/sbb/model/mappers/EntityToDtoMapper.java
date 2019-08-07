@@ -29,4 +29,5 @@ public interface EntityToDtoMapper {
     TicketDto convert(Ticket ticket);
     TrainDto convert(Train train);
     RouteStationDto convert(RouteStation routeStation);
+    String formatPrice(float price);
 }

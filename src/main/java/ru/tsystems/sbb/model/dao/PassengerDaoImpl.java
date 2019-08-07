@@ -166,4 +166,16 @@ public class PassengerDaoImpl implements PassengerDao {
     public void update(User user) {
         sessionFactory.getCurrentSession().update(user);
     }
+
+    @Override
+    public List<Ticket> getPassengerTickets(Passenger passenger) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select t from Ticket t "
+                + "join t.from st "
+                + "where t.passenger = :passenger "
+                + "order by st.departure", Ticket.class)
+                .setParameter("passenger", passenger)
+                .getResultList();
+    }
+
 }

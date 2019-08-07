@@ -126,7 +126,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         ticketOrder.setJourney(mapper.convert(journey));
         float price = getTicketPrice(journeyId, stationFrom, stationTo);
         ticketOrder.setPrice(price);
-        ticketOrder.setFormattedPrice(price);
+        ticketOrder.setFormattedPrice(mapper.formatPrice(price));
         ScheduledStop stopFrom = journey.getStops().stream()
                 .filter(scheduledStop -> scheduledStop.getStation()
                         .getName().equals(stationFrom)).findFirst()
