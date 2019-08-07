@@ -26,7 +26,7 @@
                         <div class="row mb-2 justify-content-center">
                             <span class="font-weight-bold mr-1"> Direction: </span> ${ticket.journey.destination}
                         </div>
-                        <div class="row m-2">
+                        <div class="row m-2 p-2 border-top border-bottom">
                             <div class="col-sm-6">
                                 <div class="row justify-content-center">
                                     <span class="font-weight-bold mr-1">From: </span> ${ticket.stationFrom.station}
@@ -66,7 +66,7 @@
                         <div class="row mb-2 justify-content-center">
                             <span class="font-weight-bold mr-1">Direction: </span> ${ticket.journey.destination}
                         </div>
-                        <div class="row m-2">
+                        <div class="row m-2 p-2 border-top border-bottom">
                             <div class="col-sm-6">
                                 <div class="row justify-content-center">
                                     <span class="font-weight-bold mr-1">From: </span> ${ticket.stationFrom.station}

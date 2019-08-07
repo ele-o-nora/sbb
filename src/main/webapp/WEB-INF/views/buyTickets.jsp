@@ -50,7 +50,7 @@
                     <div class="row mb-2 justify-content-center">
                         <span class="font-weight-bold mr-1">Direction:</span> ${ticketOrder.journey.destination}
                     </div>
-                <div class="row m-2">
+                <div class="row m-2 p-2 border-top border-bottom">
                     <div class="col-sm-6">
                         <div class="row justify-content-center">
                             <span class="font-weight-bold mr-1">From: </span> ${ticketOrder.origin.station}
@@ -114,7 +114,7 @@
                     <div class="row mb-2 justify-content-center">
                         <span class="font-weight-bold mr-1">Direction:</span> ${transferTickets.firstTrain.journey.destination}
                     </div>
-                <div class="row m-2">
+                <div class="row m-2 p-2 border-top border-bottom">
                     <div class="col-sm-6">
                         <div class="row justify-content-center">
                             <span class="font-weight-bold mr-1">From: </span> ${transferTickets.firstTrain.origin.station}
@@ -149,7 +149,7 @@
                     <div class="row mb-2 justify-content-center">
                         <span class="font-weight-bold mr-1">Direction:</span> ${transferTickets.secondTrain.journey.destination}
                     </div>
-                <div class="row m-2">
+                <div class="row m-2 p-2 border-top border-bottom">
                     <div class="col-sm-6">
                         <div class="row justify-content-center">
                             <span class="font-weight-bold mr-1">From: </span> ${transferTickets.secondTrain.origin.station}
