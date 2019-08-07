@@ -186,4 +186,12 @@ public class AdminViewServiceImpl implements AdminViewService {
         objects.put("tickets", tickets);
         return objects;
     }
+
+    @Override
+    public Map<String, Object> journeyInfo(int journeyId) {
+        Map<String, Object> objects = new HashMap<>();
+        JourneyDto journey = adminDataService.getJourneyById(journeyId);
+        objects.put("journey", journey);
+        return objects;
+    }
 }

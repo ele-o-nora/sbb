@@ -21,4 +21,5 @@ public interface AdminViewService {
     void updateTariff(float price);
     Map<String, Object> lookUpJourneys(String date, int page);
     Map<String, Object> listPassengers(int journeyId, int page);
+    Map<String, Object> journeyInfo(int journeyId);
 }

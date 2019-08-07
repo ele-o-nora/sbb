@@ -47,13 +47,13 @@
                 <tr>
                     <td class="align-middle" colspan="4">
                         <c:if test="${!empty previousPage}">
-                            <a href="${pageContext.request.contextPath}/admin/journeys/${journey.id}/passengers?page=${previousPage}"
+                            <a href="${pageContext.request.contextPath}/admin/journey/${journey.id}/passengers?page=${previousPage}"
                                class="btn btn-outline-dark float-left">Previous 10</a>
                         </c:if>
                     </td>
                     <td class="align-middle">
                         <c:if test="${!empty nextPage}">
-                            <a href="${pageContext.request.contextPath}/admin/journeys/${journey.id}/passengers?page=${nextPage}"
+                            <a href="${pageContext.request.contextPath}/admin/journey/${journey.id}/passengers?page=${nextPage}"
                                class="btn btn-outline-dark float-right">Next 10</a>
                         </c:if>
                     </td>

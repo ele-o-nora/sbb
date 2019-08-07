@@ -52,9 +52,9 @@
                         </td>
                         <td class="align-middle">${train.trainType.model}</td>
                         <td class="align-middle">
-                            <a href="${pageContext.request.contextPath}/admin/journeys/${train.id}" class="text-danger">
+                            <a href="${pageContext.request.contextPath}/admin/journey/${train.id}" class="text-danger">
                                 Detailed schedule</a><br/>
-                            <a href="${pageContext.request.contextPath}/admin/journeys/${train.id}/passengers"
+                            <a href="${pageContext.request.contextPath}/admin/journey/${train.id}/passengers"
                                class="text-danger">Passenger list</a>
                         </td>
                     </tr>

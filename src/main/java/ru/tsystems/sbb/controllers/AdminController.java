@@ -140,11 +140,16 @@ public class AdminController {
                 .lookUpJourneys(today, page));
     }
 
-    @GetMapping("journeys/{id}/passengers")
+    @GetMapping("/journey/{id}/passengers")
     public ModelAndView listPassengers(@PathVariable final int id,
                                        @RequestParam(defaultValue = "1")
                                        final int page) {
         return new ModelAndView("passengers", viewService
                 .listPassengers(id, page));
+    }
+
+    @GetMapping("/journey/{id}")
+    public ModelAndView journeyInfo(@PathVariable final int id) {
+        return new ModelAndView("journeyInfo", viewService.journeyInfo(id));
     }
 }
