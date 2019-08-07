@@ -295,9 +295,18 @@ public class AdminDataServiceImpl implements AdminDataService {
     }
 
     @Override
-    public int maxPages(final LocalDateTime start) {
+    public int maxJourneyPages(final LocalDateTime start) {
         int journeysCount = passengerDao.journeysCount(start);
         return (journeysCount + SEARCH_RESULTS_STEP - 1) / SEARCH_RESULTS_STEP;
+    }
+
+    @Override
+    public int maxPassengerPages(int journeyId) {
+        Journey journey = passengerDao.getJourneyById(journeyId);
+        int ticketCount = passengerDao.currentTickets(journey,
+                journey.getStops().get(0), journey.getStops()
+                        .get(journey.getStops().size() - 1));
+        return (ticketCount + SEARCH_RESULTS_STEP - 1) / SEARCH_RESULTS_STEP;
     }
 
     @Override

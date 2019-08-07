@@ -25,6 +25,7 @@ public interface AdminDataService {
     float currentTariff();
     List<JourneyDto> getJourneys(LocalDateTime start, int page);
     List<TicketDto> getTickets(int journeyId, int page);
-    int maxPages(LocalDateTime start);
+    int maxJourneyPages(LocalDateTime start);
+    int maxPassengerPages(int journeyId);
     JourneyDto getJourneyById(int journeyId);
 }

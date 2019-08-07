@@ -6,6 +6,7 @@ import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
 import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TrainDto;
 import ru.tsystems.sbb.services.data.AdminDataService;
 import ru.tsystems.sbb.services.data.RouteDataService;
@@ -159,13 +160,30 @@ public class AdminViewServiceImpl implements AdminViewService {
         if (page > 1) {
             objects.put("previousPage", (page - 1));
         }
-        int maxPages = adminDataService.maxPages(searchFrom);
+        int maxPages = adminDataService.maxJourneyPages(searchFrom);
         if (page < maxPages) {
             objects.put("nextPage", (page + 1));
         }
         List<JourneyDto> journeys = adminDataService
                 .getJourneys(searchFrom, page);
         objects.put("journeys", journeys);
+        return objects;
+    }
+
+    @Override
+    public Map<String, Object> listPassengers(int journeyId, int page) {
+        Map<String, Object> objects = new HashMap<>();
+        JourneyDto journey = adminDataService.getJourneyById(journeyId);
+        objects.put("journey", journey);
+        if (page > 1) {
+            objects.put("previousPage", (page - 1));
+        }
+        int maxPages = adminDataService.maxPassengerPages(journeyId);
+        if (page < maxPages) {
+            objects.put("nextPage", (page + 1));
+        }
+        List<TicketDto> tickets = adminDataService.getTickets(journeyId, page);
+        objects.put("tickets", tickets);
         return objects;
     }
 }

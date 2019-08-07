@@ -132,11 +132,19 @@ public class AdminController {
         return adminPanel();
     }
 
-    @GetMapping("journeys/{today}")
+    @GetMapping("/journeys/{today}")
     public ModelAndView lookUpJourneys(@PathVariable final String today,
                                        @RequestParam(defaultValue = "1")
                                        final int page) {
         return new ModelAndView("journeys", viewService
                 .lookUpJourneys(today, page));
+    }
+
+    @GetMapping("journeys/{id}/passengers")
+    public ModelAndView listPassengers(@PathVariable final int id,
+                                       @RequestParam(defaultValue = "1")
+                                       final int page) {
+        return new ModelAndView("passengers", viewService
+                .listPassengers(id, page));
     }
 }

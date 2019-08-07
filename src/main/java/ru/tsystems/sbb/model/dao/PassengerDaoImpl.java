@@ -136,7 +136,7 @@ public class PassengerDaoImpl implements PassengerDao {
     @Override
     public List<Ticket> getTickets(Journey journey, int page) {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from Ticket t "
+        return session.createQuery("select t from Ticket t "
                 + "join t.from st1 join t.to st2 "
                 + "where t.journey = :journey "
                 + "order by st1.departure asc, st2.arrival asc", Ticket.class)
