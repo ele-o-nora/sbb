@@ -16,6 +16,8 @@ import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         Station station = scheduleDao.getStationByName(stationName);
         List<ScheduledStop> scheduledStops = scheduleDao
                 .stationSchedule(station, from);
+        Collections.sort(scheduledStops, new ScheduleComparator());
         return scheduledStops.stream()
                 .map(scheduledStop -> mapper.convert(scheduledStop))
                 .collect(Collectors.toList());
@@ -45,9 +48,9 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 
     @Override
     public List<JourneyDto> directTrainsFromTo(final String stationFrom,
-                                         final String stationTo,
-                                         final LocalDateTime dateTime,
-                                         final String searchType) {
+                                               final String stationTo,
+                                               final LocalDateTime dateTime,
+                                               final String searchType) {
         Station origin = scheduleDao.getStationByName(stationFrom);
         Station destination = scheduleDao.getStationByName(stationTo);
         if (!sameLine(origin, destination)) {
@@ -91,8 +94,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     }
 
     private List<TransferTrainsDto> transferTrainsByDepart(final Station origin,
-                                                   final Station destination,
-                                                   final LocalDateTime from) {
+                                                           final Station destination,
+                                                           final LocalDateTime from) {
         List<TransferTrainsDto> connections = new ArrayList<>();
         List<Station> transferStations = scheduleDao
                 .getTransferStations(origin, destination);
@@ -124,8 +127,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     }
 
     private List<TransferTrainsDto> transferTrainsByArrive(final Station origin,
-                                                    final Station destination,
-                                                    final LocalDateTime by) {
+                                                           final Station destination,
+                                                           final LocalDateTime by) {
         List<TransferTrainsDto> connections = new ArrayList<>();
         List<Station> transferStations = scheduleDao
                 .getTransferStations(origin, destination);
@@ -154,6 +157,51 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
             }
         }
         return connections;
+    }
+
+    private static class ScheduleComparator implements Comparator<ScheduledStop> {
+        @Override
+        public int compare(ScheduledStop o1, ScheduledStop o2) {
+            if (o1.getArrival() != null && o2.getArrival() != null) {
+                return compareArrivals(o1, o2);
+            } else if (o1.getArrival() != null) {
+                return compareTimes(o1.getArrival(), o2.getDeparture());
+            } else if (o2.getArrival() != null) {
+                return compareTimes(o1.getDeparture(), o2.getArrival());
+            } else {
+                return compareTimes(o1.getDeparture(), o2.getDeparture());
+            }
+        }
+
+        private int compareArrivals(ScheduledStop o1, ScheduledStop o2) {
+            if (o1.getArrival().isBefore(o2.getArrival())) {
+                return -1;
+            } else if (o1.getArrival().isAfter(o2.getArrival())) {
+                return 1;
+            } else if (o1.getDeparture() != null
+                    && o2.getDeparture() != null) {
+                if (o1.getDeparture().isBefore(o2.getDeparture())) {
+                    return -1;
+                } else if (o1.getDeparture()
+                        .isAfter(o2.getDeparture())) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+        private int compareTimes(LocalDateTime first, LocalDateTime second) {
+            if (first.isBefore(second)) {
+                return -1;
+            } else if (first.isAfter(second)) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
     }
 
 }
