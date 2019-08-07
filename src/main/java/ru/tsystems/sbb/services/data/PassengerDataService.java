@@ -1,10 +1,12 @@
 package ru.tsystems.sbb.services.data;
 
 import ru.tsystems.sbb.model.dto.PassengerDto;
+import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TicketOrderDto;
 import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface PassengerDataService {
     void register(String firstName, String lastName, LocalDate dateOfBirth,
@@ -23,4 +25,7 @@ public interface PassengerDataService {
                                                String transfer);
     PassengerDto changePassengerInfo(String firstName, String lastName, String email);
     void changePassword(String email, String password);
+    List<TicketDto> getUserTickets(String email, int page);
+    int maxUserTicketPages(String email);
+    String returnTicket(int ticketId);
 }

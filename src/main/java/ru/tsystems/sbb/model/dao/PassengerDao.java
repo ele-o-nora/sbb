@@ -25,10 +25,14 @@ public interface PassengerDao {
                                  LocalDate dateOfBirth);
     Passenger getUserPassenger(User user);
     List<Ticket> getTickets(Journey journey, Passenger passenger);
-    List<Journey> getJourneys(LocalDateTime start, int page);
-    List<Ticket> getTickets(Journey journey, int page);
+    List<Journey> getJourneys(LocalDateTime start, int page, int searchStep);
+    List<Ticket> getTickets(Journey journey, int page, int searchStep);
     int journeysCount(LocalDateTime start);
     void update(Passenger passenger);
     void update(User user);
-    List<Ticket> getPassengerTickets(Passenger passenger);
+    List<Ticket> getPassengerTickets(Passenger passenger, int page,
+                                     int searchStep);
+    int ticketsCount(Passenger passenger);
+    Ticket getTicketById(int id);
+    void delete(Ticket ticket);
 }

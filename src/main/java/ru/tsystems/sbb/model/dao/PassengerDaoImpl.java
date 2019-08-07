@@ -22,7 +22,6 @@ public class PassengerDaoImpl implements PassengerDao {
     private SessionFactory sessionFactory;
 
     private static final int SEARCH_TIME_STEP = 1;
-    private static final int SEARCH_RESULTS_STEP = 10;
 
     @Override
     public User getUserByEmail(final String email) {
@@ -103,7 +102,7 @@ public class PassengerDaoImpl implements PassengerDao {
     }
 
     @Override
-    public Passenger getUserPassenger(User user) {
+    public Passenger getUserPassenger(final User user) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from Passenger p "
                 + "where p.user = :user", Passenger.class)
@@ -111,7 +110,8 @@ public class PassengerDaoImpl implements PassengerDao {
     }
 
     @Override
-    public List<Ticket> getTickets(Journey journey, Passenger passenger) {
+    public List<Ticket> getTickets(final Journey journey,
+                                   final Passenger passenger) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from Ticket t where t.journey = :journey "
                 + "and t.passenger = :passenger", Ticket.class)
@@ -120,7 +120,9 @@ public class PassengerDaoImpl implements PassengerDao {
     }
 
     @Override
-    public List<Journey> getJourneys(LocalDateTime start, int page) {
+    public List<Journey> getJourneys(final LocalDateTime start,
+                                     final int page,
+                                     final int searchStep) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select j from Journey j "
                 + "join j.stops st where st.arrival is null "
@@ -129,24 +131,25 @@ public class PassengerDaoImpl implements PassengerDao {
                 + "order by st.departure asc", Journey.class)
                 .setParameter("start", start)
                 .setParameter("end", start.plusDays(SEARCH_TIME_STEP))
-                .setFirstResult(SEARCH_RESULTS_STEP * (page - 1))
-                .setMaxResults(SEARCH_RESULTS_STEP).getResultList();
+                .setFirstResult(searchStep * (page - 1))
+                .setMaxResults(searchStep).getResultList();
     }
 
     @Override
-    public List<Ticket> getTickets(Journey journey, int page) {
+    public List<Ticket> getTickets(final Journey journey, final int page,
+                                   final int searchStep) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select t from Ticket t "
                 + "join t.from st1 join t.to st2 "
                 + "where t.journey = :journey "
                 + "order by st1.departure asc, st2.arrival asc", Ticket.class)
                 .setParameter("journey", journey)
-                .setFirstResult(SEARCH_RESULTS_STEP * (page - 1))
-                .setMaxResults(SEARCH_RESULTS_STEP).getResultList();
+                .setFirstResult(searchStep * (page - 1))
+                .setMaxResults(searchStep).getResultList();
     }
 
     @Override
-    public int journeysCount(LocalDateTime start) {
+    public int journeysCount(final LocalDateTime start) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(j) from Journey j "
                 + "join j.stops st where st.arrival is null "
@@ -158,24 +161,45 @@ public class PassengerDaoImpl implements PassengerDao {
     }
 
     @Override
-    public void update(Passenger passenger) {
+    public void update(final Passenger passenger) {
         sessionFactory.getCurrentSession().update(passenger);
     }
 
     @Override
-    public void update(User user) {
+    public void update(final User user) {
         sessionFactory.getCurrentSession().update(user);
     }
 
     @Override
-    public List<Ticket> getPassengerTickets(Passenger passenger) {
+    public List<Ticket> getPassengerTickets(final Passenger passenger,
+                                            final int page,
+                                            final int searchStep) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select t from Ticket t "
                 + "join t.from st "
                 + "where t.passenger = :passenger "
-                + "order by st.departure", Ticket.class)
+                + "order by st.departure desc", Ticket.class)
                 .setParameter("passenger", passenger)
-                .getResultList();
+                .setFirstResult(searchStep * (page - 1))
+                .setMaxResults(searchStep).getResultList();
     }
 
+    @Override
+    public int ticketsCount(Passenger passenger) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select count(t) from Ticket t "
+                + "where t.passenger = :passenger", Long.class)
+                .setParameter("passenger", passenger)
+                .getSingleResult().intValue();
+    }
+
+    @Override
+    public Ticket getTicketById(int id) {
+        return sessionFactory.getCurrentSession().get(Ticket.class, id);
+    }
+
+    @Override
+    public void delete(Ticket ticket) {
+        sessionFactory.getCurrentSession().delete(ticket);
+    }
 }

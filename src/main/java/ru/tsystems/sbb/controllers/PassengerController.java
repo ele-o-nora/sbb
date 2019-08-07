@@ -107,4 +107,16 @@ public class PassengerController {
         return new ModelAndView("editInfo",
                 viewService.changePassword(newPassword));
     }
+
+    @GetMapping("/myTickets")
+    public ModelAndView myTickets(@RequestParam(defaultValue = "1")
+                                  final int page) {
+        return new ModelAndView("tickets", viewService.getUserTickets(page));
+    }
+
+    @PostMapping("/returnTicket")
+    public ModelAndView returnTicket(@RequestParam(value = "ticketId")
+                                     final int ticketId) {
+        return new ModelAndView("tickets", viewService.returnTicket(ticketId));
+    }
 }

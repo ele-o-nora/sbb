@@ -281,16 +281,16 @@ public class AdminDataServiceImpl implements AdminDataService {
 
     @Override
     public List<JourneyDto> getJourneys(LocalDateTime start, int page) {
-        return passengerDao.getJourneys(start, page).stream()
-                .map(journey -> mapper.convert(journey))
+        return passengerDao.getJourneys(start, page, SEARCH_RESULTS_STEP)
+                .stream().map(journey -> mapper.convert(journey))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<TicketDto> getTickets(int journeyId, int page) {
         Journey journey = passengerDao.getJourneyById(journeyId);
-        return passengerDao.getTickets(journey, page).stream()
-                .map(ticket -> mapper.convert(ticket))
+        return passengerDao.getTickets(journey, page, SEARCH_RESULTS_STEP)
+                .stream().map(ticket -> mapper.convert(ticket))
                 .collect(Collectors.toList());
     }
 
@@ -303,10 +303,10 @@ public class AdminDataServiceImpl implements AdminDataService {
     @Override
     public int maxPassengerPages(int journeyId) {
         Journey journey = passengerDao.getJourneyById(journeyId);
-        int ticketCount = passengerDao.currentTickets(journey,
+        int ticketsCount = passengerDao.currentTickets(journey,
                 journey.getStops().get(0), journey.getStops()
                         .get(journey.getStops().size() - 1));
-        return (ticketCount + SEARCH_RESULTS_STEP - 1) / SEARCH_RESULTS_STEP;
+        return (ticketsCount + SEARCH_RESULTS_STEP - 1) / SEARCH_RESULTS_STEP;
     }
 
     @Override

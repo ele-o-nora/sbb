@@ -22,6 +22,7 @@ import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.Train;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,10 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
 
     @Autowired
     private ModelMapper mapper;
+
+    private static final String OLD = "old";
+    private static final String CURRENT = "current";
+    private static final String FUTURE = "future";
 
     @Override
     public JourneyDto convert(final Journey journey) {
@@ -87,11 +92,18 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     @Override
     public TicketDto convert(final Ticket ticket) {
         TicketDto ticketDto = mapper.map(ticket, TicketDto.class);
-        ticketDto.setRoute(ticket.getJourney().getRoute().getNumber());
-        ticketDto.setDirection(ticket.getJourney().getDestination().getName());
+        ticketDto.setJourney(convert(ticket.getJourney()));
         ticketDto.setStationFrom(convert(ticket.getFrom()));
         ticketDto.setStationTo(convert(ticket.getTo()));
         ticketDto.setFormattedPrice(formatPrice(ticket.getPrice()));
+        if (ticket.getTo().getArrival().isBefore(LocalDateTime.now())) {
+            ticketDto.setCategory(OLD);
+        } else if (ticket.getFrom().getDeparture()
+                .isAfter(LocalDateTime.now())) {
+            ticketDto.setCategory(FUTURE);
+        } else {
+            ticketDto.setCategory(CURRENT);
+        }
         return ticketDto;
     }
 

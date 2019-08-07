@@ -9,11 +9,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TicketDto {
 
-    private String route;
-    private String direction;
+    private int id;
+    private JourneyDto journey;
     private PassengerDto passenger;
     private ScheduledStopDto stationFrom;
     private ScheduledStopDto stationTo;
     private String formattedPrice;
+    private String category;
 
 }

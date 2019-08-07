@@ -7,11 +7,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TicketOrderDto;
 import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
 import ru.tsystems.sbb.services.data.PassengerDataService;
 import ru.tsystems.sbb.services.data.RouteDataService;
-import ru.tsystems.sbb.services.data.ScheduleDataService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -31,20 +31,27 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     @Autowired
     private RouteDataService routeDataService;
 
-    @Autowired
-    private ScheduleDataService scheduleDataService;
-
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter
             .ISO_LOCAL_DATE;
+    private static final int DEFAULT_PAGE = 1;
+    private static final int MIN_PASSENGER_AGE = 10;
 
-    private static final String SIGN_UP_SUCCESS = "Registration successful. You may now sign in.";
+    private static final String SIGN_UP_SUCCESS = "Registration successful. "
+            + "You may now sign in.";
     private static final String SIGN_UP_FAIL = "Registration failed. ";
-    private static final String UPDATE_SUCCESS = "Your account was successfully updated.";
+    private static final String UPDATE_SUCCESS = "Your account "
+            + "was successfully updated.";
     private static final String UPDATE_FAIL = "Failed to update your account. ";
-    private static final String BAD_INPUT = "Please make sure you fill all the required fields correctly.";
-    private static final String TICKET_SUCCESS = "Ticket sale successful. Thank you for traveling with us.";
+    private static final String BAD_INPUT = "Please make sure"
+            + "you fill all the required fields correctly.";
+    private static final String TICKET_SUCCESS = "Ticket sale successful. "
+            + "Thank you for traveling with us.";
     private static final String TICKET_FAIL = "Couldn't complete ticket sale. ";
-    private static final String TICKET_PREP_FAIL = "Couldn't prepare ticket sale. ";
+    private static final String TICKET_PREP_FAIL = "Couldn't prepare "
+            + "ticket sale. ";
+    private static final String TICKET_RETURN_FAIL = "Couldn't return ticket. ";
+    private static final String TICKET_RETURN_SUCCESS = "Ticket successfully "
+            + "returned. Your refund will be processed shortly.";
     private static final String SUCCESS = "success";
     private static final String STATUS = "status";
 
@@ -55,8 +62,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                                         final String email,
                                         final String password) {
         Map<String, Object> objects = getLines();
-        if (!validateName(firstName) || !validateName(lastName) ||
-                !validatePassword(password) || !validateEmail(email)) {
+        if (!validateName(firstName) || !validateName(lastName)
+                || !validatePassword(password) || !validateEmail(email)) {
             objects.put(STATUS, SIGN_UP_FAIL + BAD_INPUT);
             return objects;
         }
@@ -197,7 +204,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     }
 
     private boolean validateDateOfBirth(final LocalDate dateOfBirth) {
-        return ChronoUnit.YEARS.between(dateOfBirth, LocalDate.now()) >= 10;
+        return ChronoUnit.YEARS.between(dateOfBirth,
+                LocalDate.now()) >= MIN_PASSENGER_AGE;
     }
 
     private boolean validatePassword(final String password) {
@@ -237,7 +245,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     }
 
     @Override
-    public Map<String, Object> changeName(String firstName, String lastName) {
+    public Map<String, Object> changeName(final String firstName,
+                                          final String lastName) {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
         Map<String, Object> objects = editUserInfo();
@@ -258,7 +267,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     }
 
     @Override
-    public Map<String, Object> changePassword(String newPassword) {
+    public Map<String, Object> changePassword(final String newPassword) {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
         Map<String, Object> objects = editUserInfo();
@@ -273,6 +282,36 @@ public class PassengerViewServiceImpl implements PassengerViewService {
             return objects;
         }
         objects.put(STATUS, UPDATE_SUCCESS);
+        return objects;
+    }
+
+    @Override
+    public Map<String, Object> getUserTickets(final int page) {
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        Map<String, Object> objects = new HashMap<>();
+        List<TicketDto> tickets = passengerDataService
+                .getUserTickets(auth.getName(), page);
+        objects.put("tickets", tickets);
+        if (page > 1) {
+            objects.put("previousPage", (page - 1));
+        }
+        int maxPages = passengerDataService.maxUserTicketPages(auth.getName());
+        if (page < maxPages) {
+            objects.put("nextPage", (page + 1));
+        }
+        return objects;
+    }
+
+    @Override
+    public Map<String, Object> returnTicket(final int ticketId) {
+        String returnResult = passengerDataService.returnTicket(ticketId);
+        Map<String, Object> objects = getUserTickets(DEFAULT_PAGE);
+        if (returnResult.equalsIgnoreCase(SUCCESS)) {
+            objects.put(STATUS, TICKET_RETURN_SUCCESS);
+        } else {
+            objects.put(STATUS, TICKET_RETURN_FAIL + returnResult);
+        }
         return objects;
     }
 }

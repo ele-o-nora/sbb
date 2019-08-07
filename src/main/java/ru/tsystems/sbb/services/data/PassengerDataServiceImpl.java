@@ -9,6 +9,7 @@ import ru.tsystems.sbb.model.dao.AdminDao;
 import ru.tsystems.sbb.model.dao.PassengerDao;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.dto.PassengerDto;
+import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TicketOrderDto;
 import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
 import ru.tsystems.sbb.model.entities.Journey;
@@ -26,7 +27,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -52,6 +55,9 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     private static final String SAME_PASSENGER = "You already have a ticket "
             + "for this journey.";
     private static final String SUCCESS = "success";
+    private static final int SEARCH_RESULTS_STEP = 5;
+    private static final int BASE_TARIFF_DISTANCE = 30;
+    private static final int MIN_MINUTES = 10;
 
     @Override
     public void register(final String firstName, final String lastName,
@@ -84,7 +90,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
             distance = adminDao.outboundDistance(from, to, line);
         }
         float tariff = passengerDao.getCurrentTariff();
-        int tenLeaguesSections = distance / 30 + 1;
+        int tenLeaguesSections = distance / BASE_TARIFF_DISTANCE + 1;
         return tenLeaguesSections * tariff;
     }
 
@@ -102,7 +108,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         Passenger passenger = getOrCreatePassenger(firstName, lastName,
                 dateOfBirth);
         if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
-                from.getDeparture()) < 10) {
+                from.getDeparture()) < MIN_MINUTES) {
             return NO_TIME;
         } else if (!passengerDao.getTickets(journey, passenger).isEmpty()) {
             return SAME_PASSENGER;
@@ -131,7 +137,8 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 .filter(scheduledStop -> scheduledStop.getStation()
                         .getName().equals(stationFrom)).findFirst()
                 .orElse(new ScheduledStop());
-        if (ChronoUnit.MINUTES.between(LocalDateTime.now(), stopFrom.getDeparture()) < 10) {
+        if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
+                stopFrom.getDeparture()) < MIN_MINUTES) {
             ticketOrder.setStatus(NO_TIME);
             return ticketOrder;
         }
@@ -190,7 +197,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         Passenger passenger = getOrCreatePassenger(firstName, lastName,
                 dateOfBirth);
         if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
-                firstFrom.getDeparture()) < 10) {
+                firstFrom.getDeparture()) < MIN_MINUTES) {
             return NO_TIME;
         } else if (!passengerDao.getTickets(firstJourney, passenger).isEmpty()
         || !passengerDao.getTickets(secondJourney, passenger).isEmpty()) {
@@ -213,7 +220,9 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
-    public PassengerDto changePassengerInfo(String firstName, String lastName, String email) {
+    public PassengerDto changePassengerInfo(final String firstName,
+                                            final String lastName,
+                                            final String email) {
         User user = passengerDao.getUserByEmail(email);
         Passenger passenger = passengerDao.getUserPassenger(user);
         passenger.setFirstName(firstName);
@@ -223,10 +232,40 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
-    public void changePassword(String email, String password) {
+    public void changePassword(final String email, final String password) {
         User user = passengerDao.getUserByEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         passengerDao.update(user);
+    }
+
+    @Override
+    public int maxUserTicketPages(final String email) {
+        User user = passengerDao.getUserByEmail(email);
+        Passenger passenger = passengerDao.getUserPassenger(user);
+        int ticketsCount = passengerDao.ticketsCount(passenger);
+        return (ticketsCount + SEARCH_RESULTS_STEP - 1) / SEARCH_RESULTS_STEP;
+    }
+
+    @Override
+    public List<TicketDto> getUserTickets(final String email, final int page) {
+        User user = passengerDao.getUserByEmail(email);
+        Passenger passenger = passengerDao.getUserPassenger(user);
+        return passengerDao.getPassengerTickets(passenger, page,
+                SEARCH_RESULTS_STEP)
+                .stream().map(ticket -> mapper.convert(ticket))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String returnTicket(final int ticketId) {
+        Ticket ticket = passengerDao.getTicketById(ticketId);
+        if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
+                ticket.getFrom().getDeparture()) >= MIN_MINUTES) {
+            passengerDao.delete(ticket);
+            return SUCCESS;
+        } else {
+            return NO_TIME;
+        }
     }
 
     private Passenger getOrCreatePassenger(final String firstName,
