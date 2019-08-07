@@ -25,4 +25,7 @@ public interface PassengerViewService {
                                                 String firstName,
                                                 String lastName,
                                                 String dateOfBirth);
+    Map<String, Object> editUserInfo();
+    Map<String, Object> changeName(String firstName, String lastName);
+    Map<String, Object> changePassword(String newPassword);
 }

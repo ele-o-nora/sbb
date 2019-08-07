@@ -212,6 +212,23 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         return NO_SEATS;
     }
 
+    @Override
+    public PassengerDto changePassengerInfo(String firstName, String lastName, String email) {
+        User user = passengerDao.getUserByEmail(email);
+        Passenger passenger = passengerDao.getUserPassenger(user);
+        passenger.setFirstName(firstName);
+        passenger.setLastName(lastName);
+        passengerDao.update(passenger);
+        return mapper.convert(passenger);
+    }
+
+    @Override
+    public void changePassword(String email, String password) {
+        User user = passengerDao.getUserByEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        passengerDao.update(user);
+    }
+
     private Passenger getOrCreatePassenger(final String firstName,
                                            final String lastName,
                                            final LocalDate dateOfBirth) {

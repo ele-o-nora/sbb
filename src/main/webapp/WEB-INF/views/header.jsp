@@ -30,6 +30,17 @@
             <li class="nav-item">
                 <a href="${pageContext.request.contextPath}/" class="nav-link">Home</a>
             </li>
+            <sec:authorize access="hasRole('USER')">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        My account</a>
+                    <div class="dropdown-menu bg-secondary" aria-labelledby="accountDropdown">
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/editInfo">Edit info</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/myTickets">My tickets</a>
+                    </div>
+                </li>
+            </sec:authorize>
             <sec:authorize access="hasRole('ADMIN')">
                 <li class="nav-item">
                     <a href="${pageContext.request.contextPath}/admin/" class="nav-link">Admin panel</a>
@@ -87,16 +98,14 @@
                         <div class="col-sm-6">
                             <input type="password" name="password" placeholder="Password" class="form-control" id="password"
                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="Password should be at least 6 symbols long,
-with at least one number, one lowercase and one uppercase letter" onkeyup="
-  this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
-  form.matchingPassword.pattern = RegExp.escape(this.value);
-" required>
+                            with at least one number, one lowercase and one uppercase letter" onkeyup="
+                            this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
+                            form.matchingPassword.pattern = RegExp.escape(this.value);" required>
                         </div>
                         <div class="col-sm-6">
                             <input type="password" name="matchingPassword" placeholder="Confirm password" id="confirmPassword"
                                    class="form-control" title="Password should match the first one" required onkeyup="
-  this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
-">
+                            this.setCustomValidity(this.validity.patternMismatch ? this.title : '');">
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-3">

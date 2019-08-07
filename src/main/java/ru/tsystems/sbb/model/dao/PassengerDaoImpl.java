@@ -156,4 +156,14 @@ public class PassengerDaoImpl implements PassengerDao {
                 .setParameter("end", start.plusDays(SEARCH_TIME_STEP))
                 .getSingleResult().intValue();
     }
+
+    @Override
+    public void update(Passenger passenger) {
+        sessionFactory.getCurrentSession().update(passenger);
+    }
+
+    @Override
+    public void update(User user) {
+        sessionFactory.getCurrentSession().update(user);
+    }
 }

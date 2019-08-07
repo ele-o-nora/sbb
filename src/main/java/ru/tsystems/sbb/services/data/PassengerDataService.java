@@ -12,8 +12,8 @@ public interface PassengerDataService {
     String buyTicket(TicketOrderDto ticket, String firstName, String lastName,
                       LocalDate dateOfBirth);
     PassengerDto getPassenger(String email);
-    String buyTickets(TransferTicketOrderDto tickets, String firstName, String lastName,
-                       LocalDate dateOfBirth);
+    String buyTickets(TransferTicketOrderDto tickets, String firstName,
+                      String lastName, LocalDate dateOfBirth);
     TicketOrderDto prepareTicketOrder(int journeyId, String stationFrom,
                                       String stationTo);
     TransferTicketOrderDto prepareTicketsOrder(int firstJourneyId,
@@ -21,4 +21,6 @@ public interface PassengerDataService {
                                                String stationFrom,
                                                String stationTo,
                                                String transfer);
+    PassengerDto changePassengerInfo(String firstName, String lastName, String email);
+    void changePassword(String email, String password);
 }

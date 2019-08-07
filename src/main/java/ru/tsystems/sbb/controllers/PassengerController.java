@@ -2,6 +2,7 @@ package ru.tsystems.sbb.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -84,5 +85,26 @@ public class PassengerController {
                                        final TransferTicketOrderDto order) {
         return new ModelAndView(BUY_TICKETS, viewService
                 .finalizeTicketsSale(order, firstName, lastName, dateOfBirth));
+    }
+
+    @GetMapping("/editInfo")
+    public ModelAndView editUserInfo() {
+        return new ModelAndView("editInfo", viewService.editUserInfo());
+    }
+
+    @PostMapping("/changeName")
+    public ModelAndView changeName(@RequestParam(value = "firstName")
+                                   final String firstName,
+                                   @RequestParam(value = "lastName")
+                                   final String lastName) {
+        return new ModelAndView("editInfo",
+                viewService.changeName(firstName, lastName));
+    }
+
+    @PostMapping("/changePassword")
+    public ModelAndView changePassword(@RequestParam(value = "password")
+                                   final String newPassword) {
+        return new ModelAndView("editInfo",
+                viewService.changePassword(newPassword));
     }
 }

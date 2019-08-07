@@ -28,4 +28,6 @@ public interface PassengerDao {
     List<Journey> getJourneys(LocalDateTime start, int page);
     List<Ticket> getTickets(Journey journey, int page);
     int journeysCount(LocalDateTime start);
+    void update(Passenger passenger);
+    void update(User user);
 }

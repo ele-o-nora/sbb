@@ -39,6 +39,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
 
     private static final String SIGN_UP_SUCCESS = "Registration successful. You may now sign in.";
     private static final String SIGN_UP_FAIL = "Registration failed. ";
+    private static final String UPDATE_SUCCESS = "Your account was successfully updated.";
+    private static final String UPDATE_FAIL = "Failed to update your account. ";
     private static final String BAD_INPUT = "Please make sure you fill all the required fields correctly.";
     private static final String TICKET_SUCCESS = "Ticket sale successful. Thank you for traveling with us.";
     private static final String TICKET_FAIL = "Couldn't complete ticket sale. ";
@@ -223,4 +225,54 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         return objects;
     }
 
+    @Override
+    public Map<String, Object> editUserInfo() {
+        Map<String, Object> objects = new HashMap<>();
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        PassengerDto passenger = passengerDataService
+                .getPassenger(auth.getName());
+        objects.put("passenger", passenger);
+        return objects;
+    }
+
+    @Override
+    public Map<String, Object> changeName(String firstName, String lastName) {
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        Map<String, Object> objects = editUserInfo();
+        if (!validateName(firstName) || !validateName(lastName)) {
+            objects.put(STATUS, UPDATE_FAIL + BAD_INPUT);
+            return objects;
+        }
+        try {
+            PassengerDto passenger = passengerDataService
+                    .changePassengerInfo(firstName, lastName, auth.getName());
+            objects.put("passenger", passenger);
+        } catch (Exception e) {
+            objects.put(STATUS, UPDATE_FAIL);
+            return objects;
+        }
+        objects.put(STATUS, UPDATE_SUCCESS);
+        return objects;
+    }
+
+    @Override
+    public Map<String, Object> changePassword(String newPassword) {
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        Map<String, Object> objects = editUserInfo();
+        if (!validatePassword(newPassword)) {
+            objects.put(STATUS, UPDATE_FAIL + BAD_INPUT);
+            return objects;
+        }
+        try {
+            passengerDataService.changePassword(auth.getName(), newPassword);
+        } catch (Exception e) {
+            objects.put(STATUS, UPDATE_FAIL);
+            return objects;
+        }
+        objects.put(STATUS, UPDATE_SUCCESS);
+        return objects;
+    }
 }

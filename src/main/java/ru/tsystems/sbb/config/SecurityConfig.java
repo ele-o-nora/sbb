@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(filter, CsrfFilter.class);
         http.authorizeRequests()
                 .antMatchers("/admin", "admin/**").hasRole("ADMIN")
+                .antMatchers("/editInfo", "/changeName", "/changePassword").hasRole("USER")
                 .antMatchers("/webjars/**", "/resources/**", "/",
                         "/curSchedule", "/findTrains", "/login", "/register",
                         "/buyTicket", "/buyTickets", "/finalizeTicketSale",
