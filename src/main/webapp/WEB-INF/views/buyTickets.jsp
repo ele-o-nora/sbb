@@ -15,26 +15,26 @@
 <%@include file="header.jsp" %>
 <c:if test="${!empty status}">
     <p class="text-danger m-5">${status}</p>
-    <a href="${pageContext.request.contextPath}/">Back to main page</a>
+    <a href="${pageContext.request.contextPath}/" class="text-secondary">Back to main page</a>
 </c:if>
 <c:if test="${empty status}"><h5 class="text-secondary m-3">Passenger details:</h5>
 <c:if test="${!empty ticketOrder}">
     <form:form modelAttribute="ticketOrder" method="post"
                action="${pageContext.request.contextPath}/finalizeTicketSale">
         <div class="form-row justify-content-center m-1">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <input type="text" class="form-control" name="firstName" placeholder="First name"
                        <c:if test="${!empty passenger}">value="${passenger.firstName}"</c:if>
                        autocomplete="off" required/>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <input type="text" class="form-control" name="lastName" placeholder="Last name"
                        <c:if test="${!empty passenger}">value="${passenger.lastName}"</c:if>
                        autocomplete="off" required/>
             </div>
         </div>
         <div class="form-row justify-content-center m-1">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <input type="text" name="dateOfBirth" placeholder="Date of birth"
                        class="form-control datetimepicker-input" id="dateOfBirthPicker2"
                        data-toggle="datetimepicker" data-target="#dateOfBirthPicker2"
@@ -77,6 +77,25 @@
                 <form:input type="hidden" path="price" value="${ticketOrder.price}"/>
             </div>
         </div>
+        <h5 class="text-secondary m-3">Payment info:</h5>
+        <div class="form-row justify-content-center m-1">
+            <div class="col-sm-3">
+                <input type="text" class="form-control" placeholder="Card number" required>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" placeholder="Cardholder name" required>
+            </div>
+        </div>
+        <div class="form-row justify-content-center m-1">
+            <div class="col-sm-2">
+                <input type="text" class="form-control datetimepicker-input"
+                       id="validUntilPicker" data-toggle="datetimepicker" data-target="#validUntilPicker"
+                       placeholder="Valid until" required/>
+            </div>
+            <div class="col-sm-2">
+                <input type="password" class="form-control" placeholder="CVV/CVC" required>
+            </div>
+        </div>
         <div class="form-row justify-content-center m-2">
             <input type="submit" class="btn btn-outline-danger" value="Buy ticket"/>
         </div>
@@ -86,19 +105,19 @@
     <form:form modelAttribute="transferTickets" method="post"
                action="${pageContext.request.contextPath}/finalizeTicketsSale" autocomplete="off">
         <div class="form-row justify-content-center m-1">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <input type="text" class="form-control" name="firstName" placeholder="First name"
                        <c:if test="${!empty passenger}">value="${passenger.firstName}"</c:if>
                        autocomplete="off" required/>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <input type="text" class="form-control" name="lastName" placeholder="Last name"
                        <c:if test="${!empty passenger}">value="${passenger.lastName}"</c:if>
                        autocomplete="off" required/>
             </div>
         </div>
         <div class="form-row justify-content-center m-1">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <input type="text" name="dateOfBirth" placeholder="Date of birth"
                        class="form-control datetimepicker-input" id="dateOfBirthPicker2"
                        data-toggle="datetimepicker" data-target="#dateOfBirthPicker2"
@@ -177,6 +196,25 @@
                 <form:input type="hidden" path="secondTrain.destination.id"
                             value="${transferTickets.secondTrain.destination.id}"/>
                 <form:input type="hidden" path="secondTrain.price" value="${transferTickets.secondTrain.price}"/>
+            </div>
+        </div>
+        <h5 class="text-secondary m-3">Payment info:</h5>
+        <div class="form-row justify-content-center m-1">
+            <div class="col-sm-3">
+                <input type="text" class="form-control" placeholder="Card number" required>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" placeholder="Cardholder name" required>
+            </div>
+        </div>
+        <div class="form-row justify-content-center m-1">
+            <div class="col-sm-2">
+                <input type="text" class="form-control datetimepicker-input"
+                       id="validUntilPicker" data-toggle="datetimepicker" data-target="#validUntilPicker"
+                       placeholder="Valid until" required/>
+            </div>
+            <div class="col-sm-2">
+                <input type="password" class="form-control" placeholder="CVV/CVC" required>
             </div>
         </div>
         <div class="form-row justify-content-center m-2">

@@ -75,6 +75,19 @@ $(document).ready(function () {
         viewMode: 'years'
     });
 
+    $('#validUntilPicker').datetimepicker({
+        icons: {
+            time: 'far fa-clock',
+            date: 'far fa-calendar',
+            up: 'fas fa-arrow-up',
+            down: 'fas fa-arrow-down',
+            previous: 'fas fa-chevron-left',
+            next: 'fas fa-chevron-right',
+        },
+        format: 'MM/YY',
+        minDate: moment()
+    });
+
     $('#addStationMenu').click(function () {
         $('#linesStationsList').toggle();
     });

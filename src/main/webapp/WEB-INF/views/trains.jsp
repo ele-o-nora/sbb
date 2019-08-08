@@ -13,7 +13,7 @@
 <c:if test="${!empty error}">
     <div class="m-5">
         <span class="text-danger">${error}</span><br/>
-        <a href="${pageContext.request.contextPath}/">Search anew</a>
+        <a href="${pageContext.request.contextPath}/" class="text-secondary">Search anew</a>
     </div>
 </c:if>
 <c:if test="${empty error}">
@@ -23,7 +23,7 @@
         <div class="col-sm-8 offset-sm-2">
             <c:if test="${!empty fail}">
                 ${fail}<br/>
-                <a href="${pageContext.request.contextPath}/">Search anew</a>
+                <a href="${pageContext.request.contextPath}/" class="text-danger">Search anew</a>
             </c:if>
             <table class="table">
                 <c:if test="${!empty trains}">
