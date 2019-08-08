@@ -21,24 +21,20 @@ public class PassengerDaoImpl implements PassengerDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private static final int SEARCH_TIME_STEP = 1;
-
     @Override
     public User getUserByEmail(final String email) {
-        Session session = sessionFactory.openSession();
-        User user = session.createQuery("from User u where u.email = :email",
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("from User u where u.email = :email",
                 User.class).setParameter("email", email).getSingleResult();
-        session.close();
-        return user;
     }
 
     @Override
-    public void add(User user) {
+    public void add(final User user) {
         sessionFactory.getCurrentSession().persist(user);
     }
 
     @Override
-    public void add(Passenger passenger) {
+    public void add(final Passenger passenger) {
         sessionFactory.getCurrentSession().persist(passenger);
     }
 
@@ -50,7 +46,7 @@ public class PassengerDaoImpl implements PassengerDao {
     }
 
     @Override
-    public void add(Ticket ticket) {
+    public void add(final Ticket ticket) {
         sessionFactory.getCurrentSession().persist(ticket);
     }
 
@@ -130,7 +126,7 @@ public class PassengerDaoImpl implements PassengerDao {
                 + "and st.departure < :end "
                 + "order by st.departure asc", Journey.class)
                 .setParameter("start", start)
-                .setParameter("end", start.plusDays(SEARCH_TIME_STEP))
+                .setParameter("end", start.plusDays(1))
                 .setFirstResult(searchStep * (page - 1))
                 .setMaxResults(searchStep).getResultList();
     }
@@ -156,7 +152,7 @@ public class PassengerDaoImpl implements PassengerDao {
                 + "and st.departure >= :start "
                 + "and st.departure < :end", Long.class)
                 .setParameter("start", start)
-                .setParameter("end", start.plusDays(SEARCH_TIME_STEP))
+                .setParameter("end", start.plusDays(1))
                 .getSingleResult().intValue();
     }
 
@@ -185,7 +181,7 @@ public class PassengerDaoImpl implements PassengerDao {
     }
 
     @Override
-    public int ticketsCount(Passenger passenger) {
+    public int ticketsCount(final Passenger passenger) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(t) from Ticket t "
                 + "where t.passenger = :passenger", Long.class)
@@ -194,12 +190,12 @@ public class PassengerDaoImpl implements PassengerDao {
     }
 
     @Override
-    public Ticket getTicketById(int id) {
+    public Ticket getTicketById(final int id) {
         return sessionFactory.getCurrentSession().get(Ticket.class, id);
     }
 
     @Override
-    public void delete(Ticket ticket) {
+    public void delete(final Ticket ticket) {
         sessionFactory.getCurrentSession().delete(ticket);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tsystems.sbb.model.dao.PassengerDao;
 import ru.tsystems.sbb.model.entities.Role;
 import ru.tsystems.sbb.model.entities.User;
@@ -13,6 +14,7 @@ import ru.tsystems.sbb.model.entities.User;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class RailwaysUserDetailsService implements UserDetailsService {
 
     @Autowired
