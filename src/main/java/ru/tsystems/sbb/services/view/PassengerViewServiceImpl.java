@@ -33,7 +33,6 @@ public class PassengerViewServiceImpl implements PassengerViewService {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter
             .ISO_LOCAL_DATE;
-    private static final int DEFAULT_PAGE = 1;
     private static final int MIN_PASSENGER_AGE = 10;
 
     private static final String SIGN_UP_SUCCESS = "Registration successful. "
@@ -54,6 +53,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
             + "returned. Your refund will be processed shortly.";
     private static final String SUCCESS = "success";
     private static final String STATUS = "status";
+    private static final String PASSENGER = "passenger";
 
     @Override
     public Map<String, Object> register(final String firstName,
@@ -101,7 +101,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             PassengerDto passenger = passengerDataService
                     .getPassenger(auth.getName());
-            objects.put("passenger", passenger);
+            objects.put(PASSENGER, passenger);
         }
         return objects;
     }
@@ -133,7 +133,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             PassengerDto passenger = passengerDataService
                     .getPassenger(auth.getName());
-            objects.put("passenger", passenger);
+            objects.put(PASSENGER, passenger);
         }
         return objects;
     }
@@ -194,45 +194,6 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         return objects;
     }
 
-    private boolean validateName(final String name) {
-        if (name == null || name.isEmpty()) {
-            return false;
-        }
-        Pattern p = Pattern.compile("[A-Za-z\\s-']{2,30}");
-        Matcher m = p.matcher(name);
-        return m.find();
-    }
-
-    private boolean validateDateOfBirth(final LocalDate dateOfBirth) {
-        return ChronoUnit.YEARS.between(dateOfBirth,
-                LocalDate.now()) >= MIN_PASSENGER_AGE;
-    }
-
-    private boolean validatePassword(final String password) {
-        if (password == null || password.isEmpty()) {
-            return false;
-        }
-        Pattern p = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,}");
-        Matcher m = p.matcher(password);
-        return m.find();
-    }
-
-    private boolean validateEmail(final String email) {
-        if (email == null || email.isEmpty()) {
-            return false;
-        }
-        Pattern p = Pattern.compile("^(.+)@(.+)$");
-        Matcher m = p.matcher(email);
-        return m.find();
-    }
-
-    private Map<String, Object> getLines() {
-        Map<String, Object> objects = new HashMap<>();
-        List<StationDto> stations = routeDataService.allStations();
-        objects.put("stations", stations);
-        return objects;
-    }
-
     @Override
     public Map<String, Object> editUserInfo() {
         Map<String, Object> objects = new HashMap<>();
@@ -240,7 +201,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                 .getAuthentication();
         PassengerDto passenger = passengerDataService
                 .getPassenger(auth.getName());
-        objects.put("passenger", passenger);
+        objects.put(PASSENGER, passenger);
         return objects;
     }
 
@@ -257,7 +218,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         try {
             PassengerDto passenger = passengerDataService
                     .changePassengerInfo(firstName, lastName, auth.getName());
-            objects.put("passenger", passenger);
+            objects.put(PASSENGER, passenger);
         } catch (Exception e) {
             objects.put(STATUS, UPDATE_FAIL);
             return objects;
@@ -306,7 +267,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     @Override
     public Map<String, Object> returnTicket(final int ticketId) {
         String returnResult = passengerDataService.returnTicket(ticketId);
-        Map<String, Object> objects = getUserTickets(DEFAULT_PAGE);
+        Map<String, Object> objects = getUserTickets(1);
         if (returnResult.equalsIgnoreCase(SUCCESS)) {
             objects.put(STATUS, TICKET_RETURN_SUCCESS);
         } else {
@@ -314,4 +275,44 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         }
         return objects;
     }
+
+    private boolean validateName(final String name) {
+        if (name == null || name.isEmpty()) {
+            return false;
+        }
+        Pattern p = Pattern.compile("[A-Za-z\\s-']{2,30}");
+        Matcher m = p.matcher(name);
+        return m.find();
+    }
+
+    private boolean validateDateOfBirth(final LocalDate dateOfBirth) {
+        return ChronoUnit.YEARS.between(dateOfBirth,
+                LocalDate.now()) >= MIN_PASSENGER_AGE;
+    }
+
+    private boolean validatePassword(final String password) {
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+        Pattern p = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,}");
+        Matcher m = p.matcher(password);
+        return m.find();
+    }
+
+    private boolean validateEmail(final String email) {
+        if (email == null || email.isEmpty()) {
+            return false;
+        }
+        Pattern p = Pattern.compile("^(.+)@(.+)$");
+        Matcher m = p.matcher(email);
+        return m.find();
+    }
+
+    private Map<String, Object> getLines() {
+        Map<String, Object> objects = new HashMap<>();
+        List<StationDto> stations = routeDataService.allStations();
+        objects.put("stations", stations);
+        return objects;
+    }
+
 }

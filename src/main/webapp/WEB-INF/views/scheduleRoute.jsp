@@ -30,8 +30,8 @@
             </div>
             <c:if test="${!status.first and !status.last}">
                 <div class="col-sm-1">
-                    <input type="text" class="form-control" name="waitTimes"
-                           placeholder="Time at station" value="15" required>
+                    <input type="text" class="form-control" name="waitTimes" pattern=""
+                           value="15" required>
                 </div>
             </c:if> <br/>
         </div>

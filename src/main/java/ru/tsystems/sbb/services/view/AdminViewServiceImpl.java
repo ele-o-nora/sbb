@@ -36,7 +36,6 @@ public class AdminViewServiceImpl implements AdminViewService {
             .ISO_LOCAL_DATE;
 
     private static final String OUTBOUND = "outbound";
-    private static final int DAY_STEP = 1;
 
     @Override
     public Map<String, Object> prepAdminPanel() {
@@ -142,20 +141,23 @@ public class AdminViewServiceImpl implements AdminViewService {
 
     @Override
     public void updateTariff(final float price) {
-        adminDataService.updateTariff(price);
+        if (price > 0) {
+            adminDataService.updateTariff(price);
+        }
     }
 
     @Override
-    public Map<String, Object> lookUpJourneys(final String date, final int page) {
+    public Map<String, Object> lookUpJourneys(final String date,
+                                              final int page) {
         LocalDate day = LocalDate.parse(date, DATE_FORMATTER);
         LocalDateTime searchFrom = LocalDateTime.of(day,
                 LocalTime.MIDNIGHT);
         Map<String, Object> objects = new HashMap<>();
         objects.put("today", date);
-        String previousDay = day.minusDays(DAY_STEP)
+        String previousDay = day.minusDays(1)
                 .format(DATE_FORMATTER);
         objects.put("previousDay", previousDay);
-        String nextDay = day.plusDays(DAY_STEP).format(DATE_FORMATTER);
+        String nextDay = day.plusDays(1).format(DATE_FORMATTER);
         objects.put("nextDay", nextDay);
         if (page > 1) {
             objects.put("previousPage", (page - 1));
@@ -171,7 +173,8 @@ public class AdminViewServiceImpl implements AdminViewService {
     }
 
     @Override
-    public Map<String, Object> listPassengers(int journeyId, int page) {
+    public Map<String, Object> listPassengers(final int journeyId,
+                                              final int page) {
         Map<String, Object> objects = new HashMap<>();
         JourneyDto journey = adminDataService.getJourneyById(journeyId);
         objects.put("journey", journey);
@@ -188,7 +191,7 @@ public class AdminViewServiceImpl implements AdminViewService {
     }
 
     @Override
-    public Map<String, Object> journeyInfo(int journeyId) {
+    public Map<String, Object> journeyInfo(final int journeyId) {
         Map<String, Object> objects = new HashMap<>();
         JourneyDto journey = adminDataService.getJourneyById(journeyId);
         objects.put("journey", journey);
