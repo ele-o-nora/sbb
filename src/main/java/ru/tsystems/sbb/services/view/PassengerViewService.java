@@ -3,11 +3,12 @@ package ru.tsystems.sbb.services.view;
 import ru.tsystems.sbb.model.dto.TicketOrderDto;
 import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 public interface PassengerViewService {
     Map<String, Object> register(String firstName, String lastName,
-                                 String dateOfBirth, String email,
+                                 LocalDate dateOfBirth, String email,
                                  String password);
     Map<String, Object> prepTicketSale(int journeyId,
                                                String stationFrom,
@@ -30,4 +31,5 @@ public interface PassengerViewService {
     Map<String, Object> changePassword(String newPassword);
     Map<String, Object> getUserTickets(int page);
     Map<String, Object> returnTicket(int ticketId);
+    Map<String, Object> failedSignUp();
 }

@@ -2,14 +2,20 @@ package ru.tsystems.sbb.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ru.tsystems.sbb.model.dto.ChangeNameDto;
+import ru.tsystems.sbb.model.dto.PasswordDto;
+import ru.tsystems.sbb.model.dto.SignUpDto;
 import ru.tsystems.sbb.model.dto.TicketOrderDto;
 import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
 import ru.tsystems.sbb.services.view.PassengerViewService;
+
+import javax.validation.Valid;
 
 @Controller
 public class PassengerController {
@@ -20,18 +26,16 @@ public class PassengerController {
     private static final String BUY_TICKETS = "buyTickets";
 
     @PostMapping("/register")
-    public ModelAndView signUp(@RequestParam(name = "firstName")
-                                    final String firstName,
-                               @RequestParam(name = "lastName")
-                                    final String lastName,
-                               @RequestParam(name = "dateOfBirth")
-                                    final String dateOfBirth,
-                               @RequestParam(name = "email")
-                                    final String email,
-                               @RequestParam(name = "password")
-                                    final String password) {
+    public ModelAndView signUp(@ModelAttribute("signUpDto") @Valid
+                               final SignUpDto signUpDto,
+                               final BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("index", viewService.failedSignUp());
+        }
         return new ModelAndView("index", viewService
-                .register(firstName, lastName, dateOfBirth, email, password));
+                .register(signUpDto.getFirstName(), signUpDto.getLastName(),
+                        signUpDto.getDateOfBirth(), signUpDto.getEmail(),
+                        signUpDto.getPassword().getPassword()));
     }
 
     @PostMapping("/buyTickets")
@@ -93,19 +97,28 @@ public class PassengerController {
     }
 
     @PostMapping("/changeName")
-    public ModelAndView changeName(@RequestParam(value = "firstName")
-                                   final String firstName,
-                                   @RequestParam(value = "lastName")
-                                   final String lastName) {
+    public ModelAndView changeName(@ModelAttribute("changeNameDto") @Valid
+                                   final ChangeNameDto changeNameDto,
+                                   final BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("editInfo",
+                    "passwordDto", new PasswordDto());
+        }
         return new ModelAndView("editInfo",
-                viewService.changeName(firstName, lastName));
+                viewService.changeName(changeNameDto.getFirstName(),
+                        changeNameDto.getLastName()));
     }
 
     @PostMapping("/changePassword")
-    public ModelAndView changePassword(@RequestParam(value = "password")
-                                   final String newPassword) {
+    public ModelAndView changePassword(@ModelAttribute("passwordDto") @Valid
+                                       final PasswordDto passwordDto,
+                                       final BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("editInfo",
+                    "changeNameDto", new ChangeNameDto());
+        }
         return new ModelAndView("editInfo",
-                viewService.changePassword(newPassword));
+                viewService.changePassword(passwordDto.getPassword()));
     }
 
     @GetMapping("/myTickets")

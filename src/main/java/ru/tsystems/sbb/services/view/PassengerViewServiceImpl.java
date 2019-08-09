@@ -5,7 +5,10 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ru.tsystems.sbb.model.dto.ChangeNameDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
+import ru.tsystems.sbb.model.dto.PasswordDto;
+import ru.tsystems.sbb.model.dto.SignUpDto;
 import ru.tsystems.sbb.model.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TicketOrderDto;
@@ -37,7 +40,6 @@ public class PassengerViewServiceImpl implements PassengerViewService {
 
     private static final String SIGN_UP_SUCCESS = "Registration successful. "
             + "You may now sign in.";
-    private static final String SIGN_UP_FAIL = "Registration failed. ";
     private static final String UPDATE_SUCCESS = "Your account "
             + "was successfully updated.";
     private static final String UPDATE_FAIL = "Failed to update your account. ";
@@ -58,36 +60,30 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     @Override
     public Map<String, Object> register(final String firstName,
                                         final String lastName,
-                                        final String dateOfBirth,
+                                        final LocalDate dateOfBirth,
                                         final String email,
                                         final String password) {
-        Map<String, Object> objects = getLines();
-        if (!validateName(firstName) || !validateName(lastName)
-                || !validatePassword(password) || !validateEmail(email)) {
-            objects.put(STATUS, SIGN_UP_FAIL + BAD_INPUT);
-            return objects;
-        }
-        try {
-            LocalDate dob = LocalDate.parse(dateOfBirth,
-                    DATE_FORMATTER);
-            if (!validateDateOfBirth(dob)) {
-                objects.put(STATUS, SIGN_UP_FAIL + BAD_INPUT);
-                return objects;
-            }
-            passengerDataService.register(firstName, lastName, dob,
-                    email, password);
-            objects.put(STATUS, SIGN_UP_SUCCESS);
-        } catch (Exception e) {
-            objects.put(STATUS, SIGN_UP_FAIL);
-        }
+        Map<String, Object> objects = getStations();
+        passengerDataService.register(firstName, lastName, dateOfBirth,
+                email, password);
+        objects.put(STATUS, SIGN_UP_SUCCESS);
+        return objects;
+    }
+
+    @Override
+    public Map<String, Object> failedSignUp() {
+        Map<String, Object> objects = new HashMap<>();
+        List<StationDto> stations = routeDataService.allStations();
+        objects.put("stations", stations);
+        objects.put("failedSignUp", "failedSignUp");
         return objects;
     }
 
     @Override
     public Map<String, Object> prepTicketSale(final int journeyId,
-                                                  final String stationFrom,
-                                                  final String stationTo) {
-        Map<String, Object> objects = new HashMap<>();
+                                              final String stationFrom,
+                                              final String stationTo) {
+        Map<String, Object> objects = prepSignUp();
         TicketOrderDto ticketOrder = passengerDataService
                 .prepareTicketOrder(journeyId, stationFrom, stationTo);
         if (ticketOrder.getStatus() != null && !ticketOrder
@@ -108,11 +104,11 @@ public class PassengerViewServiceImpl implements PassengerViewService {
 
     @Override
     public Map<String, Object> prepTicketsSale(final int firstJourneyId,
-                                                   final int secondJourneyId,
-                                                   final String stationFrom,
-                                                   final String stationTo,
-                                                   final String transfer) {
-        Map<String, Object> objects = new HashMap<>();
+                                               final int secondJourneyId,
+                                               final String stationFrom,
+                                               final String stationTo,
+                                               final String transfer) {
+        Map<String, Object> objects = prepSignUp();
         TransferTicketOrderDto transferTickets = passengerDataService
                 .prepareTicketsOrder(firstJourneyId, secondJourneyId,
                         stationFrom, stationTo, transfer);
@@ -142,7 +138,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     public Map<String, Object> finalizeTicketSale(
             final TicketOrderDto ticketOrder, final String firstName,
             final String lastName, final String dateOfBirth) {
-        Map<String, Object> objects = getLines();
+        Map<String, Object> objects = getStations();
         if (!validateName(firstName) || !validateName(lastName)) {
             objects.put(STATUS, TICKET_FAIL + BAD_INPUT);
             return objects;
@@ -170,7 +166,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     public Map<String, Object> finalizeTicketsSale(
             final TransferTicketOrderDto order, final String firstName,
             final String lastName, final String dateOfBirth) {
-        Map<String, Object> objects = getLines();
+        Map<String, Object> objects = getStations();
         if (!validateName(firstName) || !validateName(lastName)) {
             objects.put(STATUS, TICKET_FAIL + BAD_INPUT);
             return objects;
@@ -202,6 +198,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         PassengerDto passenger = passengerDataService
                 .getPassenger(auth.getName());
         objects.put(PASSENGER, passenger);
+        objects.put("changeNameDto", new ChangeNameDto());
+        objects.put("passwordDto", new PasswordDto());
         return objects;
     }
 
@@ -232,16 +230,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
         Map<String, Object> objects = editUserInfo();
-        if (!validatePassword(newPassword)) {
-            objects.put(STATUS, UPDATE_FAIL + BAD_INPUT);
-            return objects;
-        }
-        try {
-            passengerDataService.changePassword(auth.getName(), newPassword);
-        } catch (Exception e) {
-            objects.put(STATUS, UPDATE_FAIL);
-            return objects;
-        }
+        passengerDataService.changePassword(auth.getName(), newPassword);
         objects.put(STATUS, UPDATE_SUCCESS);
         return objects;
     }
@@ -276,6 +265,12 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         return objects;
     }
 
+    private Map<String, Object> prepSignUp() {
+        Map<String, Object> objects = new HashMap<>();
+        objects.put("signUpDto", new SignUpDto());
+        return objects;
+    }
+
     private boolean validateName(final String name) {
         if (name == null || name.isEmpty()) {
             return false;
@@ -290,26 +285,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                 LocalDate.now()) >= MIN_PASSENGER_AGE;
     }
 
-    private boolean validatePassword(final String password) {
-        if (password == null || password.isEmpty()) {
-            return false;
-        }
-        Pattern p = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,}");
-        Matcher m = p.matcher(password);
-        return m.find();
-    }
-
-    private boolean validateEmail(final String email) {
-        if (email == null || email.isEmpty()) {
-            return false;
-        }
-        Pattern p = Pattern.compile("^(.+)@(.+)$");
-        Matcher m = p.matcher(email);
-        return m.find();
-    }
-
-    private Map<String, Object> getLines() {
-        Map<String, Object> objects = new HashMap<>();
+    private Map<String, Object> getStations() {
+        Map<String, Object> objects = prepSignUp();
         List<StationDto> stations = routeDataService.allStations();
         objects.put("stations", stations);
         return objects;

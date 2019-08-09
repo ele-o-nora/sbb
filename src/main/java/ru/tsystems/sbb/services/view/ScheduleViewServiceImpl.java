@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
+import ru.tsystems.sbb.model.dto.SignUpDto;
 import ru.tsystems.sbb.model.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TransferTrainsDto;
 import ru.tsystems.sbb.services.data.RouteDataService;
@@ -37,7 +38,7 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
                                                final String destination,
                                                final String dateTime,
                                                final String searchType) {
-        Map<String, Object> objects = new HashMap<>();
+        Map<String, Object> objects = prepSignUp();
         try {
             LocalDateTime moment = LocalDateTime.parse(dateTime, FORMATTER);
             List<JourneyDto> trains = scheduleDataService
@@ -66,7 +67,7 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     @Override
     public Map<String, Object> getStationsList() {
         List<StationDto> stations = routeDataService.allStations();
-        Map<String, Object> objects = new HashMap<>();
+        Map<String, Object> objects = prepSignUp();
         objects.put("stations", stations);
         return objects;
     }
@@ -82,7 +83,7 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
                 return getStationSchedule(stationName, moment);
             }
         } catch (Exception e) {
-            Map<String, Object> objects = new HashMap<>();
+            Map<String, Object> objects = prepSignUp();
             objects.put("error", ERROR);
             return objects;
         }
@@ -92,10 +93,16 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
                                                   final LocalDateTime from) {
         List<ScheduledStopDto> trains = scheduleDataService
                 .stationSchedule(stationName, from);
-        Map<String, Object> objects = new HashMap<>();
+        Map<String, Object> objects = prepSignUp();
         objects.put("trains", trains);
         objects.put("stationName", stationName);
         objects.put("momentFrom", from.format(FORMATTER));
+        return objects;
+    }
+
+    private Map<String, Object> prepSignUp() {
+        Map<String, Object> objects = new HashMap<>();
+        objects.put("signUpDto", new SignUpDto());
         return objects;
     }
 

@@ -2,6 +2,8 @@
          pageEncoding="UTF-8"
          isELIgnored="false" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -75,44 +77,50 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="${pageContext.request.contextPath}/register" method="post">
+                <form:form action="${pageContext.request.contextPath}/register" method="post"
+                           modelAttribute="signUpDto">
+                    <form:errors path = "*" cssClass = "text-danger" element = "div" />
                     <div class="form-row justify-content-center m-3">
                         <div class="col-sm-6">
-                            <input type="text" name="firstName" placeholder="First name" class="form-control" required>
+                            <form:input type="text" path="firstName" placeholder="First name" class="form-control"
+                                        required="required"/>
                         </div>
                         <div class="col-sm-6">
-                            <input type="text" name="lastName" placeholder="Last name" class="form-control" required>
+                            <form:input type="text" path="lastName" placeholder="Last name" class="form-control"
+                                        required="required"/>
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-3">
                         <div class="col-sm-6">
-                            <input type="text" name="dateOfBirth" placeholder="Date of birth"
+                            <form:input type="text" path="dateOfBirth" placeholder="Date of birth"
                                    class="form-control datetimepicker-input" id="dateOfBirthPicker"
-                                   data-toggle="datetimepicker" data-target="#dateOfBirthPicker" required>
+                                   data-toggle="datetimepicker" data-target="#dateOfBirthPicker"
+                                        required="required"/>
                         </div>
                         <div class="col-sm-6">
-                            <input type="email" name="email" placeholder="E-mail" class="form-control" required>
+                            <form:input type="email" path="email" placeholder="E-mail" class="form-control"
+                                        required="required"/>
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-3">
                         <div class="col-sm-6">
-                            <input type="password" name="password" placeholder="Password" class="form-control" id="password"
+                            <form:input type="password" path="password.password" placeholder="Password" class="form-control" id="password"
                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="Password should be at least 6 symbols long,
                             with at least one number, one lowercase and one uppercase letter" onkeyup="
                             this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
-                            form.matchingPassword.pattern = RegExp.escape(this.value);" required>
+                            form.matchingPassword.pattern = RegExp.escape(this.value);" required="required"/>
                         </div>
                         <div class="col-sm-6">
-                            <input type="password" name="matchingPassword" placeholder="Confirm password" id="confirmPassword"
-                                   class="form-control" title="Password should match the first one" required onkeyup="
-                            this.setCustomValidity(this.validity.patternMismatch ? this.title : '');">
+                            <form:input type="password" path="password.matchingPassword" placeholder="Confirm password" id="confirmPassword"
+                                   class="form-control" title="Password should match the first one" required="required"
+                                        onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');"/>
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-3">
                         <input type="submit" value="Sign up" class="btn btn-outline-secondary">
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                </form>
+                </form:form>
             </div>
         </div>
     </div>
@@ -148,7 +156,6 @@
     </div>
 </div>
 <script type="text/javascript">
-    // polyfill for RegExp.escape
     if(!RegExp.escape) {
         RegExp.escape = function(s) {
             return String(s).replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -165,5 +172,12 @@
         src="${pageContext.request.contextPath}/webjars/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+<c:if test="${!empty failedSignUp}">
+    <script type="text/javascript">
+        $(window).load(function(){
+            $('#signUpModal').modal();
+        });
+    </script>
+</c:if>
 </body>
 </html>
