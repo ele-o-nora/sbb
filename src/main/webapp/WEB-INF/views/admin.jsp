@@ -181,13 +181,17 @@
                         </div>
                         <div class="col-sm-3">
                             <input type="text" name="seats" placeholder="Seats" autocomplete="off"
-                                   class="form-control" required>
+                                   class="form-control" pattern="[1-9]{1}[0-9]{1,2}" required
+                                   title="Please enter valid seats quantity"
+                                   onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');">
                         </div>
                     </div>
                     <div class="form-row m-3">
                         <div class="col-sm-4 offset-3">
                             <input type="text" name="speed" placeholder="Speed (mph)" autocomplete="off"
-                                   class="form-control" required>
+                                   class="form-control" pattern="[1-9]{1}[0-9]{1,2}" required
+                                   title="Please enter valid train speed"
+                                   onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');">
                         </div>
                         <div class="col-sm-2">
                             <input type="submit" value="Add" class="btn btn-outline-secondary float-right">

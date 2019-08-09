@@ -4,6 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,6 +67,7 @@
         </sec:authorize>
     </div>
 </nav>
+<sec:authorize access="!isAuthenticated()">
 <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -82,17 +84,17 @@
                     <form:errors path = "*" cssClass = "text-danger" element = "div" />
                     <div class="form-row justify-content-center m-3">
                         <div class="col-sm-6">
-                            <form:input type="text" path="firstName" placeholder="First name" class="form-control"
-                                        required="required"/>
+                            <form:input type="text" path="passengerDetails.firstName" placeholder="First name"
+                                        class="form-control" required="required"/>
                         </div>
                         <div class="col-sm-6">
-                            <form:input type="text" path="lastName" placeholder="Last name" class="form-control"
-                                        required="required"/>
+                            <form:input type="text" path="passengerDetails.lastName" placeholder="Last name"
+                                        class="form-control" required="required"/>
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-3">
                         <div class="col-sm-6">
-                            <form:input type="text" path="dateOfBirth" placeholder="Date of birth"
+                            <form:input type="text" path="passengerDetails.dateOfBirth" placeholder="Date of birth"
                                    class="form-control datetimepicker-input" id="dateOfBirthPicker"
                                    data-toggle="datetimepicker" data-target="#dateOfBirthPicker"
                                         required="required"/>
@@ -106,9 +108,9 @@
                         <div class="col-sm-6">
                             <form:input type="password" path="password.password" placeholder="Password" class="form-control" id="password"
                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="Password should be at least 6 symbols long,
-                            with at least one number, one lowercase and one uppercase letter" onkeyup="
-                            this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
-                            form.matchingPassword.pattern = RegExp.escape(this.value);" required="required"/>
+                            with at least one number, one lowercase and one uppercase letter"
+                                        onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
+                            document.getElementById('confirmPassword').pattern = RegExp.escape(this.value);" required="required"/>
                         </div>
                         <div class="col-sm-6">
                             <form:input type="password" path="password.matchingPassword" placeholder="Confirm password" id="confirmPassword"
@@ -155,12 +157,16 @@
         </div>
     </div>
 </div>
+</sec:authorize>
 <script type="text/javascript">
+
+    // polyfill for RegExp.escape
     if(!RegExp.escape) {
         RegExp.escape = function(s) {
             return String(s).replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
         };
     }
+
 </script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/webjars/jquery/3.4.1/jquery.min.js"></script>
@@ -172,12 +178,6 @@
         src="${pageContext.request.contextPath}/webjars/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/js/main.js"></script>
-<c:if test="${!empty failedSignUp}">
-    <script type="text/javascript">
-        $(window).load(function(){
-            $('#signUpModal').modal();
-        });
-    </script>
-</c:if>
+
 </body>
 </html>

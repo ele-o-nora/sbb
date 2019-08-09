@@ -30,8 +30,10 @@
             </div>
             <c:if test="${!status.first and !status.last}">
                 <div class="col-sm-1">
-                    <input type="text" class="form-control" name="waitTimes" pattern=""
-                           value="15" required>
+                    <input type="text" class="form-control" name="waitTimes"
+                           value="15" required pattern="[1-9]{1}[0-9]?"
+                           title="Please enter valid stop duration"
+                           onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');">
                 </div>
             </c:if> <br/>
         </div>

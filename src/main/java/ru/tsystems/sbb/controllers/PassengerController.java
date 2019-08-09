@@ -33,8 +33,10 @@ public class PassengerController {
             return new ModelAndView("index", viewService.failedSignUp());
         }
         return new ModelAndView("index", viewService
-                .register(signUpDto.getFirstName(), signUpDto.getLastName(),
-                        signUpDto.getDateOfBirth(), signUpDto.getEmail(),
+                .register(signUpDto.getPassengerDetails().getFirstName(),
+                        signUpDto.getPassengerDetails().getLastName(),
+                        signUpDto.getPassengerDetails().getDateOfBirth(),
+                        signUpDto.getEmail(),
                         signUpDto.getPassword().getPassword()));
     }
 

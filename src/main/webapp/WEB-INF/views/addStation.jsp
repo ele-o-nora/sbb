@@ -54,13 +54,17 @@
                     <div class="form-row justify-content-center m-2" id="rowBefore">
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="distanceBefore" name="distanceBefore"
-                                   placeholder="Distance to the previous station (miles)">
+                                   placeholder="Distance to the previous station (miles)" pattern="[1-9]{1}[0-9]{0,3}"
+                                   title="Please enter valid distance"
+                                   onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');">
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-2" id="rowAfter">
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="distanceAfter" name="distanceAfter"
-                                   placeholder="Distance to the next station (miles)">
+                                   placeholder="Distance to the next station (miles)" pattern="[1-9]{1}[0-9]{0,3}"
+                                   title="Please enter valid distance"
+                                   onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');">
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-2">
