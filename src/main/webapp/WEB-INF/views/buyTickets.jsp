@@ -80,7 +80,8 @@
         <h5 class="text-secondary m-3">Payment info:</h5>
         <div class="form-row justify-content-center m-1">
             <div class="col-sm-3">
-                <input type="text" class="form-control" placeholder="Card number" required>
+                <input type="text" class="form-control" placeholder="Card number"  id="cardNumber"
+                       pattern="[0-9]{16,18}" title="16 or 18 digits" required>
             </div>
             <div class="col-sm-3">
                 <input type="text" class="form-control" placeholder="Cardholder name" required>
@@ -93,7 +94,8 @@
                        placeholder="Valid until" required/>
             </div>
             <div class="col-sm-2">
-                <input type="password" class="form-control" placeholder="CVV/CVC" required>
+                <input type="password" class="form-control" placeholder="CVV/CVC" id="cvc"
+                       pattern="[0-9]{3}" title="3 digits" required>
             </div>
         </div>
         <div class="form-row justify-content-center m-2">
@@ -201,7 +203,8 @@
         <h5 class="text-secondary m-3">Payment info:</h5>
         <div class="form-row justify-content-center m-1">
             <div class="col-sm-3">
-                <input type="text" class="form-control" placeholder="Card number" required>
+                <input type="text" class="form-control" placeholder="Card number" id="cardNumber"
+                       pattern="[0-9]{16,18}" title="16 or 18 digits" required>
             </div>
             <div class="col-sm-3">
                 <input type="text" class="form-control" placeholder="Cardholder name" required>
@@ -214,7 +217,8 @@
                        placeholder="Valid until" required/>
             </div>
             <div class="col-sm-2">
-                <input type="password" class="form-control" placeholder="CVV/CVC" required>
+                <input type="password" class="form-control" placeholder="CVV/CVC"  id="cvc"
+                       title="3 digits" pattern="[0-9]{3}" required>
             </div>
         </div>
         <div class="form-row justify-content-center m-2">

@@ -80,7 +80,7 @@
             </div>
             <div class="modal-body">
                 <form:form action="${pageContext.request.contextPath}/register" method="post"
-                           modelAttribute="signUpDto">
+                           modelAttribute="signUpDto" id="modal-form">
                     <form:errors path = "*" cssClass = "text-danger" element = "div" />
                     <div class="form-row justify-content-center m-3">
                         <div class="col-sm-6">
@@ -95,7 +95,7 @@
                     <div class="form-row justify-content-center m-3">
                         <div class="col-sm-6">
                             <form:input type="text" path="passengerDetails.dateOfBirth" placeholder="Date of birth"
-                                   class="form-control datetimepicker-input" id="dateOfBirthPicker"
+                                   class ="form-control datetimepicker-input" id="dateOfBirthPicker"
                                    data-toggle="datetimepicker" data-target="#dateOfBirthPicker"
                                         required="required"/>
                         </div>
@@ -106,16 +106,13 @@
                     </div>
                     <div class="form-row justify-content-center m-3">
                         <div class="col-sm-6">
-                            <form:input type="password" path="password.password" placeholder="Password" class="form-control" id="password"
+                            <form:input type="password" path="password.password" placeholder="Password" class="form-control" id="passwordRegister"
                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="Password should be at least 6 symbols long,
-                            with at least one number, one lowercase and one uppercase letter"
-                                        onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
-                            document.getElementById('confirmPassword').pattern = RegExp.escape(this.value);" required="required"/>
+                            with at least one number, one lowercase and one uppercase letter" required="required"/>
                         </div>
                         <div class="col-sm-6">
-                            <form:input type="password" path="password.matchingPassword" placeholder="Confirm password" id="confirmPassword"
-                                   class="form-control" title="Password should match the first one" required="required"
-                                        onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');"/>
+                            <form:input type="password" path="password.matchingPassword" placeholder="Confirm password" id="confirmPasswordRegister"
+                                   class="form-control" title="Password should match the first one" required="required"/>
                         </div>
                     </div>
                     <div class="form-row justify-content-center m-3">
@@ -158,16 +155,7 @@
     </div>
 </div>
 </sec:authorize>
-<script type="text/javascript">
 
-    // polyfill for RegExp.escape
-    if(!RegExp.escape) {
-        RegExp.escape = function(s) {
-            return String(s).replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
-        };
-    }
-
-</script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/webjars/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript"
@@ -178,6 +166,12 @@
         src="${pageContext.request.contextPath}/webjars/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/js/main.js"></script>
-
+<c:if test="${!empty error}">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#signUpModal').modal('show');
+        });
+    </script>
+</c:if>
 </body>
 </html>

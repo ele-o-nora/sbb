@@ -75,6 +75,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         Map<String, Object> objects = new HashMap<>();
         List<StationDto> stations = routeDataService.allStations();
         objects.put("stations", stations);
+        objects.put("error", "true");
         return objects;
     }
 

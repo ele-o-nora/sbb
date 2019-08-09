@@ -158,7 +158,27 @@ $(document).ready(function () {
 
     $('#signInButton').click(function () {
         $('#signInModal').modal();
-    })
+    });
+
+    $('#passwordRegister').keyup(function () {
+        this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
+        $('#confirmPasswordRegister').prop('pattern', RegExp.escape(this.value));
+    });
+
+    $('#confirmPasswordRegister, #confirmNewPassword, #cvc, #cardNumber').keyup(function () {
+        this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
+    });
+
+    $('#newPassword').keyup(function () {
+        this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
+        $('#confirmNewPassword').prop('pattern', RegExp.escape(this.value));
+    });
+
+    if(!RegExp.escape) {
+        RegExp.escape = function(s) {
+            return String(s).replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+        };
+    }
 
 });
 

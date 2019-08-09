@@ -47,16 +47,13 @@
                 <div class="col-sm-8">
                     <form:input type="password" path="password" placeholder="Password" class="form-control" id="newPassword"
                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="Password should be at least 6 symbols long,
-                    with at least one number, one lowercase and one uppercase letter" onkeyup="
-                    this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
-                    form.matchingPassword.pattern = RegExp.escape(this.value);" required="required"/>
+                    with at least one number, one lowercase and one uppercase letter" required="required"/>
                 </div>
             </div>
             <div class="form-row justify-content-center m-3">
                 <div class="col-sm-8">
                     <form:input type="password" path="matchingPassword" placeholder="Confirm password" id="confirmNewPassword"
-                           class="form-control" title="Password should match the first one" required="required"
-                                onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');"/>
+                           class="form-control" title="Password should match the first one" required="required" />
                 </div>
             </div>
             <div class="form-row justify-content-center m-3">
