@@ -74,7 +74,6 @@
                 <form:input type="hidden" path="journey.id" value="${ticketOrder.journey.id}"/>
                 <form:input type="hidden" path="origin.id" value="${ticketOrder.origin.id}"/>
                 <form:input type="hidden" path="destination.id" value="${ticketOrder.destination.id}"/>
-                <form:input type="hidden" path="price" value="${ticketOrder.price}"/>
             </div>
         </div>
         <h5 class="text-secondary m-3">Payment info:</h5>
@@ -161,7 +160,6 @@
                 <form:input type="hidden" path="firstTrain.origin.id" value="${transferTickets.firstTrain.origin.id}"/>
                 <form:input type="hidden" path="firstTrain.destination.id"
                             value="${transferTickets.firstTrain.destination.id}"/>
-                <form:input type="hidden" path="firstTrain.price" value="${transferTickets.firstTrain.price}"/>
             </div>
             <div class="col-sm-5 m-1 border p-1">
                 <div class="row mt-2 justify-content-center">
@@ -197,7 +195,6 @@
                             value="${transferTickets.secondTrain.origin.id}"/>
                 <form:input type="hidden" path="secondTrain.destination.id"
                             value="${transferTickets.secondTrain.destination.id}"/>
-                <form:input type="hidden" path="secondTrain.price" value="${transferTickets.secondTrain.price}"/>
             </div>
         </div>
         <h5 class="text-secondary m-3">Payment info:</h5>

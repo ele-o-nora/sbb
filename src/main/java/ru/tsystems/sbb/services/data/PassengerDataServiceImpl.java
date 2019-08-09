@@ -105,6 +105,8 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 .getOrigin().getId());
         ScheduledStop to = passengerDao.getStopById(ticketOrder
                 .getDestination().getId());
+        float price = getTicketPrice(journey.getId(),
+                from.getStation().getName(), to.getStation().getName());
         Passenger passenger = getOrCreatePassenger(firstName, lastName,
                 dateOfBirth);
         if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
@@ -115,7 +117,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         } else if (passengerDao.currentTickets(journey, from, to)
                 < journey.getTrainType().getSeats()) {
             Ticket ticket = Ticket.builder().from(from).to(to).journey(journey)
-                    .price(ticketOrder.getPrice()).passenger(passenger).build();
+                    .price(price).passenger(passenger).build();
             passengerDao.add(ticket);
             return SUCCESS;
         } else {
@@ -131,7 +133,6 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         TicketOrderDto ticketOrder = new TicketOrderDto();
         ticketOrder.setJourney(mapper.convert(journey));
         float price = getTicketPrice(journeyId, stationFrom, stationTo);
-        ticketOrder.setPrice(price);
         ticketOrder.setFormattedPrice(mapper.formatPrice(price));
         ScheduledStop stopFrom = journey.getStops().stream()
                 .filter(scheduledStop -> scheduledStop.getStation()
@@ -194,6 +195,12 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 .getSecondTrain().getOrigin().getId());
         ScheduledStop secondTo = passengerDao.getStopById(tickets
                 .getSecondTrain().getDestination().getId());
+        float firstPrice = getTicketPrice(firstJourney.getId(),
+                firstFrom.getStation().getName(),
+                firstTo.getStation().getName());
+        float secondPrice = getTicketPrice(secondJourney.getId(),
+                secondFrom.getStation().getName(),
+                secondTo.getStation().getName());
         Passenger passenger = getOrCreatePassenger(firstName, lastName,
                 dateOfBirth);
         if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
@@ -207,11 +214,11 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 && passengerDao.currentTickets(secondJourney, secondFrom,
                 secondTo) < secondJourney.getTrainType().getSeats()) {
             Ticket firstTicket = Ticket.builder().from(firstFrom).to(firstTo)
-                    .journey(firstJourney).price(tickets.getFirstTrain()
-                            .getPrice()).passenger(passenger).build();
+                    .journey(firstJourney).price(firstPrice)
+                    .passenger(passenger).build();
             Ticket secondTicket = Ticket.builder().from(secondFrom).to(secondTo)
-                    .journey(secondJourney).price(tickets.getSecondTrain()
-                            .getPrice()).passenger(passenger).build();
+                    .journey(secondJourney).price(secondPrice)
+                    .passenger(passenger).build();
             passengerDao.add(firstTicket);
             passengerDao.add(secondTicket);
             return SUCCESS;
