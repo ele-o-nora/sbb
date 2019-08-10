@@ -212,7 +212,11 @@ public class PassengerViewServiceImpl implements PassengerViewService {
 
     private Map<String, Object> prepSignUp() {
         Map<String, Object> objects = new HashMap<>();
-        objects.put("signUpDto", new SignUpDto());
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            objects.put("signUpDto", new SignUpDto());
+        }
         return objects;
     }
 
