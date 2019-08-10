@@ -13,13 +13,20 @@
 <c:if test="${!empty error}">
     <div class="m-5">
         <span class="text-danger">${error}</span><br/>
-        <a href="${pageContext.request.contextPath}/">Search anew</a>
+        <a href="${pageContext.request.contextPath}/" class="text-secondary">Search anew</a>
     </div>
 </c:if>
 <c:if test="${empty error}">
     <h4 class="m-4">Station schedule for
         <span class="text-danger">${stationName}</span> from
         <span class="text-danger">${momentFrom}</span></h4>
+    <c:if test="${empty trains}">
+        <div class="m-5">
+            <span>There are no trains scheduled to be at the station at this time.</span><br/>
+            <a href="${pageContext.request.contextPath}/" class="text-danger">Back to main page</a>
+        </div>
+    </c:if>
+    <c:if test="${!empty trains}">
     <div class="row">
         <div class="col-sm-8 offset-sm-2">
             <table class="table">
@@ -44,6 +51,7 @@
             </table>
         </div>
     </div>
+    </c:if>
 </c:if>
 </body>
 </html>

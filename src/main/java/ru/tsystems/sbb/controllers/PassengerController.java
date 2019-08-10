@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import ru.tsystems.sbb.model.dto.BuyerDetailsDto;
 import ru.tsystems.sbb.model.dto.ChangeNameDto;
 import ru.tsystems.sbb.model.dto.PasswordDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
@@ -18,12 +21,14 @@ import ru.tsystems.sbb.services.view.PassengerViewService;
 import javax.validation.Valid;
 
 @Controller
+@SessionAttributes({"ticketOrder", "transferTickets"})
 public class PassengerController {
 
     @Autowired
     private PassengerViewService viewService;
 
     private static final String BUY_TICKETS = "buyTickets";
+    private static final String EDIT_INFO = "editInfo";
 
     @PostMapping("/register")
     public ModelAndView signUp(@ModelAttribute("signUpDto") @Valid
@@ -68,34 +73,46 @@ public class PassengerController {
     }
 
     @PostMapping("/finalizeTicketSale")
-    public ModelAndView finalizeTicketSale(@RequestParam(value = "firstName")
-                                               final String firstName,
-                                           @RequestParam(value = "lastName")
-                                                final String lastName,
-                                           @RequestParam(value = "dateOfBirth")
-                                                final String dateOfBirth,
-                                           @ModelAttribute(name = "ticketOrder")
-                                           final TicketOrderDto order) {
+    public ModelAndView finalizeTicketSale(@ModelAttribute("ticketOrder")
+                                           final TicketOrderDto order,
+                                           @ModelAttribute("buyerDetails")
+                                           @Valid
+                                           final BuyerDetailsDto buyerDetails,
+                                           final BindingResult bindingResult,
+                                           final SessionStatus status) {
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView(BUY_TICKETS, viewService.prepBuyerInfo());
+        }
+        status.setComplete();
         return new ModelAndView(BUY_TICKETS, viewService
-                .finalizeTicketSale(order, firstName, lastName, dateOfBirth));
+                .finalizeTicketSale(order,
+                        buyerDetails.getPassenger().getFirstName(),
+                        buyerDetails.getPassenger().getLastName(),
+                        buyerDetails.getPassenger().getDateOfBirth()));
     }
 
     @PostMapping("/finalizeTicketsSale")
-    public ModelAndView finalizeTicketsSale(@RequestParam(value = "firstName")
-                                                final String firstName,
-                                            @RequestParam(value = "lastName")
-                                                final String lastName,
-                                            @RequestParam(value = "dateOfBirth")
-                                                final String dateOfBirth,
-                                            @ModelAttribute("transferTickets")
-                                       final TransferTicketOrderDto order) {
+    public ModelAndView finalizeTicketsSale(@ModelAttribute("transferTickets")
+                                            final TransferTicketOrderDto order,
+                                            @ModelAttribute("buyerDetails")
+                                            @Valid
+                                            final BuyerDetailsDto buyerDetails,
+                                            final BindingResult bindingResult,
+                                            final SessionStatus status) {
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView(BUY_TICKETS, viewService.prepBuyerInfo());
+        }
+        status.setComplete();
         return new ModelAndView(BUY_TICKETS, viewService
-                .finalizeTicketsSale(order, firstName, lastName, dateOfBirth));
+                .finalizeTicketsSale(order,
+                        buyerDetails.getPassenger().getFirstName(),
+                        buyerDetails.getPassenger().getLastName(),
+                        buyerDetails.getPassenger().getDateOfBirth()));
     }
 
     @GetMapping("/editInfo")
     public ModelAndView editUserInfo() {
-        return new ModelAndView("editInfo", viewService.editUserInfo());
+        return new ModelAndView(EDIT_INFO, viewService.editUserInfo());
     }
 
     @PostMapping("/changeName")
@@ -103,10 +120,10 @@ public class PassengerController {
                                    final ChangeNameDto changeNameDto,
                                    final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("editInfo",
+            return new ModelAndView(EDIT_INFO,
                     "passwordDto", new PasswordDto());
         }
-        return new ModelAndView("editInfo",
+        return new ModelAndView(EDIT_INFO,
                 viewService.changeName(changeNameDto.getFirstName(),
                         changeNameDto.getLastName()));
     }
@@ -116,10 +133,10 @@ public class PassengerController {
                                        final PasswordDto passwordDto,
                                        final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("editInfo",
+            return new ModelAndView(EDIT_INFO,
                     "changeNameDto", new ChangeNameDto());
         }
-        return new ModelAndView("editInfo",
+        return new ModelAndView(EDIT_INFO,
                 viewService.changePassword(passwordDto.getPassword()));
     }
 
@@ -134,4 +151,5 @@ public class PassengerController {
                                      final int ticketId) {
         return new ModelAndView("tickets", viewService.returnTicket(ticketId));
     }
+
 }

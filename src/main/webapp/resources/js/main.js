@@ -84,7 +84,7 @@ $(document).ready(function () {
             previous: 'fas fa-chevron-left',
             next: 'fas fa-chevron-right',
         },
-        format: 'MM/YY',
+        format: 'MM/YYYY',
         minDate: moment()
     });
 

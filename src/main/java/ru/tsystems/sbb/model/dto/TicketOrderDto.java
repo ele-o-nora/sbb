@@ -13,6 +13,7 @@ public class TicketOrderDto {
     private ScheduledStopDto origin;
     private ScheduledStopDto destination;
     private String formattedPrice;
+    private float price;
     private String status;
 
 }

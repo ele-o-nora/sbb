@@ -14,6 +14,13 @@
     <p class="text-danger m-5">${status}</p>
 </c:if>
 <h5 class="text-secondary">My tickets</h5>
+<c:if test="${empty tickets}">
+    <div class="m-5">
+        <span>You have not bought any tickets yet.</span><br/>
+        <a href="${pageContext.request.contextPath}/" class="text-danger">Search for a journey</a>
+    </div>
+</c:if>
+<c:if test="${!empty tickets}">
 <div class="row justify-content-center">
     <div class="col-sm-8">
         <c:forEach items="${tickets}" var="ticket">
@@ -107,5 +114,6 @@
         </div>
     </div>
 </div>
+</c:if>
 </body>
 </html>

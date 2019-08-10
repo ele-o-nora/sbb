@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ru.tsystems.sbb.model.dto.BuyerDetailsDto;
 import ru.tsystems.sbb.model.dto.ChangeNameDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.PasswordDto;
@@ -17,13 +18,9 @@ import ru.tsystems.sbb.services.data.PassengerDataService;
 import ru.tsystems.sbb.services.data.RouteDataService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class PassengerViewServiceImpl implements PassengerViewService {
@@ -34,17 +31,10 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     @Autowired
     private RouteDataService routeDataService;
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter
-            .ISO_LOCAL_DATE;
-    private static final int MIN_PASSENGER_AGE = 10;
-
     private static final String SIGN_UP_SUCCESS = "Registration successful. "
             + "You may now sign in.";
     private static final String UPDATE_SUCCESS = "Your account "
             + "was successfully updated.";
-    private static final String UPDATE_FAIL = "Failed to update your account. ";
-    private static final String BAD_INPUT = "Please make sure"
-            + "you fill all the required fields correctly.";
     private static final String TICKET_SUCCESS = "Ticket sale successful. "
             + "Thank you for traveling with us.";
     private static final String TICKET_FAIL = "Couldn't complete ticket sale. ";
@@ -84,6 +74,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                                               final String stationFrom,
                                               final String stationTo) {
         Map<String, Object> objects = prepSignUp();
+        objects.put("buyerDetails", new BuyerDetailsDto());
         TicketOrderDto ticketOrder = passengerDataService
                 .prepareTicketOrder(journeyId, stationFrom, stationTo);
         if (ticketOrder.getStatus() != null && !ticketOrder
@@ -92,13 +83,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
             return objects;
         }
         objects.put("ticketOrder", ticketOrder);
-        Authentication auth = SecurityContextHolder.getContext()
-                .getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            PassengerDto passenger = passengerDataService
-                    .getPassenger(auth.getName());
-            objects.put(PASSENGER, passenger);
-        }
+        objects.putAll(prepBuyerInfo());
         return objects;
     }
 
@@ -109,6 +94,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                                                final String stationTo,
                                                final String transfer) {
         Map<String, Object> objects = prepSignUp();
+        objects.put("buyerDetails", new BuyerDetailsDto());
         TransferTicketOrderDto transferTickets = passengerDataService
                 .prepareTicketsOrder(firstJourneyId, secondJourneyId,
                         stationFrom, stationTo, transfer);
@@ -124,40 +110,21 @@ public class PassengerViewServiceImpl implements PassengerViewService {
             return objects;
         }
         objects.put("transferTickets", transferTickets);
-        Authentication auth = SecurityContextHolder.getContext()
-                .getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            PassengerDto passenger = passengerDataService
-                    .getPassenger(auth.getName());
-            objects.put(PASSENGER, passenger);
-        }
+        objects.putAll(prepBuyerInfo());
         return objects;
     }
 
     @Override
     public Map<String, Object> finalizeTicketSale(
             final TicketOrderDto ticketOrder, final String firstName,
-            final String lastName, final String dateOfBirth) {
+            final String lastName, final LocalDate dateOfBirth) {
         Map<String, Object> objects = getStations();
-        if (!validateName(firstName) || !validateName(lastName)) {
-            objects.put(STATUS, TICKET_FAIL + BAD_INPUT);
-            return objects;
-        }
-        try {
-            LocalDate dob = LocalDate.parse(dateOfBirth, DATE_FORMATTER);
-            if (!validateDateOfBirth(dob)) {
-                objects.put(STATUS, TICKET_FAIL + BAD_INPUT);
-                return objects;
-            }
-            String saleResult = passengerDataService.buyTicket(ticketOrder,
-                    firstName, lastName, dob);
-            if (saleResult.equalsIgnoreCase(SUCCESS)) {
-                objects.put(STATUS, TICKET_SUCCESS);
-            } else {
-                objects.put(STATUS, TICKET_FAIL + saleResult);
-            }
-        } catch (Exception e) {
-            objects.put(STATUS, TICKET_FAIL);
+        String saleResult = passengerDataService.buyTicket(ticketOrder,
+                firstName, lastName, dateOfBirth);
+        if (saleResult.equalsIgnoreCase(SUCCESS)) {
+            objects.put(STATUS, TICKET_SUCCESS);
+        } else {
+            objects.put(STATUS, TICKET_FAIL + saleResult);
         }
         return objects;
     }
@@ -165,27 +132,14 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     @Override
     public Map<String, Object> finalizeTicketsSale(
             final TransferTicketOrderDto order, final String firstName,
-            final String lastName, final String dateOfBirth) {
+            final String lastName, final LocalDate dateOfBirth) {
         Map<String, Object> objects = getStations();
-        if (!validateName(firstName) || !validateName(lastName)) {
-            objects.put(STATUS, TICKET_FAIL + BAD_INPUT);
-            return objects;
-        }
-        try {
-            LocalDate dob = LocalDate.parse(dateOfBirth, DATE_FORMATTER);
-            if (!validateDateOfBirth(dob)) {
-                objects.put(STATUS, TICKET_FAIL + BAD_INPUT);
-                return objects;
-            }
-            String saleResult = passengerDataService.buyTickets(order,
-                    firstName, lastName, dob);
-            if (saleResult.equalsIgnoreCase(SUCCESS)) {
-                objects.put(STATUS, TICKET_SUCCESS);
-            } else {
-                objects.put(STATUS, TICKET_FAIL + saleResult);
-            }
-        } catch (Exception e) {
-            objects.put(STATUS, TICKET_FAIL);
+        String saleResult = passengerDataService.buyTickets(order,
+                firstName, lastName, dateOfBirth);
+        if (saleResult.equalsIgnoreCase(SUCCESS)) {
+            objects.put(STATUS, TICKET_SUCCESS);
+        } else {
+            objects.put(STATUS, TICKET_FAIL + saleResult);
         }
         return objects;
     }
@@ -209,18 +163,9 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
         Map<String, Object> objects = editUserInfo();
-        if (!validateName(firstName) || !validateName(lastName)) {
-            objects.put(STATUS, UPDATE_FAIL + BAD_INPUT);
-            return objects;
-        }
-        try {
-            PassengerDto passenger = passengerDataService
-                    .changePassengerInfo(firstName, lastName, auth.getName());
-            objects.put(PASSENGER, passenger);
-        } catch (Exception e) {
-            objects.put(STATUS, UPDATE_FAIL);
-            return objects;
-        }
+        PassengerDto passenger = passengerDataService
+                .changePassengerInfo(firstName, lastName, auth.getName());
+        objects.put(PASSENGER, passenger);
         objects.put(STATUS, UPDATE_SUCCESS);
         return objects;
     }
@@ -271,24 +216,22 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         return objects;
     }
 
-    private boolean validateName(final String name) {
-        if (name == null || name.isEmpty()) {
-            return false;
-        }
-        Pattern p = Pattern.compile("[A-Za-z\\s-']{2,30}");
-        Matcher m = p.matcher(name);
-        return m.find();
-    }
-
-    private boolean validateDateOfBirth(final LocalDate dateOfBirth) {
-        return ChronoUnit.YEARS.between(dateOfBirth,
-                LocalDate.now()) >= MIN_PASSENGER_AGE;
-    }
-
     private Map<String, Object> getStations() {
         Map<String, Object> objects = prepSignUp();
         List<StationDto> stations = routeDataService.allStations();
         objects.put("stations", stations);
+        return objects;
+    }
+
+    public Map<String, Object> prepBuyerInfo() {
+        Map<String, Object> objects = prepSignUp();
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            PassengerDto passenger = passengerDataService
+                    .getPassenger(auth.getName());
+            objects.put(PASSENGER, passenger);
+        }
         return objects;
     }
 

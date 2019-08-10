@@ -21,15 +21,16 @@ public interface PassengerViewService {
     Map<String, Object> finalizeTicketSale(TicketOrderDto ticketOrder,
                                                String firstName,
                                                String lastName,
-                                               String dateOfBirth);
+                                               LocalDate dateOfBirth);
     Map<String, Object> finalizeTicketsSale(TransferTicketOrderDto order,
                                                 String firstName,
                                                 String lastName,
-                                                String dateOfBirth);
+                                            LocalDate dateOfBirth);
     Map<String, Object> editUserInfo();
     Map<String, Object> changeName(String firstName, String lastName);
     Map<String, Object> changePassword(String newPassword);
     Map<String, Object> getUserTickets(int page);
     Map<String, Object> returnTicket(int ticketId);
     Map<String, Object> failedSignUp();
+    Map<String, Object> prepBuyerInfo();
 }

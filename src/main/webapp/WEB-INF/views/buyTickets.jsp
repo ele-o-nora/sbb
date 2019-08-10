@@ -18,211 +18,223 @@
     <a href="${pageContext.request.contextPath}/" class="text-secondary">Back to main page</a>
 </c:if>
 <c:if test="${empty status}"><h5 class="text-secondary m-3">Passenger details:</h5>
-<c:if test="${!empty ticketOrder}">
-    <form:form modelAttribute="ticketOrder" method="post"
-               action="${pageContext.request.contextPath}/finalizeTicketSale">
-        <div class="form-row justify-content-center m-1">
-            <div class="col-sm-3">
-                <input type="text" class="form-control" name="firstName" placeholder="First name"
-                       <c:if test="${!empty passenger}">value="${passenger.firstName}"</c:if>
-                       autocomplete="off" required/>
+    <c:if test="${!empty ticketOrder}">
+        <form:form modelAttribute="buyerDetails" method="post"
+                   action="${pageContext.request.contextPath}/finalizeTicketSale">
+            <form:errors path = "*" cssClass = "text-danger" element = "div" />
+            <div class="form-row justify-content-center m-1">
+                <c:if test="${empty passenger}">
+                    <div class="col-sm-3">
+                        <form:input type="text" class="form-control" path="passenger.firstName" placeholder="First name"
+                                    autocomplete="off" required="required"/>
+                    </div>
+                    <div class="col-sm-3">
+                        <form:input type="text" class="form-control" path="passenger.lastName" placeholder="Last name"
+                                    autocomplete="off" required="required"/>
+                    </div>
+                </c:if>
+                <c:if test="${!empty passenger}">
+                    <div class="col-sm-3">
+                        <form:input type="text" class="form-control" path="passenger.firstName" placeholder="First name"
+                                    value="${passenger.firstName}" autocomplete="off" required="required"/>
+                    </div>
+                    <div class="col-sm-3">
+                        <form:input type="text" class="form-control" path="passenger.lastName" placeholder="Last name"
+                                    value="${passenger.lastName}" autocomplete="off" required="required"/>
+                    </div>
+                </c:if>
             </div>
-            <div class="col-sm-3">
-                <input type="text" class="form-control" name="lastName" placeholder="Last name"
-                       <c:if test="${!empty passenger}">value="${passenger.lastName}"</c:if>
-                       autocomplete="off" required/>
+            <div class="form-row justify-content-center m-1">
+                <div class="col-sm-3">
+                    <form:input type="text" path="passenger.dateOfBirth" placeholder="Date of birth"
+                                class="form-control datetimepicker-input" id="dateOfBirthPicker2"
+                                data-toggle="datetimepicker" data-target="#dateOfBirthPicker2"
+                                autocomplete="off" required="required"/>
+                </div>
             </div>
-        </div>
-        <div class="form-row justify-content-center m-1">
-            <div class="col-sm-3">
-                <input type="text" name="dateOfBirth" placeholder="Date of birth"
-                       class="form-control datetimepicker-input" id="dateOfBirthPicker2"
-                       data-toggle="datetimepicker" data-target="#dateOfBirthPicker2"
-                       autocomplete="off" required/>
-            </div>
-        </div>
-        <h5 class="text-secondary m-3">Travel info:</h5>
-        <div class="row justify-content-center m-2">
-            <div class="col-sm-6 m-1 border p-1">
+            <h5 class="text-secondary m-3">Travel info:</h5>
+            <div class="row justify-content-center m-2">
+                <div class="col-sm-6 m-1 border p-1">
                     <div class="row mt-2 justify-content-center">
-                        <span class="font-weight-bold mr-1">Route:</span> ${ticketOrder.journey.route}
+                        <span class="font-weight-bold mr-1">Route:</span> ${sessionScope.ticketOrder.journey.route}
                     </div>
                     <div class="row mb-2 justify-content-center">
-                        <span class="font-weight-bold mr-1">Direction:</span> ${ticketOrder.journey.destination}
+                        <span class="font-weight-bold mr-1">Direction:</span> ${sessionScope.ticketOrder.journey.destination}
                     </div>
-                <div class="row m-2 p-2 border-top border-bottom">
-                    <div class="col-sm-6">
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">From: </span> ${ticketOrder.origin.station}
+                    <div class="row m-2 p-2 border-top border-bottom">
+                        <div class="col-sm-6">
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">From: </span> ${sessionScope.ticketOrder.origin.station}
+                            </div>
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">Departure: </span>${sessionScope.ticketOrder.origin.departure}
+                            </div>
                         </div>
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">Departure: </span>${ticketOrder.origin.departure}
+                        <div class="col-sm-6">
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">To: </span>${sessionScope.ticketOrder.destination.station}
+                            </div>
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">Arrival: </span>${sessionScope.ticketOrder.destination.arrival}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">To: </span>${ticketOrder.destination.station}
-                        </div>
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">Arrival: </span>${ticketOrder.destination.arrival}
-                        </div>
+                    <div class="row m-2 justify-content-center">
+                        <span class="font-weight-bold mr-1">Price: </span>${sessionScope.ticketOrder.formattedPrice}
                     </div>
                 </div>
-                <div class="row m-2 justify-content-center">
-                    <span class="font-weight-bold mr-1">Price: </span>${ticketOrder.formattedPrice}
+            </div>
+            <h5 class="text-secondary m-3">Payment info:</h5>
+            <div class="form-row justify-content-center m-1">
+                <div class="col-sm-3">
+                    <form:input type="text" class="form-control" placeholder="Card number" id="cardNumber"
+                                path="payment.cardNumber" pattern="[0-9]{16,18}" title="16 or 18 digits"
+                                required="required"/>
                 </div>
-                <form:input type="hidden" path="journey.id" value="${ticketOrder.journey.id}"/>
-                <form:input type="hidden" path="origin.id" value="${ticketOrder.origin.id}"/>
-                <form:input type="hidden" path="destination.id" value="${ticketOrder.destination.id}"/>
+                <div class="col-sm-3">
+                    <form:input type="text" class="form-control" placeholder="Cardholder name"
+                                path="payment.cardHolderName" required="required"/>
+                </div>
             </div>
-        </div>
-        <h5 class="text-secondary m-3">Payment info:</h5>
-        <div class="form-row justify-content-center m-1">
-            <div class="col-sm-3">
-                <input type="text" class="form-control" placeholder="Card number"  id="cardNumber"
-                       pattern="[0-9]{16,18}" title="16 or 18 digits" required>
+            <div class="form-row justify-content-center m-1">
+                <div class="col-sm-2">
+                    <form:input type="text" class="form-control datetimepicker-input"
+                                id="validUntilPicker" data-toggle="datetimepicker" data-target="#validUntilPicker"
+                                placeholder="Valid until" path="payment.validUntil" required="required"/>
+                </div>
+                <div class="col-sm-2">
+                    <form:input type="password" class="form-control" placeholder="CVV/CVC" id="cvc"
+                                pattern="[0-9]{3}" title="3 digits" required="required" path="payment.cvc"/>
+                </div>
             </div>
-            <div class="col-sm-3">
-                <input type="text" class="form-control" placeholder="Cardholder name" required>
+            <div class="form-row justify-content-center m-2">
+                <input type="submit" class="btn btn-outline-danger" value="Buy ticket"/>
             </div>
-        </div>
-        <div class="form-row justify-content-center m-1">
-            <div class="col-sm-2">
-                <input type="text" class="form-control datetimepicker-input"
-                       id="validUntilPicker" data-toggle="datetimepicker" data-target="#validUntilPicker"
-                       placeholder="Valid until" required/>
+        </form:form>
+    </c:if>
+    <c:if test="${!empty transferTickets}">
+        <form:form modelAttribute="buyerDetails" method="post"
+                   action="${pageContext.request.contextPath}/finalizeTicketsSale" autocomplete="off">
+            <form:errors path = "*" cssClass = "text-danger" element = "div" />
+            <div class="form-row justify-content-center m-1">
+                <c:if test="${empty passenger}">
+                    <div class="col-sm-3">
+                        <form:input type="text" class="form-control" path="passenger.firstName" placeholder="First name"
+                                    autocomplete="off" required="required"/>
+                    </div>
+                    <div class="col-sm-3">
+                        <form:input type="text" class="form-control" path="passenger.lastName" placeholder="Last name"
+                                    autocomplete="off" required="required"/>
+                    </div>
+                </c:if>
+                <c:if test="${!empty passenger}">
+                    <div class="col-sm-3">
+                        <form:input type="text" class="form-control" path="passenger.firstName" placeholder="First name"
+                                    value="${passenger.firstName}" autocomplete="off" required="required"/>
+                    </div>
+                    <div class="col-sm-3">
+                        <form:input type="text" class="form-control" path="passenger.lastName" placeholder="Last name"
+                                    value="${passenger.lastName}" autocomplete="off" required="required"/>
+                    </div>
+                </c:if>
             </div>
-            <div class="col-sm-2">
-                <input type="password" class="form-control" placeholder="CVV/CVC" id="cvc"
-                       pattern="[0-9]{3}" title="3 digits" required>
+            <div class="form-row justify-content-center m-1">
+                <div class="col-sm-3">
+                    <form:input type="text" path="passenger.dateOfBirth" placeholder="Date of birth"
+                                class="form-control datetimepicker-input" id="dateOfBirthPicker2"
+                                data-toggle="datetimepicker" data-target="#dateOfBirthPicker2"
+                                autocomplete="off" required="required"/>
+                </div>
             </div>
-        </div>
-        <div class="form-row justify-content-center m-2">
-            <input type="submit" class="btn btn-outline-danger" value="Buy ticket"/>
-        </div>
-    </form:form>
-</c:if>
-<c:if test="${!empty transferTickets}">
-    <form:form modelAttribute="transferTickets" method="post"
-               action="${pageContext.request.contextPath}/finalizeTicketsSale" autocomplete="off">
-        <div class="form-row justify-content-center m-1">
-            <div class="col-sm-3">
-                <input type="text" class="form-control" name="firstName" placeholder="First name"
-                       <c:if test="${!empty passenger}">value="${passenger.firstName}"</c:if>
-                       autocomplete="off" required/>
-            </div>
-            <div class="col-sm-3">
-                <input type="text" class="form-control" name="lastName" placeholder="Last name"
-                       <c:if test="${!empty passenger}">value="${passenger.lastName}"</c:if>
-                       autocomplete="off" required/>
-            </div>
-        </div>
-        <div class="form-row justify-content-center m-1">
-            <div class="col-sm-3">
-                <input type="text" name="dateOfBirth" placeholder="Date of birth"
-                       class="form-control datetimepicker-input" id="dateOfBirthPicker2"
-                       data-toggle="datetimepicker" data-target="#dateOfBirthPicker2"
-                       autocomplete="off" required/>
-            </div>
-        </div>
-        <h5 class="text-secondary m-3">Travel info:</h5>
-        <div class="row justify-content-center m-2">
-            <div class="col-sm-5 m-1 border p-1">
+            <h5 class="text-secondary m-3">Travel info:</h5>
+            <div class="row justify-content-center m-2">
+                <div class="col-sm-5 m-1 border p-1">
                     <div class="row mt-2 justify-content-center">
-                        <span class="font-weight-bold mr-1">Route:</span> ${transferTickets.firstTrain.journey.route}
+                        <span class="font-weight-bold mr-1">Route:</span> ${sessionScope.transferTickets.firstTrain.journey.route}
                     </div>
                     <div class="row mb-2 justify-content-center">
-                        <span class="font-weight-bold mr-1">Direction:</span> ${transferTickets.firstTrain.journey.destination}
+                        <span class="font-weight-bold mr-1">Direction:</span> ${sessionScope.transferTickets.firstTrain.journey.destination}
                     </div>
-                <div class="row m-2 p-2 border-top border-bottom">
-                    <div class="col-sm-6">
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">From: </span> ${transferTickets.firstTrain.origin.station}
+                    <div class="row m-2 p-2 border-top border-bottom">
+                        <div class="col-sm-6">
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">From: </span> ${sessionScope.transferTickets.firstTrain.origin.station}
+                            </div>
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">Departure: </span>${sessionScope.transferTickets.firstTrain.origin.departure}
+                            </div>
                         </div>
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">Departure: </span>${transferTickets.firstTrain.origin.departure}
+                        <div class="col-sm-6">
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">To: </span>${sessionScope.transferTickets.firstTrain.destination.station}
+                            </div>
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">Arrival: </span>${sessionScope.transferTickets.firstTrain.destination.arrival}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">To: </span>${transferTickets.firstTrain.destination.station}
-                        </div>
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">Arrival: </span>${transferTickets.firstTrain.destination.arrival}
-                        </div>
+                    <div class="row m-2 justify-content-center">
+                        <span class="font-weight-bold mr-1">Price: </span>${sessionScope.transferTickets.firstTrain.formattedPrice}
                     </div>
                 </div>
-                <div class="row m-2 justify-content-center">
-                    <span class="font-weight-bold mr-1">Price: </span>${transferTickets.firstTrain.formattedPrice}
-                </div>
-                <form:input type="hidden" path="firstTrain.journey.id"
-                            value="${transferTickets.firstTrain.journey.id}"/>
-                <form:input type="hidden" path="firstTrain.origin.id" value="${transferTickets.firstTrain.origin.id}"/>
-                <form:input type="hidden" path="firstTrain.destination.id"
-                            value="${transferTickets.firstTrain.destination.id}"/>
-            </div>
-            <div class="col-sm-5 m-1 border p-1">
-                <div class="row mt-2 justify-content-center">
-                        <span class="font-weight-bold mr-1">Route:</span> ${transferTickets.secondTrain.journey.route}
+                <div class="col-sm-5 m-1 border p-1">
+                    <div class="row mt-2 justify-content-center">
+                        <span class="font-weight-bold mr-1">Route:</span> ${sessionScope.transferTickets.secondTrain.journey.route}
                     </div>
                     <div class="row mb-2 justify-content-center">
-                        <span class="font-weight-bold mr-1">Direction:</span> ${transferTickets.secondTrain.journey.destination}
+                        <span class="font-weight-bold mr-1">Direction:</span> ${sessionScope.transferTickets.secondTrain.journey.destination}
                     </div>
-                <div class="row m-2 p-2 border-top border-bottom">
-                    <div class="col-sm-6">
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">From: </span> ${transferTickets.secondTrain.origin.station}
+                    <div class="row m-2 p-2 border-top border-bottom">
+                        <div class="col-sm-6">
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">From: </span> ${sessionScope.transferTickets.secondTrain.origin.station}
+                            </div>
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">Departure: </span>${sessionScope.transferTickets.secondTrain.origin.departure}
+                            </div>
                         </div>
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">Departure: </span>${transferTickets.secondTrain.origin.departure}
+                        <div class="col-sm-6">
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">To: </span>${sessionScope.transferTickets.secondTrain.destination.station}
+                            </div>
+                            <div class="row justify-content-center">
+                                <span class="font-weight-bold mr-1">Arrival: </span>${sessionScope.transferTickets.secondTrain.destination.arrival}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">To: </span>${transferTickets.secondTrain.destination.station}
-                        </div>
-                        <div class="row justify-content-center">
-                            <span class="font-weight-bold mr-1">Arrival: </span>${transferTickets.secondTrain.destination.arrival}
-                        </div>
+                    <div class="row m-2 justify-content-center">
+                        <span class="font-weight-bold mr-1">Price: </span>${sessionScope.transferTickets.secondTrain.formattedPrice}
                     </div>
                 </div>
-                <div class="row m-2 justify-content-center">
-                    <span class="font-weight-bold mr-1">Price: </span>${transferTickets.secondTrain.formattedPrice}
+            </div>
+            <h5 class="text-secondary m-3">Payment info:</h5>
+            <div class="form-row justify-content-center m-1">
+                <div class="col-sm-3">
+                    <form:input type="text" class="form-control" placeholder="Card number" id="cardNumber"
+                                pattern="[0-9]{16,18}" title="16 or 18 digits"
+                                path="payment.cardNumber" required="required"/>
                 </div>
-                <form:input type="hidden" path="secondTrain.journey.id"
-                            value="${transferTickets.secondTrain.journey.id}"/>
-                <form:input type="hidden" path="secondTrain.origin.id"
-                            value="${transferTickets.secondTrain.origin.id}"/>
-                <form:input type="hidden" path="secondTrain.destination.id"
-                            value="${transferTickets.secondTrain.destination.id}"/>
+                <div class="col-sm-3">
+                    <form:input type="text" class="form-control" placeholder="Cardholder name"
+                                path="payment.cardHolderName" required="required"/>
+                </div>
             </div>
-        </div>
-        <h5 class="text-secondary m-3">Payment info:</h5>
-        <div class="form-row justify-content-center m-1">
-            <div class="col-sm-3">
-                <input type="text" class="form-control" placeholder="Card number" id="cardNumber"
-                       pattern="[0-9]{16,18}" title="16 or 18 digits" required>
+            <div class="form-row justify-content-center m-1">
+                <div class="col-sm-2">
+                    <form:input type="text" class="form-control datetimepicker-input"
+                                id="validUntilPicker" data-toggle="datetimepicker" data-target="#validUntilPicker"
+                                placeholder="Valid until" path="payment.validUntil" required="required"/>
+                </div>
+                <div class="col-sm-2">
+                    <form:input type="password" class="form-control" placeholder="CVV/CVC" id="cvc"
+                                title="3 digits" pattern="[0-9]{3}" path="payment.cvc" required="required"/>
+                </div>
             </div>
-            <div class="col-sm-3">
-                <input type="text" class="form-control" placeholder="Cardholder name" required>
+            <div class="form-row justify-content-center m-2">
+                <input type="submit" value="Buy tickets" class="btn btn-outline-danger">
             </div>
-        </div>
-        <div class="form-row justify-content-center m-1">
-            <div class="col-sm-2">
-                <input type="text" class="form-control datetimepicker-input"
-                       id="validUntilPicker" data-toggle="datetimepicker" data-target="#validUntilPicker"
-                       placeholder="Valid until" required/>
-            </div>
-            <div class="col-sm-2">
-                <input type="password" class="form-control" placeholder="CVV/CVC"  id="cvc"
-                       title="3 digits" pattern="[0-9]{3}" required>
-            </div>
-        </div>
-        <div class="form-row justify-content-center m-2">
-            <input type="submit" value="Buy tickets" class="btn btn-outline-danger">
-        </div>
-    </form:form>
-</c:if>
+        </form:form>
+    </c:if>
 </c:if>
 
 <c:if test="${!empty passenger}">
@@ -230,6 +242,7 @@
         function pasteDate() {
             $('#dateOfBirthPicker2').datetimepicker('date', moment('${passenger.dateOfBirth}', 'YYYY-MM-DD'));
         }
+
         window.onload = setTimeout("pasteDate()", 10);
     </script>
 </c:if>

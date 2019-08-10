@@ -133,6 +133,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         TicketOrderDto ticketOrder = new TicketOrderDto();
         ticketOrder.setJourney(mapper.convert(journey));
         float price = getTicketPrice(journeyId, stationFrom, stationTo);
+        ticketOrder.setPrice(price);
         ticketOrder.setFormattedPrice(mapper.formatPrice(price));
         ScheduledStop stopFrom = journey.getStops().stream()
                 .filter(scheduledStop -> scheduledStop.getStation()
@@ -195,12 +196,6 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 .getSecondTrain().getOrigin().getId());
         ScheduledStop secondTo = passengerDao.getStopById(tickets
                 .getSecondTrain().getDestination().getId());
-        float firstPrice = getTicketPrice(firstJourney.getId(),
-                firstFrom.getStation().getName(),
-                firstTo.getStation().getName());
-        float secondPrice = getTicketPrice(secondJourney.getId(),
-                secondFrom.getStation().getName(),
-                secondTo.getStation().getName());
         Passenger passenger = getOrCreatePassenger(firstName, lastName,
                 dateOfBirth);
         if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
@@ -214,10 +209,12 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 && passengerDao.currentTickets(secondJourney, secondFrom,
                 secondTo) < secondJourney.getTrainType().getSeats()) {
             Ticket firstTicket = Ticket.builder().from(firstFrom).to(firstTo)
-                    .journey(firstJourney).price(firstPrice)
+                    .journey(firstJourney)
+                    .price(tickets.getFirstTrain().getPrice())
                     .passenger(passenger).build();
             Ticket secondTicket = Ticket.builder().from(secondFrom).to(secondTo)
-                    .journey(secondJourney).price(secondPrice)
+                    .journey(secondJourney)
+                    .price(tickets.getSecondTrain().getPrice())
                     .passenger(passenger).build();
             passengerDao.add(firstTicket);
             passengerDao.add(secondTicket);
