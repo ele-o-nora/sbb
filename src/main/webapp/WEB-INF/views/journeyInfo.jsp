@@ -10,7 +10,8 @@
 </head>
 <body class="text-center">
 <%@include file="header.jsp" %>
-<h5 class="text-secondary m-3">${journey.route} direction ${journey.destination}</h5>
+<h5 class="text-secondary m-3"><span class="text-danger">${journey.route}</span> direction
+    <span class="text-danger">${journey.destination}</span></h5>
 <h6 class="m-3">Train model: ${journey.trainType.model}</h6>
 <div class="row justify-content-center">
     <div class="col-sm-8">

@@ -11,7 +11,7 @@
 </head>
 <body class="text-center">
 <%@include file="header.jsp" %>
-<h5 class="text-secondary">Scheduled journeys for ${today}</h5>
+<h5 class="text-secondary">Scheduled journeys for <span class="text-danger">${today}</span></h5>
 <div class="row m-3 justify-content-center">
     <div class="col-sm-8">
         <a href="${pageContext.request.contextPath}/admin/journeys/${previousDay}"

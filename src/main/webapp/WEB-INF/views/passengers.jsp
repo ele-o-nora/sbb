@@ -10,10 +10,11 @@
 </head>
 <body class="text-center">
 <%@include file="header.jsp" %>
-<h5 class="text-secondary m-4">List of passengers for ${journey.route} direction ${journey.destination},
+<h5 class="text-secondary m-4">List of passengers for <span class="text-danger">${journey.route}</span>
+    direction <span class="text-danger">${journey.destination}</span>,
     departing <c:forEach var="stop" items="${journey.stops}" varStatus="status">
         <c:if test="${status.first}">
-            ${stop.departure}
+            <span class="text-danger">${stop.departure}</span>
         </c:if>
     </c:forEach></h5>
 <c:if test="${empty tickets}">

@@ -11,7 +11,9 @@
 <body class="text-center">
 <%@include file="header.jsp" %>
 <c:if test="${!empty param.error}">
-    <p class="text-danger m-5">Bad credentials!</p>
+    <div class="row justify-content-center">
+    <h5 class="col-sm-4 bg-danger text-light m-5 p-3 rounded">Bad credentials!</h5>
+    </div>
 </c:if>
 <h2 class="text-muted">Please sign in</h2>
 <form action="${pageContext.request.contextPath}/perform_login" method="POST">
