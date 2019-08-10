@@ -1,6 +1,11 @@
 package ru.tsystems.sbb.services.view;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
@@ -25,10 +30,14 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     @Autowired
     private RouteDataService routeDataService;
 
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ScheduleViewServiceImpl.class);
+
     private static final String FAIL = "Sorry, there were no trains found "
             + "fulfilling your search criteria :(";
 
-    private static final String ERROR = "There was an error processing your request. Please check your inputs.";
+    private static final String ERROR = "There was an error processing your "
+            + "request. Please check your inputs.";
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter
             .ofPattern("yyyy-MM-dd HH:mm");
@@ -42,7 +51,8 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
         try {
             LocalDateTime moment = LocalDateTime.parse(dateTime, FORMATTER);
             List<JourneyDto> trains = scheduleDataService
-                    .directTrainsFromTo(origin, destination, moment, searchType);
+                    .directTrainsFromTo(origin, destination,
+                            moment, searchType);
             if (!trains.isEmpty()) {
                 objects.put("trains", trains);
             } else {
@@ -58,6 +68,8 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
             objects.put("origin", origin);
             objects.put("destination", destination);
         } catch (Exception e) {
+            LOGGER.error("Method getTrainsFromTo({}, {}, {}, {}) raised {}",
+                    origin, destination, dateTime, searchType, e);
             objects.put("error", ERROR);
         }
 
@@ -83,6 +95,8 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
                 return getStationSchedule(stationName, moment);
             }
         } catch (Exception e) {
+            LOGGER.error("Method getStationSchedule({}, {}) raised {}",
+                    stationName, from, e);
             Map<String, Object> objects = prepSignUp();
             objects.put("error", ERROR);
             return objects;
@@ -102,7 +116,11 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
 
     private Map<String, Object> prepSignUp() {
         Map<String, Object> objects = new HashMap<>();
-        objects.put("signUpDto", new SignUpDto());
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            objects.put("signUpDto", new SignUpDto());
+        }
         return objects;
     }
 

@@ -32,5 +32,6 @@ public interface PassengerViewService {
     Map<String, Object> getUserTickets(int page);
     Map<String, Object> returnTicket(int ticketId);
     Map<String, Object> failedSignUp();
+    Map<String, Object> prepSignUp();
     Map<String, Object> prepBuyerInfo();
 }

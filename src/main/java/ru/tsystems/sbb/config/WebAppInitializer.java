@@ -1,6 +1,8 @@
 package ru.tsystems.sbb.config;
 
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support
         .AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -30,5 +32,14 @@ public class WebAppInitializer
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
         return new Filter[]{filter};
+    }
+
+    @Override
+    protected DispatcherServlet createDispatcherServlet(
+            WebApplicationContext servletAppContext) {
+        final DispatcherServlet dispatcherServlet = (DispatcherServlet)
+                super.createDispatcherServlet(servletAppContext);
+        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+        return dispatcherServlet;
     }
 }

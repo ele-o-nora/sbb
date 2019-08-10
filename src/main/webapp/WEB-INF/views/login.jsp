@@ -12,7 +12,7 @@
 <%@include file="header.jsp" %>
 <c:if test="${!empty param.error}">
     <div class="row justify-content-center">
-    <h5 class="col-sm-4 bg-danger text-light m-5 p-3 rounded">Bad credentials!</h5>
+    <h5 class="col-sm-4 border border-danger text-danger m-5 p-3 rounded">Bad credentials!</h5>
     </div>
 </c:if>
 <h2 class="text-muted">Please sign in</h2>

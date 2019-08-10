@@ -22,4 +22,9 @@ public class MainController {
     public ModelAndView loginPage() {
         return new ModelAndView("login", "signUpDto", new SignUpDto());
     }
+
+    @GetMapping("/accessDenied")
+    public ModelAndView accessDenied() {
+        return new ModelAndView("accessDenied");
+    }
 }

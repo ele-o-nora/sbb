@@ -2,6 +2,8 @@ package ru.tsystems.sbb.model.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.Valid;
@@ -12,10 +14,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class SignUpDto {
 
     @Valid
-    private PassengerDetailsDto passengerDetails;
+    private @NonNull PassengerDetailsDto passengerDetails;
 
     @NotNull(message = "E-mail is a required field")
     @NotBlank(message = "E-mail cannot be empty")
@@ -23,5 +26,5 @@ public class SignUpDto {
     private String email;
 
     @Valid
-    private PasswordDto password;
+    private @NonNull PasswordDto password;
 }

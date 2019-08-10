@@ -166,7 +166,7 @@
         src="${pageContext.request.contextPath}/webjars/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/js/main.js"></script>
-<c:if test="${!empty error}">
+<c:if test="${!empty signUpError}">
     <script type="text/javascript">
         $(document).ready(function() {
             $('#signUpModal').modal('show');

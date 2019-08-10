@@ -65,7 +65,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         Map<String, Object> objects = new HashMap<>();
         List<StationDto> stations = routeDataService.allStations();
         objects.put("stations", stations);
-        objects.put("error", "true");
+        objects.put("signUpError", "true");
         return objects;
     }
 
@@ -210,7 +210,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         return objects;
     }
 
-    private Map<String, Object> prepSignUp() {
+    @Override
+    public Map<String, Object> prepSignUp() {
         Map<String, Object> objects = new HashMap<>();
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
@@ -220,13 +221,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         return objects;
     }
 
-    private Map<String, Object> getStations() {
-        Map<String, Object> objects = prepSignUp();
-        List<StationDto> stations = routeDataService.allStations();
-        objects.put("stations", stations);
-        return objects;
-    }
-
+    @Override
     public Map<String, Object> prepBuyerInfo() {
         Map<String, Object> objects = prepSignUp();
         Authentication auth = SecurityContextHolder.getContext()
@@ -236,6 +231,13 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                     .getPassenger(auth.getName());
             objects.put(PASSENGER, passenger);
         }
+        return objects;
+    }
+
+    private Map<String, Object> getStations() {
+        Map<String, Object> objects = prepSignUp();
+        List<StationDto> stations = routeDataService.allStations();
+        objects.put("stations", stations);
         return objects;
     }
 
