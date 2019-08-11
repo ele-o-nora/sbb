@@ -47,6 +47,8 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
                                                final String destination,
                                                final String dateTime,
                                                final String searchType) {
+        LOGGER.info("Method call: getTrainsFromTo({}, {}, {}, {})", origin,
+                destination, dateTime, searchType);
         Map<String, Object> objects = prepSignUp();
         try {
             LocalDateTime moment = LocalDateTime.parse(dateTime, FORMATTER);
@@ -86,17 +88,20 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
 
     @Override
     public Map<String, Object> getStationSchedule(final String stationName,
-                                                  final String from) {
+                                                  final String momentFrom) {
+        LOGGER.info("Method call: getStationSchedule({}, {})", stationName,
+                momentFrom);
         try {
-            if (from == null || from.isEmpty()) {
+            if (momentFrom == null || momentFrom.isEmpty()) {
                 return getStationSchedule(stationName, LocalDateTime.now());
             } else {
-                LocalDateTime moment = LocalDateTime.parse(from, FORMATTER);
+                LocalDateTime moment = LocalDateTime
+                        .parse(momentFrom, FORMATTER);
                 return getStationSchedule(stationName, moment);
             }
         } catch (Exception e) {
             LOGGER.error("Method getStationSchedule({}, {}) raised {}",
-                    stationName, from, e);
+                    stationName, momentFrom, e);
             Map<String, Object> objects = prepSignUp();
             objects.put("error", ERROR);
             return objects;

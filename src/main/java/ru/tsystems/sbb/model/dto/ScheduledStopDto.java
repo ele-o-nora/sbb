@@ -3,6 +3,7 @@ package ru.tsystems.sbb.model.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,11 +11,15 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class ScheduledStopDto {
     private int id;
     private String station;
+    @ToString.Exclude
     private int journeyId;
+    @ToString.Exclude
     private String route;
+    @ToString.Exclude
     private String direction;
     private String arrival;
     private String departure;

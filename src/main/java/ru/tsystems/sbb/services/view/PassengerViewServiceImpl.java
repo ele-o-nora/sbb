@@ -1,5 +1,7 @@
 package ru.tsystems.sbb.services.view;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,6 +33,9 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     @Autowired
     private RouteDataService routeDataService;
 
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(PassengerViewServiceImpl.class);
+
     private static final String SIGN_UP_SUCCESS = "Registration successful. "
             + "You may now sign in.";
     private static final String UPDATE_SUCCESS = "Your account "
@@ -53,6 +58,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                                         final LocalDate dateOfBirth,
                                         final String email,
                                         final String password) {
+        LOGGER.info("Method call: register({}, {}, {}, {}, {})", firstName,
+                lastName, dateOfBirth, email, password);
         Map<String, Object> objects = getStations();
         passengerDataService.register(firstName, lastName, dateOfBirth,
                 email, password);
@@ -62,6 +69,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
 
     @Override
     public Map<String, Object> failedSignUp() {
+        LOGGER.info("Method call: failedSignUp()");
         Map<String, Object> objects = new HashMap<>();
         List<StationDto> stations = routeDataService.allStations();
         objects.put("stations", stations);
@@ -73,6 +81,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     public Map<String, Object> prepTicketSale(final int journeyId,
                                               final String stationFrom,
                                               final String stationTo) {
+        LOGGER.info("Method call: prepTicketSale({}, {}, {})", journeyId,
+                stationFrom, stationTo);
         Map<String, Object> objects = prepSignUp();
         objects.put("buyerDetails", new BuyerDetailsDto());
         TicketOrderDto ticketOrder = passengerDataService
@@ -93,6 +103,9 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                                                final String stationFrom,
                                                final String stationTo,
                                                final String transfer) {
+        LOGGER.info("Method call: prepTicketsSale({}, {}, {}, {}, {})",
+                firstJourneyId, secondJourneyId, stationFrom, stationTo,
+                transfer);
         Map<String, Object> objects = prepSignUp();
         objects.put("buyerDetails", new BuyerDetailsDto());
         TransferTicketOrderDto transferTickets = passengerDataService
@@ -118,6 +131,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     public Map<String, Object> finalizeTicketSale(
             final TicketOrderDto ticketOrder, final String firstName,
             final String lastName, final LocalDate dateOfBirth) {
+        LOGGER.info("Method call: finalizeTicketSale({}, {}, {}, {})",
+                ticketOrder, firstName, lastName, dateOfBirth);
         Map<String, Object> objects = getStations();
         String saleResult = passengerDataService.buyTicket(ticketOrder,
                 firstName, lastName, dateOfBirth);
@@ -133,6 +148,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     public Map<String, Object> finalizeTicketsSale(
             final TransferTicketOrderDto order, final String firstName,
             final String lastName, final LocalDate dateOfBirth) {
+        LOGGER.info("Method call: finalizeTicketsSale({}, {}, {}, {})",
+                order, firstName, lastName, dateOfBirth);
         Map<String, Object> objects = getStations();
         String saleResult = passengerDataService.buyTickets(order,
                 firstName, lastName, dateOfBirth);
@@ -149,6 +166,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         Map<String, Object> objects = new HashMap<>();
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
+        LOGGER.info("Method call: editUserInfo() by user: {}", auth.getName());
         PassengerDto passenger = passengerDataService
                 .getPassenger(auth.getName());
         objects.put(PASSENGER, passenger);
@@ -162,6 +180,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                                           final String lastName) {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
+        LOGGER.info("Method call: changeName({}, {}) by user: {}", firstName,
+                lastName, auth.getName());
         Map<String, Object> objects = editUserInfo();
         PassengerDto passenger = passengerDataService
                 .changePassengerInfo(firstName, lastName, auth.getName());
@@ -174,6 +194,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     public Map<String, Object> changePassword(final String newPassword) {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
+        LOGGER.info("Method call: changePassword() by user: {}",
+                auth.getName());
         Map<String, Object> objects = editUserInfo();
         passengerDataService.changePassword(auth.getName(), newPassword);
         objects.put(STATUS, UPDATE_SUCCESS);
@@ -184,6 +206,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     public Map<String, Object> getUserTickets(final int page) {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
+        LOGGER.info("Method call: getUserTickets({}) by user: {}", page,
+                auth.getName());
         Map<String, Object> objects = new HashMap<>();
         List<TicketDto> tickets = passengerDataService
                 .getUserTickets(auth.getName(), page);
@@ -200,23 +224,16 @@ public class PassengerViewServiceImpl implements PassengerViewService {
 
     @Override
     public Map<String, Object> returnTicket(final int ticketId) {
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        LOGGER.info("Method call: returnTicket({}) by user: {}", ticketId,
+                auth.getName());
         String returnResult = passengerDataService.returnTicket(ticketId);
         Map<String, Object> objects = getUserTickets(1);
         if (returnResult.equalsIgnoreCase(SUCCESS)) {
             objects.put(STATUS, TICKET_RETURN_SUCCESS);
         } else {
             objects.put(STATUS, TICKET_RETURN_FAIL + returnResult);
-        }
-        return objects;
-    }
-
-    @Override
-    public Map<String, Object> prepSignUp() {
-        Map<String, Object> objects = new HashMap<>();
-        Authentication auth = SecurityContextHolder.getContext()
-                .getAuthentication();
-        if (auth instanceof AnonymousAuthenticationToken) {
-            objects.put("signUpDto", new SignUpDto());
         }
         return objects;
     }
@@ -230,6 +247,16 @@ public class PassengerViewServiceImpl implements PassengerViewService {
             PassengerDto passenger = passengerDataService
                     .getPassenger(auth.getName());
             objects.put(PASSENGER, passenger);
+        }
+        return objects;
+    }
+
+    private Map<String, Object> prepSignUp() {
+        Map<String, Object> objects = new HashMap<>();
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            objects.put("signUpDto", new SignUpDto());
         }
         return objects;
     }

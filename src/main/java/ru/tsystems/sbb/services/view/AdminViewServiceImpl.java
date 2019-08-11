@@ -1,6 +1,10 @@
 package ru.tsystems.sbb.services.view;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.LineDto;
@@ -29,6 +33,9 @@ public class AdminViewServiceImpl implements AdminViewService {
     @Autowired
     private AdminDataService adminDataService;
 
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(AdminViewServiceImpl.class);
+
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter
             .ofPattern("HH:mm");
 
@@ -39,6 +46,8 @@ public class AdminViewServiceImpl implements AdminViewService {
 
     @Override
     public Map<String, Object> prepAdminPanel() {
+        LOGGER.info("Method call: prepAdminPanel() by employee: {}",
+                getEmployeeUsername());
         List<LineDto> lines = routeDataService.getAllLines();
         List<TrainDto> trainModels = adminDataService.getAllTrainModels();
         Map<String, Object> objects = new HashMap<>();
@@ -62,6 +71,9 @@ public class AdminViewServiceImpl implements AdminViewService {
                                              final int order,
                                              final int distBefore,
                                              final int distAfter) {
+        LOGGER.info("Method call: addNewStation({}, {}, {}, {}, {}) by "
+                        + "employee: {}", stationName, lineId, order,
+                distBefore, distAfter, getEmployeeUsername());
         adminDataService.addNewStation(stationName, lineId, order,
                 distBefore, distAfter);
         return getCurrentLineStations(lineId);
@@ -70,11 +82,15 @@ public class AdminViewServiceImpl implements AdminViewService {
     @Override
     public void addNewTrainModel(final String model,
                                  final int seats, final int speed) {
+        LOGGER.info("Method call: addNewTrainModel({}, {}, {}) by employee: {}",
+                model, seats, speed, getEmployeeUsername());
         adminDataService.addNewTrainModel(model, seats, speed);
     }
 
     @Override
     public Map<String, Object> getCurrentLineStations(final int lineId) {
+        LOGGER.info("Method call: getCurrentLineStations({}) by employee: {}",
+                lineId, getEmployeeUsername());
         List<StationDto> stations = routeDataService
                 .getAllLineStations(lineId);
         LineDto line = routeDataService.getLine(lineId);
@@ -87,6 +103,8 @@ public class AdminViewServiceImpl implements AdminViewService {
     @Override
     public Map<String, Object> modifyRouteStations(final int lineId,
                                                    final int routeId) {
+        LOGGER.info("Method call: modifyRouteStations({}, {}) by employee: {}",
+                lineId, routeId, getEmployeeUsername());
         LineDto line = routeDataService.getLine(lineId);
         RouteDto route = routeDataService.getRoute(routeId);
         List<StationDto> lineStations = routeDataService
@@ -103,6 +121,9 @@ public class AdminViewServiceImpl implements AdminViewService {
                                                    final int routeId,
                                                    final int lineId,
                                                    final String[] stations) {
+        LOGGER.info("Method call: newRouteStopPattern({}, {}, {}, {}) "
+                        + "by employee: {}", routeNumber, lineId, routeId,
+                stations, getEmployeeUsername());
         LineDto line = routeDataService.getLine(lineId);
         Map<String, Object> objects = new HashMap<>();
         if (routeId > 0) {
@@ -118,12 +139,17 @@ public class AdminViewServiceImpl implements AdminViewService {
     @Override
     public void addNewRoute(final String routeNumber, final int lineId,
                             final String[] stations, final int[] waitTimes) {
+        LOGGER.info("Method call: addNewRoute({}, {}, {}, {}) by employee: {}",
+                routeNumber, lineId, stations, waitTimes,
+                getEmployeeUsername());
         adminDataService.addNewRoute(routeNumber, lineId, stations, waitTimes);
     }
 
     @Override
     public void modifyRoute(final int routeId, final String[] stations,
                             final int[] waitTimes) {
+        LOGGER.info("Method call: modifyRoute({}, {}, {}) by employee: {}",
+                routeId, stations, waitTimes, getEmployeeUsername());
         adminDataService.modifyRoute(routeId, stations, waitTimes);
     }
 
@@ -131,6 +157,9 @@ public class AdminViewServiceImpl implements AdminViewService {
     public void scheduleRoute(final int routeId, final String departureTime,
                               final String dateFrom, final String dateUntil,
                               final int trainId, final String direction) {
+        LOGGER.info("Method call: scheduleRoute({}, {}, {}, {}, {}, {}) "
+                        + "by employee: {}", routeId, departureTime,
+                dateFrom, dateUntil, trainId, direction, getEmployeeUsername());
         boolean outbound = direction.equalsIgnoreCase(OUTBOUND);
         LocalDate dayFrom = LocalDate.parse(dateFrom, DATE_FORMATTER);
         LocalDate dayUntil = LocalDate.parse(dateUntil, DATE_FORMATTER);
@@ -141,6 +170,8 @@ public class AdminViewServiceImpl implements AdminViewService {
 
     @Override
     public void updateTariff(final float price) {
+        LOGGER.info("Method call: updateTariff({}) by employee: {}", price,
+                getEmployeeUsername());
         if (price > 0) {
             adminDataService.updateTariff(price);
         }
@@ -149,6 +180,8 @@ public class AdminViewServiceImpl implements AdminViewService {
     @Override
     public Map<String, Object> lookUpJourneys(final String date,
                                               final int page) {
+        LOGGER.info("Method call: lookUpJourneys({}, {}) by employee: {}",
+                date, page, getEmployeeUsername());
         LocalDate day = LocalDate.parse(date, DATE_FORMATTER);
         LocalDateTime searchFrom = LocalDateTime.of(day,
                 LocalTime.MIDNIGHT);
@@ -175,6 +208,8 @@ public class AdminViewServiceImpl implements AdminViewService {
     @Override
     public Map<String, Object> listPassengers(final int journeyId,
                                               final int page) {
+        LOGGER.info("Method call: listPassengers({}, {}) by employee: {}",
+                journeyId, page, getEmployeeUsername());
         Map<String, Object> objects = new HashMap<>();
         JourneyDto journey = adminDataService.getJourneyById(journeyId);
         objects.put("journey", journey);
@@ -192,9 +227,17 @@ public class AdminViewServiceImpl implements AdminViewService {
 
     @Override
     public Map<String, Object> journeyInfo(final int journeyId) {
+        LOGGER.info("Method call: journeyInfo({}) by employee: {}",
+                journeyId, getEmployeeUsername());
         Map<String, Object> objects = new HashMap<>();
         JourneyDto journey = adminDataService.getJourneyById(journeyId);
         objects.put("journey", journey);
         return objects;
+    }
+
+    private String getEmployeeUsername() {
+        Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        return auth.getName();
     }
 }
