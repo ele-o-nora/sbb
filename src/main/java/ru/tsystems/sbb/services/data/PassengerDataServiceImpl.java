@@ -3,6 +3,7 @@ package ru.tsystems.sbb.services.data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tsystems.sbb.model.dao.AdminDao;
@@ -95,7 +96,8 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW,
+    isolation = Isolation.SERIALIZABLE)
     public String buyTicket(final TicketOrderDto ticketOrder,
                           final String firstName, final String lastName,
                           final LocalDate dateOfBirth) {
@@ -179,7 +181,8 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW,
+    isolation = Isolation.SERIALIZABLE)
     public String buyTickets(final TransferTicketOrderDto tickets,
                               final String firstName,
                               final String lastName,
