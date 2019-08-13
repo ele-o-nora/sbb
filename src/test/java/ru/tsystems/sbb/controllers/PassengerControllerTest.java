@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -15,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
+import ru.tsystems.sbb.model.dto.ChangeNameDto;
 import ru.tsystems.sbb.model.dto.PassengerDetailsDto;
 import ru.tsystems.sbb.model.dto.PasswordDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
@@ -56,14 +61,71 @@ class PassengerControllerTest {
         ModelAndView mav = controller.signUp(signUpDto, bindingResult);
 
         verify(mockViewService, times(1))
-                .register(signUpDto.getPassengerDetails().getFirstName(),
-                        signUpDto.getPassengerDetails().getLastName(),
-                        signUpDto.getPassengerDetails().getDateOfBirth(),
-                        signUpDto.getEmail(),
-                        signUpDto.getPassword().getPassword());
+                .register(same(signUpDto.getPassengerDetails().getFirstName()),
+                        same(signUpDto.getPassengerDetails().getLastName()),
+                        same(signUpDto.getPassengerDetails().getDateOfBirth()),
+                        same(signUpDto.getEmail()),
+                        same(signUpDto.getPassword().getPassword()));
         verifyNoMoreInteractions(mockViewService);
 
         assertEquals("index", mav.getViewName());
+    }
+
+    @Test
+    void changePasswordErrorTest(@Mock BindingResult bindingResult) {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        PasswordDto passwordDto = new PasswordDto();
+
+        ModelAndView mav = controller
+                .changePassword(passwordDto, bindingResult);
+
+        verifyZeroInteractions(mockViewService);
+
+        assertEquals("editInfo", mav.getViewName());
+        assertTrue(mav.getModel().containsKey("changeNameDto"));
+        assertEquals(new ChangeNameDto(), mav.getModel().get("changeNameDto"));
+    }
+
+    @Test
+    void changePasswordSuccessTest(@Mock BindingResult bindingResult) {
+        PasswordDto passwordDto = new PasswordDto();
+
+        ModelAndView mav = controller
+                .changePassword(passwordDto, bindingResult);
+
+        verify(mockViewService, times(1))
+                .changePassword(same(passwordDto.getPassword()));
+        verifyNoMoreInteractions(mockViewService);
+
+        assertEquals("editInfo", mav.getViewName());
+    }
+
+    @Test
+    void changeNameErrorTest(@Mock BindingResult bindingResult) {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        ChangeNameDto changeNameDto = new ChangeNameDto();
+
+        ModelAndView mav = controller.changeName(changeNameDto, bindingResult);
+
+        verifyZeroInteractions(mockViewService);
+
+        assertEquals("editInfo", mav.getViewName());
+        assertTrue(mav.getModel().containsKey("passwordDto"));
+        assertEquals(new PasswordDto(), mav.getModel().get("passwordDto"));
+    }
+
+    @Test
+    void changeNameSuccessTest(@Mock BindingResult bindingResult) {
+        ChangeNameDto changeNameDto = new ChangeNameDto();
+
+        ModelAndView mav = controller.changeName(changeNameDto, bindingResult);
+
+        verify(mockViewService, times(1))
+                .changeName(same(changeNameDto.getFirstName()),
+                        same(changeNameDto.getLastName()));
+        verifyNoMoreInteractions(mockViewService);
+
+        assertEquals("editInfo", mav.getViewName());
     }
 
 }

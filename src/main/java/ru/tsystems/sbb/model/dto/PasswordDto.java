@@ -1,5 +1,6 @@
 package ru.tsystems.sbb.model.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode
 @PasswordMatches
 public class PasswordDto {
 
