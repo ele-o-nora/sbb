@@ -1,5 +1,6 @@
 package ru.tsystems.sbb.model.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class SignUpDto {
 
     @Valid

@@ -24,6 +24,7 @@ import ru.tsystems.sbb.model.entities.User;
 import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
 import javax.persistence.NoResultException;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -50,6 +51,9 @@ public class PassengerDataServiceImpl implements PassengerDataService {
 
     @Autowired
     private EntityToDtoMapper mapper;
+
+    @Autowired
+    private Clock clock;
 
     private static final String NO_TIME = "Not enough time before departure.";
     private static final String NO_SEATS = "No available seats.";
@@ -111,7 +115,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 from.getStation().getName(), to.getStation().getName());
         Passenger passenger = getOrCreatePassenger(firstName, lastName,
                 dateOfBirth);
-        if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
+        if (ChronoUnit.MINUTES.between(LocalDateTime.now(clock),
                 from.getDeparture()) < MIN_MINUTES) {
             return NO_TIME;
         } else if (!passengerDao.getTickets(journey, passenger).isEmpty()) {
@@ -141,7 +145,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 .filter(scheduledStop -> scheduledStop.getStation()
                         .getName().equals(stationFrom)).findFirst()
                 .orElse(new ScheduledStop());
-        if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
+        if (ChronoUnit.MINUTES.between(LocalDateTime.now(clock),
                 stopFrom.getDeparture()) < MIN_MINUTES) {
             ticketOrder.setStatus(NO_TIME);
             return ticketOrder;
@@ -201,7 +205,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 .getSecondTrain().getDestination().getId());
         Passenger passenger = getOrCreatePassenger(firstName, lastName,
                 dateOfBirth);
-        if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
+        if (ChronoUnit.MINUTES.between(LocalDateTime.now(clock),
                 firstFrom.getDeparture()) < MIN_MINUTES) {
             return NO_TIME;
         } else if (!passengerDao.getTickets(firstJourney, passenger).isEmpty()
@@ -266,7 +270,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     @Override
     public String returnTicket(final int ticketId) {
         Ticket ticket = passengerDao.getTicketById(ticketId);
-        if (ChronoUnit.MINUTES.between(LocalDateTime.now(),
+        if (ChronoUnit.MINUTES.between(LocalDateTime.now(clock),
                 ticket.getFrom().getDeparture()) >= MIN_MINUTES) {
             passengerDao.delete(ticket);
             return SUCCESS;

@@ -22,6 +22,7 @@ import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Ticket;
 import ru.tsystems.sbb.model.entities.Train;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +32,9 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
 
     @Autowired
     private ModelMapper mapper;
+
+    @Autowired
+    private Clock clock;
 
     private static final String OLD = "old";
     private static final String CURRENT = "current";
@@ -96,10 +100,10 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
         ticketDto.setStationFrom(convert(ticket.getFrom()));
         ticketDto.setStationTo(convert(ticket.getTo()));
         ticketDto.setFormattedPrice(formatPrice(ticket.getPrice()));
-        if (ticket.getTo().getArrival().isBefore(LocalDateTime.now())) {
+        if (ticket.getTo().getArrival().isBefore(LocalDateTime.now(clock))) {
             ticketDto.setCategory(OLD);
         } else if (ticket.getFrom().getDeparture()
-                .isAfter(LocalDateTime.now())) {
+                .isAfter(LocalDateTime.now(clock))) {
             ticketDto.setCategory(FUTURE);
         } else {
             ticketDto.setCategory(CURRENT);

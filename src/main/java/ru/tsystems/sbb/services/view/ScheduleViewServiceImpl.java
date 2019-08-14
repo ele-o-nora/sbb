@@ -15,6 +15,7 @@ import ru.tsystems.sbb.model.dto.TransferTrainsDto;
 import ru.tsystems.sbb.services.data.RouteDataService;
 import ru.tsystems.sbb.services.data.ScheduleDataService;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -29,6 +30,9 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
 
     @Autowired
     private RouteDataService routeDataService;
+
+    @Autowired
+    private Clock clock;
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ScheduleViewServiceImpl.class);
@@ -93,7 +97,8 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
                 momentFrom);
         try {
             if (momentFrom == null || momentFrom.isEmpty()) {
-                return getStationSchedule(stationName, LocalDateTime.now());
+                return getStationSchedule(stationName,
+                        LocalDateTime.now(clock));
             } else {
                 LocalDateTime moment = LocalDateTime
                         .parse(momentFrom, FORMATTER);

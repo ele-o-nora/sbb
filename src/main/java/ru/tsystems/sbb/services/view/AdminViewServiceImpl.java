@@ -15,6 +15,7 @@ import ru.tsystems.sbb.model.dto.TrainDto;
 import ru.tsystems.sbb.services.data.AdminDataService;
 import ru.tsystems.sbb.services.data.RouteDataService;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -32,6 +33,9 @@ public class AdminViewServiceImpl implements AdminViewService {
 
     @Autowired
     private AdminDataService adminDataService;
+
+    @Autowired
+    private Clock clock;
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(AdminViewServiceImpl.class);
@@ -52,7 +56,7 @@ public class AdminViewServiceImpl implements AdminViewService {
         List<TrainDto> trainModels = adminDataService.getAllTrainModels();
         Map<String, Object> objects = new HashMap<>();
         float currentTariff = adminDataService.currentTariff();
-        String today = LocalDate.now().format(DATE_FORMATTER);
+        String today = LocalDate.now(clock).format(DATE_FORMATTER);
         objects.put("today", today);
         objects.put("tariff", currentTariff);
         objects.put("lines", lines);
@@ -238,10 +242,6 @@ public class AdminViewServiceImpl implements AdminViewService {
     private String getEmployeeUsername() {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
-        if (auth != null) {
-            return auth.getName();
-        } else {
-            return "";
-        }
+        return auth.getName();
     }
 }

@@ -22,6 +22,7 @@ import ru.tsystems.sbb.model.entities.Tariff;
 import ru.tsystems.sbb.model.entities.Train;
 import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -46,6 +47,9 @@ public class AdminDataServiceImpl implements AdminDataService {
 
     @Autowired
     private EntityToDtoMapper mapper;
+
+    @Autowired
+    private Clock clock;
 
     private static final int SEARCH_RESULTS_STEP = 10;
 
@@ -264,7 +268,7 @@ public class AdminDataServiceImpl implements AdminDataService {
 
     @Override
     public void updateTariff(final float price) {
-        Tariff tariff = Tariff.builder().momentFrom(LocalDateTime.now())
+        Tariff tariff = Tariff.builder().momentFrom(LocalDateTime.now(clock))
                 .pricePerTenLeagues(price).build();
         adminDao.add(tariff);
     }
