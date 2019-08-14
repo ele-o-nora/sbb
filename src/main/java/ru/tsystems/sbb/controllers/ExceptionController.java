@@ -20,14 +20,14 @@ public class ExceptionController {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ModelAndView handleNotFound(HttpServletRequest req, Exception ex) {
-        LOGGER.error("Request {} raised {}", req.getRequestURL(), ex);
+        LOGGER.error("Request {} raised {}", req.getRequestURI(), ex);
         return new ModelAndView("notFound", "signUpDto",
                 new SignUpDto(new PassengerDetailsDto(), new PasswordDto()));
     }
 
     @ExceptionHandler(Exception.class)
     public ModelAndView handleError(HttpServletRequest req, Exception ex) {
-        LOGGER.error("Request {} raised {}", req.getRequestURL(), ex);
+        LOGGER.error("Request {} raised {}", req.getRequestURI(), ex);
         return new ModelAndView("error", "signUpDto",
                 new SignUpDto(new PassengerDetailsDto(), new PasswordDto()));
     }

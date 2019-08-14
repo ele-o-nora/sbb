@@ -18,11 +18,15 @@ import static org.mockito.Mockito.times;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import ru.tsystems.sbb.model.dto.BuyerDetailsDto;
 import ru.tsystems.sbb.model.dto.ChangeNameDto;
 import ru.tsystems.sbb.model.dto.PassengerDetailsDto;
 import ru.tsystems.sbb.model.dto.PasswordDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
+import ru.tsystems.sbb.model.dto.TicketOrderDto;
+import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
 import ru.tsystems.sbb.services.view.PassengerViewService;
 
 @ExtendWith(MockitoExtension.class)
@@ -126,6 +130,83 @@ class PassengerControllerTest {
         verifyNoMoreInteractions(mockViewService);
 
         assertEquals("editInfo", mav.getViewName());
+    }
+
+    @Test
+    void finalizeTicketSaleErrorTest(@Mock BindingResult bindingResult,
+                                     @Mock SessionStatus status) {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        TicketOrderDto order = new TicketOrderDto();
+        BuyerDetailsDto buyerDetails = new BuyerDetailsDto();
+
+        ModelAndView mav = controller.finalizeTicketSale(order, buyerDetails,
+                bindingResult, status);
+
+        verify(mockViewService, times(1)).prepBuyerInfo();
+        verifyNoMoreInteractions(mockViewService);
+
+        assertEquals("buyTickets", mav.getViewName());
+    }
+
+    @Test
+    void finalizeTicketSaleSuccessTest(@Mock BindingResult bindingResult,
+                                       @Mock SessionStatus status) {
+        TicketOrderDto order = new TicketOrderDto();
+        BuyerDetailsDto buyerDetails = new BuyerDetailsDto();
+        buyerDetails.setPassenger(new PassengerDetailsDto());
+
+        ModelAndView mav = controller.finalizeTicketSale(order, buyerDetails,
+                bindingResult, status);
+
+        verify(status, times(1)).setComplete();
+        verifyNoMoreInteractions(status);
+
+        verify(mockViewService, times(1)).finalizeTicketSale(same(order),
+                same(buyerDetails.getPassenger().getFirstName()),
+                same(buyerDetails.getPassenger().getLastName()),
+                same(buyerDetails.getPassenger().getDateOfBirth()));
+        verifyNoMoreInteractions(mockViewService);
+
+        assertEquals("buyTickets", mav.getViewName());
+    }
+
+    @Test
+    void finalizeTicketsSaleErrorTest(@Mock BindingResult bindingResult,
+                                      @Mock SessionStatus status) {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        TransferTicketOrderDto order = new TransferTicketOrderDto();
+        BuyerDetailsDto buyerDetails = new BuyerDetailsDto();
+
+        ModelAndView mav = controller.finalizeTicketsSale(order, buyerDetails,
+                bindingResult, status);
+
+        verify(mockViewService, times(1)).prepBuyerInfo();
+        verifyNoMoreInteractions(mockViewService);
+
+        assertEquals("buyTickets", mav.getViewName());
+
+    }
+
+    @Test
+    void finalizeTicketsSaleSuccessTest(@Mock BindingResult bindingResult,
+                                        @Mock SessionStatus status) {
+        TransferTicketOrderDto order = new TransferTicketOrderDto();
+        BuyerDetailsDto buyerDetails = new BuyerDetailsDto();
+        buyerDetails.setPassenger(new PassengerDetailsDto());
+
+        ModelAndView mav = controller.finalizeTicketsSale(order, buyerDetails,
+                bindingResult, status);
+
+        verify(status, times(1)).setComplete();
+        verifyNoMoreInteractions(status);
+
+        verify(mockViewService, times(1)).finalizeTicketsSale(same(order),
+                same(buyerDetails.getPassenger().getFirstName()),
+                same(buyerDetails.getPassenger().getLastName()),
+                same(buyerDetails.getPassenger().getDateOfBirth()));
+        verifyNoMoreInteractions(mockViewService);
+
+        assertEquals("buyTickets", mav.getViewName());
     }
 
 }

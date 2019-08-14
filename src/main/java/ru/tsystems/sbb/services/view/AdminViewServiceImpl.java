@@ -238,6 +238,10 @@ public class AdminViewServiceImpl implements AdminViewService {
     private String getEmployeeUsername() {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
-        return auth.getName();
+        if (auth != null) {
+            return auth.getName();
+        } else {
+            return "";
+        }
     }
 }
