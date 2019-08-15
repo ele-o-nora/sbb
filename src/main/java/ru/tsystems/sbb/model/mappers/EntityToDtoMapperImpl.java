@@ -99,6 +99,7 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
         ticketDto.setJourney(convert(ticket.getJourney()));
         ticketDto.setStationFrom(convert(ticket.getFrom()));
         ticketDto.setStationTo(convert(ticket.getTo()));
+        ticketDto.setPassenger(convert(ticket.getPassenger()));
         ticketDto.setFormattedPrice(formatPrice(ticket.getPrice()));
         if (ticket.getTo().getArrival().isBefore(LocalDateTime.now(clock))) {
             ticketDto.setCategory(OLD);
@@ -125,14 +126,22 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     }
 
     public String formatPrice(final float price) {
+        String singularStag = "silver stag";
+        String pluralStags = "silver stags";
+        String singularStar = "copper star";
+        String pluralStars = "copper stars";
         int stags = (int) price;
         int stars = (int) ((price - stags) / 0.15);
         if (stags > 0 && stars > 0) {
-            return String.format("%d silver stags, %d copper stars", stags, stars);
+            return String.format("%d %s, %d %s",
+                    stags, (stags == 1 ? singularStag : pluralStags),
+                    stars, (stars == 1 ? singularStar : pluralStars));
         } else if (stags > 0) {
-            return String.format("%d silver stags", stags);
+            return String.format("%d %s", stags,
+                    (stags == 1 ? singularStag : pluralStags));
         } else {
-            return String.format("%d copper stars", stars);
+            return String.format("%d %s", stars,
+                    (stars == 1 ? singularStar : pluralStars));
         }
     }
 
