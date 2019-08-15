@@ -84,7 +84,6 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         LOGGER.info("Method call: prepTicketSale({}, {}, {})", journeyId,
                 stationFrom, stationTo);
         Map<String, Object> objects = prepSignUp();
-        objects.put("buyerDetails", new BuyerDetailsDto());
         TicketOrderDto ticketOrder = passengerDataService
                 .prepareTicketOrder(journeyId, stationFrom, stationTo);
         if (ticketOrder.getStatus() != null && !ticketOrder
@@ -92,6 +91,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
             objects.put(STATUS, TICKET_PREP_FAIL + ticketOrder.getStatus());
             return objects;
         }
+        objects.put("buyerDetails", new BuyerDetailsDto());
         objects.put("ticketOrder", ticketOrder);
         objects.putAll(prepBuyerInfo());
         return objects;
@@ -107,7 +107,6 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                 firstJourneyId, secondJourneyId, stationFrom, stationTo,
                 transfer);
         Map<String, Object> objects = prepSignUp();
-        objects.put("buyerDetails", new BuyerDetailsDto());
         TransferTicketOrderDto transferTickets = passengerDataService
                 .prepareTicketsOrder(firstJourneyId, secondJourneyId,
                         stationFrom, stationTo, transfer);
@@ -122,6 +121,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                     .getSecondTrain().getStatus());
             return objects;
         }
+        objects.put("buyerDetails", new BuyerDetailsDto());
         objects.put("transferTickets", transferTickets);
         objects.putAll(prepBuyerInfo());
         return objects;

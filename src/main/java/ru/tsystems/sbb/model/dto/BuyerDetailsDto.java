@@ -1,5 +1,6 @@
 package ru.tsystems.sbb.model.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import javax.validation.Valid;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode
 public class BuyerDetailsDto {
 
     @Valid

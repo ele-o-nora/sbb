@@ -1,6 +1,5 @@
 package ru.tsystems.sbb.services.view;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,16 +66,9 @@ class ScheduleViewServiceImplTest {
     private static final String FAIL = "Sorry, there were no trains found "
             + "fulfilling your search criteria :(";
 
-    @BeforeAll
-    static void setup(@Mock Authentication auth,
-                      @Mock SecurityContext securityContext) {
-        when(securityContext.getAuthentication()).thenReturn(auth);
-        when(auth.getName()).thenReturn("testUser");
-        SecurityContextHolder.setContext(securityContext);
-    }
-
     @BeforeEach
-    void initMocks(){
+    void initMocks(@Mock Authentication auth,
+                   @Mock SecurityContext securityContext){
         MockitoAnnotations.initMocks(this);
         Clock fixedClock = Clock.fixed(LOCAL_DATE.atStartOfDay(ZoneId
                 .systemDefault()).toInstant(), ZoneId.systemDefault());
@@ -84,6 +76,9 @@ class ScheduleViewServiceImplTest {
                 .thenReturn(fixedClock.instant());
         Mockito.lenient().when(mockClock.getZone())
                 .thenReturn(fixedClock.getZone());
+        when(securityContext.getAuthentication()).thenReturn(auth);
+        when(auth.getName()).thenReturn("testUser");
+        SecurityContextHolder.setContext(securityContext);
     }
 
     @Test
