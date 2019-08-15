@@ -76,8 +76,9 @@ class ScheduleViewServiceImplTest {
                 .thenReturn(fixedClock.instant());
         Mockito.lenient().when(mockClock.getZone())
                 .thenReturn(fixedClock.getZone());
-        when(securityContext.getAuthentication()).thenReturn(auth);
-        when(auth.getName()).thenReturn("testUser");
+        Mockito.lenient().when(securityContext.getAuthentication())
+                .thenReturn(auth);
+        Mockito.lenient().when(auth.getName()).thenReturn("testUser");
         SecurityContextHolder.setContext(securityContext);
     }
 

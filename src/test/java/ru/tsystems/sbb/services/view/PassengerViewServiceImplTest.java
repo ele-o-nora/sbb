@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -67,8 +68,9 @@ class PassengerViewServiceImplTest {
     void initMocks(@Mock Authentication auth,
                    @Mock SecurityContext securityContext){
         MockitoAnnotations.initMocks(this);
-        when(securityContext.getAuthentication()).thenReturn(auth);
-        when(auth.getName()).thenReturn("testUser");
+        Mockito.lenient().when(securityContext.getAuthentication())
+                .thenReturn(auth);
+        Mockito.lenient().when(auth.getName()).thenReturn("testUser");
         SecurityContextHolder.setContext(securityContext);
     }
 
