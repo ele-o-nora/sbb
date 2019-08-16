@@ -1,18 +1,16 @@
 package ru.tsystems.sbb.services.view;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import ru.tsystems.sbb.config.ViewServiceTestConfig;
 import ru.tsystems.sbb.model.dto.BuyerDetailsDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
@@ -37,6 +35,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -44,15 +43,19 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class PassengerViewServiceImplTest {
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ViewServiceTestConfig.class},
+    loader = AnnotationConfigContextLoader.class)
+@WithMockUser(username = "testUser")
+class PassengerViewServiceTest {
 
-    @InjectMocks
-    private PassengerViewServiceImpl passengerViewService;
+    @Autowired
+    private PassengerViewService passengerViewService;
 
-    @Mock
+    @Autowired
     private RouteDataService mockRouteDataService;
 
-    @Mock
+    @Autowired
     private PassengerDataService mockPassengerDataService;
 
     private static final String TICKET_PREP_FAIL = "Couldn't prepare "
@@ -64,14 +67,10 @@ class PassengerViewServiceImplTest {
     private static final String TICKET_RETURN_SUCCESS = "Ticket successfully "
             + "returned. Your refund will be processed shortly.";
 
-    @BeforeEach
-    void initMocks(@Mock Authentication auth,
-                   @Mock SecurityContext securityContext){
-        MockitoAnnotations.initMocks(this);
-        Mockito.lenient().when(securityContext.getAuthentication())
-                .thenReturn(auth);
-        Mockito.lenient().when(auth.getName()).thenReturn("testUser");
-        SecurityContextHolder.setContext(securityContext);
+    @AfterEach
+    void resetMocks() {
+        reset(mockRouteDataService);
+        reset(mockPassengerDataService);
     }
 
     @Test
@@ -499,13 +498,8 @@ class PassengerViewServiceImplTest {
     }
 
     @Test
-    void prepBuyerInfoAnonymousTest(@Mock SecurityContext securityContext) {
-        Authentication auth = new AnonymousAuthenticationToken("key",
-                "anonymous", AuthorityUtils
-                .createAuthorityList("ROLE_ANONYMOUS"));
-        when(securityContext.getAuthentication()).thenReturn(auth);
-        SecurityContextHolder.setContext(securityContext);
-
+    @WithAnonymousUser
+    void prepBuyerInfoAnonymousTest() {
         Map<String, Object> result = passengerViewService.prepBuyerInfo();
 
         verifyZeroInteractions(mockPassengerDataService);

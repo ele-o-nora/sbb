@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-class RailwaysUserDetailsServiceTest {
+class UserDetailsServiceTest {
 
     @InjectMocks
     private RailwaysUserDetailsService railwaysUserDetailsService;

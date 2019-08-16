@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-class ScheduleDataServiceImplTest {
+class ScheduleDataServiceTest {
 
     @InjectMocks
     private ScheduleDataServiceImpl scheduleDataService;

@@ -1,18 +1,16 @@
 package ru.tsystems.sbb.services.view;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import ru.tsystems.sbb.config.ViewServiceTestConfig;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
@@ -22,10 +20,8 @@ import ru.tsystems.sbb.services.data.RouteDataService;
 import ru.tsystems.sbb.services.data.ScheduleDataService;
 
 import javax.persistence.NoResultException;
-import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +34,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -46,19 +43,20 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-class ScheduleViewServiceImplTest {
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {ViewServiceTestConfig.class},
+    loader = AnnotationConfigContextLoader.class)
+@WithMockUser(username = "testUser")
+class ScheduleViewServiceTest {
 
-    @InjectMocks
-    private ScheduleViewServiceImpl scheduleViewService;
+    @Autowired
+    private ScheduleViewService scheduleViewService;
 
-    @Mock
+    @Autowired
     private RouteDataService mockRouteDataService;
 
-    @Mock
+    @Autowired
     private ScheduleDataService mockScheduleDataService;
-
-    @Mock
-    private Clock mockClock;
 
     private final static LocalDate LOCAL_DATE = LocalDate.of(2020, 2, 2);
     private static final String ERROR = "There was an error processing your "
@@ -66,20 +64,10 @@ class ScheduleViewServiceImplTest {
     private static final String FAIL = "Sorry, there were no trains found "
             + "fulfilling your search criteria :(";
 
-    @BeforeEach
-    void initMocks(@Mock Authentication auth,
-                   @Mock SecurityContext securityContext){
-        MockitoAnnotations.initMocks(this);
-        Clock fixedClock = Clock.fixed(LOCAL_DATE.atStartOfDay(ZoneId
-                .systemDefault()).toInstant(), ZoneId.systemDefault());
-        Mockito.lenient().when(mockClock.instant())
-                .thenReturn(fixedClock.instant());
-        Mockito.lenient().when(mockClock.getZone())
-                .thenReturn(fixedClock.getZone());
-        Mockito.lenient().when(securityContext.getAuthentication())
-                .thenReturn(auth);
-        Mockito.lenient().when(auth.getName()).thenReturn("testUser");
-        SecurityContextHolder.setContext(securityContext);
+    @AfterEach
+    void resetMocks() {
+        reset(mockRouteDataService);
+        reset(mockScheduleDataService);
     }
 
     @Test
@@ -187,13 +175,8 @@ class ScheduleViewServiceImplTest {
     }
 
     @Test
-    void getStationsListAnonymousTest(@Mock SecurityContext securityContext) {
-        Authentication auth = new AnonymousAuthenticationToken("key",
-                "anonymous", AuthorityUtils
-                .createAuthorityList("ROLE_ANONYMOUS"));
-        when(securityContext.getAuthentication()).thenReturn(auth);
-        SecurityContextHolder.setContext(securityContext);
-
+    @WithAnonymousUser
+    void getStationsListAnonymousTest() {
         List<StationDto> stations = new ArrayList<>();
         when(mockRouteDataService.allStations()).thenReturn(stations);
 

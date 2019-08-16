@@ -86,8 +86,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         Map<String, Object> objects = prepSignUp();
         TicketOrderDto ticketOrder = passengerDataService
                 .prepareTicketOrder(journeyId, stationFrom, stationTo);
-        if (ticketOrder.getStatus() != null && !ticketOrder
-                .getStatus().isEmpty()) {
+        if (ticketOrder.getStatus() != null) {
             objects.put(STATUS, TICKET_PREP_FAIL + ticketOrder.getStatus());
             return objects;
         }
@@ -110,13 +109,11 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         TransferTicketOrderDto transferTickets = passengerDataService
                 .prepareTicketsOrder(firstJourneyId, secondJourneyId,
                         stationFrom, stationTo, transfer);
-        if (transferTickets.getFirstTrain().getStatus() != null
-                && !transferTickets.getFirstTrain().getStatus().isEmpty()) {
+        if (transferTickets.getFirstTrain().getStatus() != null) {
             objects.put(STATUS, TICKET_PREP_FAIL + transferTickets
                     .getFirstTrain().getStatus());
             return objects;
-        } else if (transferTickets.getSecondTrain().getStatus() != null
-                && !transferTickets.getSecondTrain().getStatus().isEmpty()) {
+        } else if (transferTickets.getSecondTrain().getStatus() != null) {
             objects.put(STATUS, TICKET_PREP_FAIL + transferTickets
                     .getSecondTrain().getStatus());
             return objects;
