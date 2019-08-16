@@ -242,6 +242,6 @@ public class AdminViewServiceImpl implements AdminViewService {
     private String getEmployeeUsername() {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
-        return auth.getName();
+        return auth.getName().replaceAll("[\\n|\\r|\\t]", "_");
     }
 }
