@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.dto.JourneyDto;
+import ru.tsystems.sbb.model.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.TransferTrainsDto;
 import ru.tsystems.sbb.model.entities.Journey;
 import ru.tsystems.sbb.model.entities.Line;
@@ -20,6 +21,7 @@ import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
@@ -31,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -468,4 +471,557 @@ class ScheduleDataServiceImplTest {
         assertSame(firstJourneyDto, result.get(0).getFirstTrain());
         assertSame(secondJourneyDto, result.get(0).getSecondTrain());
     }
+
+    @Test
+    void stationScheduleComparatorSameArrivalSameDepartureTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        ScheduledStop second = new ScheduledStop();
+        second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorSameArrivalOnlyFirstDepartureTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        ScheduledStop second = new ScheduledStop();
+        second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorSameArrivalOnlySecondDepartureTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        ScheduledStop second = new ScheduledStop();
+        second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorSameArrivalFirstEarlierDepartureTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 10));
+        ScheduledStop second = new ScheduledStop();
+        second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorSameArrivalSecondEarlierDepartureTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        ScheduledStop second = new ScheduledStop();
+        second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 10));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(secondStop, result.get(0));
+        assertSame(firstStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorFirstEarlierArrivalTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        ScheduledStop second = new ScheduledStop();
+        second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorSecondEarlierArrivalTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
+        ScheduledStop second = new ScheduledStop();
+        second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(secondStop, result.get(0));
+        assertSame(firstStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorFirstArrivalSameAsSecondDepartureTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        ScheduledStop second = new ScheduledStop();
+        second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorFirstArrivalBeforeSecondDepartureTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        ScheduledStop second = new ScheduledStop();
+        second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorFirstArrivalAfterSecondDepartureTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
+        ScheduledStop second = new ScheduledStop();
+        second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(secondStop, result.get(0));
+        assertSame(firstStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorFirstDepartureSameAsSecondArrivalTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        ScheduledStop second = new ScheduledStop();
+        second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorFirstDepartureBeforeSecondArrivalTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        ScheduledStop second = new ScheduledStop();
+        second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorFirstDepartureAfterSecondArrivalTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        ScheduledStop second = new ScheduledStop();
+        second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(secondStop, result.get(0));
+        assertSame(firstStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorSameDeparturesTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        ScheduledStop second = new ScheduledStop();
+        second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorFirstEarlierDepartureTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        ScheduledStop second = new ScheduledStop();
+        second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(firstStop, result.get(0));
+        assertSame(secondStop, result.get(1));
+    }
+
+    @Test
+    void stationScheduleComparatorSecondEarlierDepartureTest() {
+        ScheduledStop first = new ScheduledStop();
+        first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        ScheduledStop second = new ScheduledStop();
+        second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        Station station = new Station();
+        String stationName = "stationName";
+        LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
+        ScheduledStopDto firstStop = new ScheduledStopDto();
+        ScheduledStopDto secondStop = new ScheduledStopDto();
+        when(mockScheduleDao.getStationByName(anyString())).thenReturn(station);
+        when(mockScheduleDao.stationSchedule(any(Station.class),
+                any(LocalDateTime.class)))
+                .thenReturn(Arrays.asList(first, second));
+        when(mockMapper.convert(same(first))).thenReturn(firstStop);
+        when(mockMapper.convert(same(second))).thenReturn(secondStop);
+
+        List<ScheduledStopDto> result = scheduleDataService
+                .stationSchedule(stationName, from);
+
+        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1))
+                .stationSchedule(same(station), same(from));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verify(mockMapper, times(1)).convert(same(first));
+        verify(mockMapper, times(1)).convert(same(second));
+        verifyNoMoreInteractions(mockMapper);
+
+        assertEquals(2, result.size());
+        assertSame(secondStop, result.get(0));
+        assertSame(firstStop, result.get(1));
+    }
+
 }
