@@ -21,7 +21,8 @@ public class ExceptionController {
     @ExceptionHandler(NoHandlerFoundException.class)
     public ModelAndView handleNotFound(final HttpServletRequest req,
                                        final Exception ex) {
-        LOGGER.error("Request {} raised {}", req.getRequestURI(), ex);
+        String sanitizedURI = sanitize(req.getRequestURI());
+        LOGGER.error("Request {} raised {}", sanitizedURI, ex);
         return new ModelAndView("notFound", "signUpDto",
                 new SignUpDto(new PassengerDetailsDto(), new PasswordDto()));
     }
@@ -29,9 +30,14 @@ public class ExceptionController {
     @ExceptionHandler(Exception.class)
     public ModelAndView handleError(final HttpServletRequest req,
                                     final Exception ex) {
-        LOGGER.error("Request {} raised {}", req.getRequestURI(), ex);
+        String sanitizedURI = sanitize(req.getRequestURI());
+        LOGGER.error("Request {} raised {}", sanitizedURI, ex);
         return new ModelAndView("error", "signUpDto",
                 new SignUpDto(new PassengerDetailsDto(), new PasswordDto()));
+    }
+
+    private String sanitize(final String s) {
+        return s.replaceAll("[\\n|\\r|\\t]", "_");
     }
 
 }
