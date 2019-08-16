@@ -19,17 +19,23 @@ public class ExceptionController {
             .getLogger(ExceptionController.class);
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ModelAndView handleNotFound(HttpServletRequest req, Exception ex) {
-        LOGGER.error("Request {} raised {}", req.getRequestURI(), ex);
+    public ModelAndView handleNotFound(final HttpServletRequest req,
+                                       final Exception ex) {
+        LOGGER.error("Request {} raised {}", sanitize(req.getRequestURI()), ex);
         return new ModelAndView("notFound", "signUpDto",
                 new SignUpDto(new PassengerDetailsDto(), new PasswordDto()));
     }
 
     @ExceptionHandler(Exception.class)
-    public ModelAndView handleError(HttpServletRequest req, Exception ex) {
-        LOGGER.error("Request {} raised {}", req.getRequestURI(), ex);
+    public ModelAndView handleError(final HttpServletRequest req,
+                                    final Exception ex) {
+        LOGGER.error("Request {} raised {}", sanitize(req.getRequestURI()), ex);
         return new ModelAndView("error", "signUpDto",
                 new SignUpDto(new PassengerDetailsDto(), new PasswordDto()));
+    }
+
+    private String sanitize(final String s) {
+        return s.replaceAll("[\\n|\\r|\\t]", "_");
     }
 
 }

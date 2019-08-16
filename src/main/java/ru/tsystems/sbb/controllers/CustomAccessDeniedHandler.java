@@ -18,13 +18,14 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             .getLogger(CustomAccessDeniedHandler.class);
 
     @Override
-    public void handle(HttpServletRequest request,
-                       HttpServletResponse response,
-                       AccessDeniedException accessDeniedException)
+    public void handle(final HttpServletRequest request,
+                       final HttpServletResponse response,
+                       final AccessDeniedException accessDeniedException)
             throws IOException, ServletException {
         Authentication auth
                 = SecurityContextHolder.getContext().getAuthentication();
-        String sanitized = request.getRequestURI().replaceAll("[\\n|\\r|\\t]", "_");
+        String sanitized = request.getRequestURI()
+                .replaceAll("[\\n|\\r|\\t]", "_");
         LOGGER.warn("User {} attempted to access protected URL: {}",
                 auth.getName(), sanitized);
         response.sendRedirect(request.getContextPath() + "/accessDenied");
