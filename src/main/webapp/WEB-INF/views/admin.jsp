@@ -13,7 +13,7 @@
 <h4 class="text-secondary m-4">Westerosi Railways admin panel</h4>
 <div class="row">
     <div class="col-sm-6 offset-3">
-        <div id="addStationMenu" class="bg-dark text-light m-3 rounded">Add new station</div>
+        <div id="addStationMenu" class="bg-dark text-light m-3 rounded p-2">Add new station</div>
     </div>
 </div>
 <div class="row">
@@ -30,7 +30,7 @@
 </div>
 <div class="row">
     <div class="col-sm-6 offset-3">
-        <div id="modifyRouteMenu" class="bg-dark text-light m-3 rounded">Add/modify routes</div>
+        <div id="modifyRouteMenu" class="bg-dark text-light m-3 rounded p-2">Add/modify routes</div>
     </div>
 </div>
 <div class="row">
@@ -74,7 +74,7 @@
 </div>
 <div class="row">
     <div class="col-sm-6 offset-3">
-        <div id="scheduleRoutesMenu" class="bg-dark text-light m-3 rounded">Schedule a route</div>
+        <div id="scheduleRoutesMenu" class="bg-dark text-light m-3 rounded p-2">Schedule a route</div>
     </div>
 </div>
 <div class="row">
@@ -100,7 +100,7 @@
 </div>
 <div class="row">
     <div class="col-sm-6 offset-3">
-        <div class="bg-dark text-light m-3 rounded">
+        <div class="bg-dark text-light m-3 rounded p-2">
             <a href="${pageContext.request.contextPath}/admin/journeys/${today}"
                class="text-light stretched-link">List all scheduled journeys</a>
         </div>
@@ -108,7 +108,7 @@
 </div>
 <div class="row">
     <div class="col-sm-6 offset-3">
-        <div id="trainModelsMenu" class="bg-dark text-light m-3 rounded">Train models</div>
+        <div id="trainModelsMenu" class="bg-dark text-light m-3 rounded p-2">Train models</div>
     </div>
 </div>
 <div class="row">
@@ -129,7 +129,7 @@
 </div>
 <div class="row">
     <div class="col-sm-6 offset-3">
-        <div id="tariffMenu" class="bg-dark text-light m-3 rounded">Update tariff</div>
+        <div id="tariffMenu" class="bg-dark text-light m-3 rounded p-2">Update tariff</div>
     </div>
 </div>
 <div class="modal fade" id="updateTariffModal" tabindex="-1" role="dialog" aria-labelledby="updateTariffTitle"

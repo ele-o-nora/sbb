@@ -28,7 +28,6 @@ hs_err_pid*
 
 /src/main/resources/db.properties
 /target/
-/src/main/resources/log4j2.properties
 /src/main/webapp/resources/doom.jpg
 /src/main/webapp/resources/wall.jpg
 /src/test/resources/log4j2-test.properties
