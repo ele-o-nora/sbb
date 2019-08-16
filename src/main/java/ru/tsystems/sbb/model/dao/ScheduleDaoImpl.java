@@ -17,6 +17,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
     @Autowired
     private SessionFactory sessionFactory;
     private static final int SEARCH_PERIOD = 4;
+    private static final String ORIGIN = "origin";
 
     @Override
     public List<ScheduledStop> stationSchedule(final Station station,
@@ -40,11 +41,11 @@ public class ScheduleDaoImpl implements ScheduleDao {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select j from Journey j "
                 + "join j.stops st1 join j.stops st2 "
-                + "where st1.station = :origin and st2.station = :dest "
-                + "and st1.departure >= :from and st1.departure < :to "
+                + "where st1.station = :origin and st2.station = :dest"
+                + " and st1.departure >= :from and st1.departure < :to "
                 + "and st1.departure < st2.arrival "
                 + "order by st1.departure asc", Journey.class)
-                .setParameter("origin", origin)
+                .setParameter(ORIGIN, origin)
                 .setParameter("dest", destination)
                 .setParameter("from", from)
                 .setParameter("to", from.plusHours(SEARCH_PERIOD))
@@ -58,11 +59,11 @@ public class ScheduleDaoImpl implements ScheduleDao {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select j from Journey j "
                 + "join j.stops st1 join j.stops st2 "
-                + "where st1.station = :origin and st2.station = :dest "
-                + "and st2.arrival <= :by and st2.arrival > :from "
-                + "and st1.departure < st2.arrival "
-                + "order by st1.departure asc", Journey.class)
-                .setParameter("origin", origin)
+                + "where st1.station = :origin and st2.station = :dest"
+                + " and st2.arrival <= :by and st2.arrival > :from "
+                + "and st1.departure < st2.arrival"
+                + " order by st1.departure asc", Journey.class)
+                .setParameter(ORIGIN, origin)
                 .setParameter("dest", destination)
                 .setParameter("by", by)
                 .setParameter("from", by.minusHours(SEARCH_PERIOD))
@@ -87,7 +88,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 + "join r1.stations rs3 join r2.stations rs4 "
                 + "where rs3.station = :origin "
                 + "and rs4.station = :dest", Station.class)
-                .setParameter("origin", origin)
+                .setParameter(ORIGIN, origin)
                 .setParameter("dest", destination).getResultList();
     }
 
@@ -96,14 +97,14 @@ public class ScheduleDaoImpl implements ScheduleDao {
                                    final Station destination,
                                    final LocalDateTime by) {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select j from Journey j "
-                + "join j.stops st1 join j.stops st2 "
+        return session.createQuery("select j from Journey j"
+                + " join j.stops st1 join j.stops st2 "
                 + "where st1.station = :origin and st2.station = :dest "
                 + "and st2.arrival <= :by "
-                + "and st1.departure < st2.arrival "
-                + "order by st2.arrival desc", Journey.class)
+                + "and st1.departure < st2.arrival"
+                + " order by st2.arrival desc", Journey.class)
                 .setMaxResults(1)
-                .setParameter("origin", origin)
+                .setParameter(ORIGIN, origin)
                 .setParameter("dest", destination)
                 .setParameter("by", by)
                 .uniqueResult();
@@ -114,14 +115,14 @@ public class ScheduleDaoImpl implements ScheduleDao {
                                    final Station destination,
                                    final LocalDateTime from) {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select j from Journey j "
-                + "join j.stops st1 join j.stops st2 "
+        return session.createQuery("select j from Journey j"
+                + " join j.stops st1 join j.stops st2 "
                 + "where st1.station = :origin and st2.station = :dest "
                 + "and st1.departure >= :from "
                 + "and st1.departure < st2.arrival "
                 + "order by st1.departure asc", Journey.class)
                 .setMaxResults(1)
-                .setParameter("origin", origin)
+                .setParameter(ORIGIN, origin)
                 .setParameter("dest", destination)
                 .setParameter("from", from)
                 .uniqueResult();

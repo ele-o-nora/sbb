@@ -21,6 +21,9 @@ public class PassengerDaoImpl implements PassengerDao {
     @Autowired
     private SessionFactory sessionFactory;
 
+    private static final String PASSENGER = "passenger";
+    private static final String JOURNEY = "journey";
+
     @Override
     public User getUserByEmail(final String email) {
         Session session = sessionFactory.getCurrentSession();
@@ -72,7 +75,7 @@ public class PassengerDaoImpl implements PassengerDao {
                 + "where t.journey = :journey "
                 + "and st1.departure < :arrival "
                 + "and st2.arrival > :departure", Long.class)
-                .setParameter("journey", journey)
+                .setParameter(JOURNEY, journey)
                 .setParameter("departure", from.getDeparture())
                 .setParameter("arrival", to.getArrival())
                 .uniqueResult().intValue();
@@ -111,8 +114,8 @@ public class PassengerDaoImpl implements PassengerDao {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("from Ticket t where t.journey = :journey "
                 + "and t.passenger = :passenger", Ticket.class)
-                .setParameter("journey", journey)
-                .setParameter("passenger", passenger).getResultList();
+                .setParameter(JOURNEY, journey)
+                .setParameter(PASSENGER, passenger).getResultList();
     }
 
     @Override
@@ -139,7 +142,7 @@ public class PassengerDaoImpl implements PassengerDao {
                 + "join t.from st1 join t.to st2 "
                 + "where t.journey = :journey "
                 + "order by st1.departure asc, st2.arrival asc", Ticket.class)
-                .setParameter("journey", journey)
+                .setParameter(JOURNEY, journey)
                 .setFirstResult(searchStep * (page - 1))
                 .setMaxResults(searchStep).getResultList();
     }
@@ -175,7 +178,7 @@ public class PassengerDaoImpl implements PassengerDao {
                 + "join t.from st "
                 + "where t.passenger = :passenger "
                 + "order by st.departure desc", Ticket.class)
-                .setParameter("passenger", passenger)
+                .setParameter(PASSENGER, passenger)
                 .setFirstResult(searchStep * (page - 1))
                 .setMaxResults(searchStep).getResultList();
     }
@@ -185,7 +188,7 @@ public class PassengerDaoImpl implements PassengerDao {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(t) from Ticket t "
                 + "where t.passenger = :passenger", Long.class)
-                .setParameter("passenger", passenger)
+                .setParameter(PASSENGER, passenger)
                 .getSingleResult().intValue();
     }
 
