@@ -95,7 +95,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
             distance = adminDao.outboundDistance(from, to, line);
         }
         float tariff = passengerDao.getCurrentTariff();
-        int tenLeaguesSections = distance / BASE_TARIFF_DISTANCE + 1;
+        int tenLeaguesSections = (int) Math.ceil(distance / (double) BASE_TARIFF_DISTANCE);
         return tenLeaguesSections * tariff;
     }
 
@@ -111,8 +111,6 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 .getOrigin().getId());
         ScheduledStop to = passengerDao.getStopById(ticketOrder
                 .getDestination().getId());
-        float price = getTicketPrice(journey.getId(),
-                from.getStation().getName(), to.getStation().getName());
         Passenger passenger = getOrCreatePassenger(firstName, lastName,
                 dateOfBirth);
         if (ChronoUnit.MINUTES.between(LocalDateTime.now(clock),
@@ -123,7 +121,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         } else if (passengerDao.currentTickets(journey, from, to)
                 < journey.getTrainType().getSeats()) {
             Ticket ticket = Ticket.builder().from(from).to(to).journey(journey)
-                    .price(price).passenger(passenger).build();
+                    .price(ticketOrder.getPrice()).passenger(passenger).build();
             passengerDao.add(ticket);
             return SUCCESS;
         } else {
