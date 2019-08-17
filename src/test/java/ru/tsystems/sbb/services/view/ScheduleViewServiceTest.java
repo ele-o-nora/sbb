@@ -97,13 +97,12 @@ class ScheduleViewServiceTest {
     @Test
     void getStationScheduleNullDateTest() {
         String stationName = "stationName";
-        String momentFrom = null;
         List<ScheduledStopDto> trains = new ArrayList<>();
         when(mockScheduleDataService.stationSchedule(anyString(),
                 any(LocalDateTime.class))).thenReturn(trains);
 
         Map<String, Object> result = scheduleViewService
-                .getStationSchedule(stationName, momentFrom);
+                .getStationSchedule(stationName, null);
 
         verify(mockScheduleDataService, times(1))
                 .stationSchedule(same(stationName), eq(LOCAL_DATE.atStartOfDay()));
