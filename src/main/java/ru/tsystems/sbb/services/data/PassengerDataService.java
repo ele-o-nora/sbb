@@ -121,7 +121,7 @@ public interface PassengerDataService {
      *  Returns list of corresponding DTOs.
      * @param email email indicating for whom tickets will be returned
      * @param page page on which tickets in question must fall
-     * @return list of TicketDto that fit aforementioned conditions
+     * @return list of TicketDto that fit the criteria
      */
     List<TicketDto> getUserTickets(String email, int page);
 
@@ -129,7 +129,7 @@ public interface PassengerDataService {
      * Gets from DAO total quantity of tickets for user with specific email
      *  and calculates and returns total number of pages the tickets can fill.
      * @param email email indicating for whom tickets will be counted
-     * @return integer value of the number of pages tickets fill
+     * @return integer value of the number of pages that tickets fill
      */
     int maxUserTicketPages(String email);
 

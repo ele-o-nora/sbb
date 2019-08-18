@@ -100,7 +100,7 @@ public interface AdminDataService {
      *  limited number of entries on each page, and returns corresponding DTOs.
      * @param start moment in time from which search period begins
      * @param page page on which journeys must fall
-     * @return list of JourneyDto that fit aforementioned conditions
+     * @return list of JourneyDto that fit the criteria
      */
     List<JourneyDto> getJourneys(LocalDateTime start, int page);
 
@@ -110,7 +110,7 @@ public interface AdminDataService {
      *  on each page, and returns the list of corresponding DTOs.
      * @param journeyId id indicating which journey the tickets are for
      * @param page page on which the tickets must fall
-     * @return list of TicketDto that fit aforementioned conditions
+     * @return list of TicketDto that fit the criteria
      */
     List<TicketDto> getTickets(int journeyId, int page);
 
@@ -119,7 +119,7 @@ public interface AdminDataService {
      *  starting with specific moment in time and calculates total number
      *  of pages these journeys can fill.
      * @param start moment in time from which the search period begins
-     * @return integer value of the number of the pages journeys fill
+     * @return integer value of the number of the pages that journeys fill
      */
     int maxJourneyPages(LocalDateTime start);
 
@@ -127,7 +127,7 @@ public interface AdminDataService {
      * Gets from DAO total quantity of the tickets bought for specific journey
      *  and calculates total number of the pages these tickets can fill.
      * @param journeyId id indicating which journey the tickets are for
-     * @return integer value of the number of the pages tickets fill
+     * @return integer value of the number of the pages that tickets fill
      */
     int maxPassengerPages(int journeyId);
 

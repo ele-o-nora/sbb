@@ -102,7 +102,7 @@ public interface PassengerDao {
      *  and specific passenger.
      * @param journey journey for which tickets will be returned
      * @param passenger passenger for whom tickets will be returned
-     * @return list of Ticket that fit aforementioned conditions
+     * @return list of Ticket that fit the criteria
      */
     List<Ticket> getTickets(Journey journey, Passenger passenger);
 
@@ -113,7 +113,7 @@ public interface PassengerDao {
      * @param start moment in time indicating the beginning of the search period
      * @param page page on which the journeys that will be returned must fall
      * @param searchStep number of entries on one page
-     * @return list of Journey that fit aforementioned conditions
+     * @return list of Journey that fit the criteria
      */
     List<Journey> getJourneys(LocalDateTime start, int page, int searchStep);
 
@@ -124,7 +124,7 @@ public interface PassengerDao {
      * @param journey journey for which the tickets will be returned
      * @param page page on which the tickets in question must fall
      * @param searchStep number of entries on one page
-     * @return list of Ticket that fit aforementioned conditions
+     * @return list of Ticket that fit the criteria
      */
     List<Ticket> getTickets(Journey journey, int page, int searchStep);
 
@@ -155,7 +155,7 @@ public interface PassengerDao {
      * @param passenger passenger for whom tickets will be returned
      * @param page page on which the tickets in question must fall
      * @param searchStep number of entries on one page
-     * @return list of Ticket that fit aforementioned conditions
+     * @return list of Ticket that fit the criteria
      */
     List<Ticket> getPassengerTickets(Passenger passenger, int page,
                                      int searchStep);

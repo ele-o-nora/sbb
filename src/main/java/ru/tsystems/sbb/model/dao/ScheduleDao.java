@@ -16,7 +16,7 @@ public interface ScheduleDao {
      *  about trains passing specific station during specific time period.
      * @param station station for which the schedule will be returned
      * @param from moment in time that sets the beginning of the search period
-     * @return list of ScheduledStop that fit aforementioned conditions
+     * @return list of ScheduledStop that fit the criteria
      * @see ScheduledStop
      */
     List<ScheduledStop> stationSchedule(Station station, LocalDateTime from);
@@ -27,7 +27,7 @@ public interface ScheduleDao {
      * @param origin station which train departs from during specified time
      * @param destination station where train must stop after origin
      * @param from moment in time that sets the beginning of the search period
-     * @return list of Journey that fit aforementioned conditions
+     * @return list of Journey that fit the criteria
      */
     List<Journey> trainsFromToByDeparture(Station origin, Station destination,
                                LocalDateTime from);
@@ -39,7 +39,7 @@ public interface ScheduleDao {
      * @param origin station where train must stop before destination
      * @param destination station where train arrives during specified time
      * @param by moment in time that sets the end of the search period
-     * @return list of Journey that fit aforementioned conditions
+     * @return list of Journey that fit the criteria
      */
     List<Journey> trainsFromToByArrival(Station origin, Station destination,
                                           LocalDateTime by);
@@ -56,7 +56,7 @@ public interface ScheduleDao {
      *  origin and destination via existing routes.
      * @param origin first of the stations to be connected via transfer station
      * @param destination second station to be connected
-     * @return list of Station that fit aforementioned conditions
+     * @return list of Station that fit the criteria
      */
     List<Station> getTransferStations(Station origin, Station destination);
 
@@ -66,7 +66,7 @@ public interface ScheduleDao {
      * @param origin station where train must stop before destination
      * @param destination station where train arrives by specified time
      * @param by moment in time by which train must have arrived at destination
-     * @return latest Journey that fits aforementioned conditions
+     * @return latest Journey that fits the criteria
      */
     Journey lastTrainBefore(Station origin, Station destination,
                             LocalDateTime by);
@@ -77,7 +77,7 @@ public interface ScheduleDao {
      * @param origin station which train departs from after specified time
      * @param destination stations where train stops after having left origin
      * @param from moment in time after which train departs from origin
-     * @return first Journey that fits aforementioned conditions
+     * @return first Journey that fits the criteria
      */
     Journey firstTrainAfter(Station origin, Station destination,
                             LocalDateTime from);

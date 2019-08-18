@@ -19,7 +19,7 @@ public interface ScheduleDataService {
      *  Return them in the form of corresponding DTO.
      * @param stationName name of the station for which search is conducted
      * @param from moment in time that sets the beginning of the search period
-     * @return list of ScheduledStopDto fitting the aforementioned conditions
+     * @return list of ScheduledStopDto fitting the criteria
      */
     List<ScheduledStopDto> stationSchedule(String stationName,
                                            LocalDateTime from);
@@ -35,7 +35,7 @@ public interface ScheduleDataService {
      * @param stationTo station where train stops later in time
      * @param fromOrBy moment setting either start or end of the search period
      * @param searchType indicates whether search is by departure or arrival
-     * @return list of JourneyDto fitting the aforementioned conditions
+     * @return list of JourneyDto fitting the criteria
      */
     List<JourneyDto> directTrainsFromTo(String stationFrom, String stationTo,
                                   LocalDateTime fromOrBy, String searchType);

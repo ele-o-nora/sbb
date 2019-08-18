@@ -87,7 +87,7 @@ public interface AdminDao {
 
     /**
      * Adds new distance between stations to the database.
-     * @param stationsDistance istance between stations to be added
+     * @param stationsDistance distance between stations to be added
      */
     void add(StationsDistance stationsDistance);
 
