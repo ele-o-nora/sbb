@@ -93,7 +93,7 @@ class AdminDataServiceTest {
         when(mockRouteDao.getLineById(anyInt())).thenReturn(line);
         when(mockRouteDao.getLineStations(any(Line.class), anyInt()))
                 .thenReturn(lineStations);
-        when(mockAdminDao.getStation(any(Line.class), anyInt()))
+        when(mockRouteDao.getStation(any(Line.class), anyInt()))
                 .thenReturn(new Station());
 
         adminDataService.addNewStation(stationName, lineId, order,
@@ -103,7 +103,7 @@ class AdminDataServiceTest {
         verify(mockRouteDao, times(1)).getLineStations(same(line), eq(1));
         verify(mockAdminDao, times(2)).update(lineStation);
         verify(mockAdminDao, times(1)).add(any(Station.class));
-        verify(mockAdminDao, times(1)).getStation(same(line), eq(2));
+        verify(mockRouteDao, times(1)).getStation(same(line), eq(2));
         verify(mockAdminDao, times(2)).add(any(StationsDistance.class));
         verify(mockAdminDao, times(1)).add(any(LineStation.class));
         verifyNoMoreInteractions(mockAdminDao);
@@ -124,7 +124,7 @@ class AdminDataServiceTest {
         when(mockRouteDao.getLineById(anyInt())).thenReturn(line);
         when(mockRouteDao.getLineStations(any(Line.class), anyInt()))
                 .thenReturn(new ArrayList<>());
-        when(mockAdminDao.getStation(any(Line.class), anyInt()))
+        when(mockRouteDao.getStation(any(Line.class), anyInt()))
                 .thenReturn(new Station());
 
         adminDataService.addNewStation(stationName, lineId, order,
@@ -133,7 +133,7 @@ class AdminDataServiceTest {
         verify(mockRouteDao, times(2)).getLineById(eq(0));
         verify(mockRouteDao, times(1)).getLineStations(same(line), eq(10));
         verify(mockAdminDao, times(1)).add(any(Station.class));
-        verify(mockAdminDao, times(1)).getStation(same(line), eq(9));
+        verify(mockRouteDao, times(1)).getStation(same(line), eq(9));
         verify(mockAdminDao, times(2)).add(any(StationsDistance.class));
         verify(mockAdminDao, times(1)).add(any(LineStation.class));
         verifyNoMoreInteractions(mockAdminDao);
@@ -159,11 +159,11 @@ class AdminDataServiceTest {
         when(mockRouteDao.getLineById(anyInt())).thenReturn(line);
         when(mockRouteDao.getLineStations(any(Line.class), anyInt()))
                 .thenReturn(lineStations);
-        when(mockAdminDao.getStation(any(Line.class), eq(4)))
+        when(mockRouteDao.getStation(any(Line.class), eq(4)))
                 .thenReturn(firstStation);
-        when(mockAdminDao.getStation(any(Line.class), eq(5)))
+        when(mockRouteDao.getStation(any(Line.class), eq(5)))
                 .thenReturn(secondStation);
-        when(mockAdminDao.getStation(any(Line.class), eq(6)))
+        when(mockRouteDao.getStation(any(Line.class), eq(6)))
                 .thenReturn(new Station());
 
         adminDataService.addNewStation(stationName, lineId, order,
@@ -175,9 +175,9 @@ class AdminDataServiceTest {
         verify(mockRouteDao, times(1)).getLineStations(same(line), eq(5));
         verify(mockAdminDao, times(2)).update(lineStation);
         verify(mockAdminDao, times(1)).add(any(Station.class));
-        verify(mockAdminDao, times(2)).getStation(same(line), eq(4));
-        verify(mockAdminDao, times(1)).getStation(same(line), eq(5));
-        verify(mockAdminDao, times(1)).getStation(same(line), eq(6));
+        verify(mockRouteDao, times(2)).getStation(same(line), eq(4));
+        verify(mockRouteDao, times(1)).getStation(same(line), eq(5));
+        verify(mockRouteDao, times(1)).getStation(same(line), eq(6));
         verify(mockAdminDao, times(4)).add(any(StationsDistance.class));
         verify(mockAdminDao, times(1)).add(any(LineStation.class));
         verifyNoMoreInteractions(mockAdminDao);
@@ -235,7 +235,7 @@ class AdminDataServiceTest {
         route.setStations(routeStations);
         when(mockRouteDao.getRouteById(anyInt())).thenReturn(route);
         when(mockAdminDao.getTrainById(anyInt())).thenReturn(train);
-        when(mockAdminDao.inboundDistance(any(Station.class),
+        when(mockRouteDao.inboundDistance(any(Station.class),
                 any(Station.class), any(Line.class))).thenReturn(50);
 
         adminDataService.scheduleJourneys(routeId, departure, dayFrom,
@@ -244,7 +244,7 @@ class AdminDataServiceTest {
         verify(mockRouteDao, times(1)).getRouteById(eq(0));
         verify(mockAdminDao, times(1)).getTrainById(eq(0));
         verify(mockAdminDao, times(3)).add(any(Journey.class));
-        verify(mockAdminDao, times(9)).inboundDistance(same(station),
+        verify(mockRouteDao, times(9)).inboundDistance(same(station),
                 same(station), same(line));
         verify(mockAdminDao, times(12)).add(any(ScheduledStop.class));
         verifyNoMoreInteractions(mockRouteDao);
@@ -275,7 +275,7 @@ class AdminDataServiceTest {
         route.setStations(routeStations);
         when(mockRouteDao.getRouteById(anyInt())).thenReturn(route);
         when(mockAdminDao.getTrainById(anyInt())).thenReturn(train);
-        when(mockAdminDao.outboundDistance(any(Station.class),
+        when(mockRouteDao.outboundDistance(any(Station.class),
                 any(Station.class), any(Line.class))).thenReturn(50);
 
         adminDataService.scheduleJourneys(routeId, departure, dayFrom,
@@ -284,7 +284,7 @@ class AdminDataServiceTest {
         verify(mockRouteDao, times(1)).getRouteById(eq(0));
         verify(mockAdminDao, times(1)).getTrainById(eq(0));
         verify(mockAdminDao, times(3)).add(any(Journey.class));
-        verify(mockAdminDao, times(9)).outboundDistance(same(station),
+        verify(mockRouteDao, times(9)).outboundDistance(same(station),
                 same(station), same(line));
         verify(mockAdminDao, times(12)).add(any(ScheduledStop.class));
         verifyNoMoreInteractions(mockRouteDao);

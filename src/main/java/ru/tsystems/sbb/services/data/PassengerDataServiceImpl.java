@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tsystems.sbb.model.dao.AdminDao;
 import ru.tsystems.sbb.model.dao.PassengerDao;
+import ru.tsystems.sbb.model.dao.RouteDao;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.TicketDto;
@@ -44,7 +44,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     private ScheduleDao scheduleDao;
 
     @Autowired
-    private AdminDao adminDao;
+    private RouteDao routeDao;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -86,13 +86,13 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         Station from = scheduleDao.getStationByName(stationFrom);
         Station to = scheduleDao.getStationByName(stationTo);
         Line line = journey.getRoute().getLine();
-        int fromOrder = adminDao.getStationOrder(line, from);
-        int toOrder = adminDao.getStationOrder(line, to);
+        int fromOrder = routeDao.getStationOrder(line, from);
+        int toOrder = routeDao.getStationOrder(line, to);
         int distance;
         if (fromOrder > toOrder) {
-            distance = adminDao.inboundDistance(from, to, line);
+            distance = routeDao.inboundDistance(from, to, line);
         } else {
-            distance = adminDao.outboundDistance(from, to, line);
+            distance = routeDao.outboundDistance(from, to, line);
         }
         float tariff = passengerDao.getCurrentTariff();
         int tenLeaguesSections = (int) Math.ceil(distance / (double) BASE_TARIFF_DISTANCE);

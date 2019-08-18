@@ -8,8 +8,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.tsystems.sbb.model.dao.AdminDao;
 import ru.tsystems.sbb.model.dao.PassengerDao;
+import ru.tsystems.sbb.model.dao.RouteDao;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.ScheduledStopDto;
@@ -66,7 +66,7 @@ class PassengerDataServiceTest {
     private PassengerDao mockPassengerDao;
 
     @Mock
-    private AdminDao mockAdminDao;
+    private RouteDao mockRouteDao;
 
     @Mock
     private Clock mockClock;
@@ -109,12 +109,12 @@ class PassengerDataServiceTest {
                 .thenReturn(firstStation);
         when(mockScheduleDao.getStationByName(eq(stationTo)))
                 .thenReturn(secondStation);
-        when(mockAdminDao.getStationOrder(same(line), same(firstStation)))
+        when(mockRouteDao.getStationOrder(same(line), same(firstStation)))
                 .thenReturn(5);
-        when(mockAdminDao.getStationOrder(same(line), same(secondStation)))
+        when(mockRouteDao.getStationOrder(same(line), same(secondStation)))
                 .thenReturn(3);
         when(mockPassengerDao.getCurrentTariff()).thenReturn(0.5f);
-        when(mockAdminDao.inboundDistance(any(Station.class),
+        when(mockRouteDao.inboundDistance(any(Station.class),
                 any(Station.class), any(Line.class))).thenReturn(90);
         when(mockMapper.convert(any(Journey.class)))
                 .thenReturn(new JourneyDto());
@@ -126,16 +126,16 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(2)).getJourneyById(eq(journeyId));
         verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
         verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
-        verify(mockAdminDao, times(1))
+        verify(mockRouteDao, times(1))
                 .getStationOrder(same(line), same(firstStation));
-        verify(mockAdminDao, times(1))
+        verify(mockRouteDao, times(1))
                 .getStationOrder(same(line), same(secondStation));
-        verify(mockAdminDao, times(1)).inboundDistance(same(firstStation),
+        verify(mockRouteDao, times(1)).inboundDistance(same(firstStation),
                 same(secondStation), same(line));
         verify(mockPassengerDao, times(1)).getCurrentTariff();
         verify(mockMapper, times(1)).convert(same(journey));
         verify(mockMapper, times(1)).formatPrice(eq(1.5f));
-        verifyNoMoreInteractions(mockAdminDao);
+        verifyNoMoreInteractions(mockRouteDao);
         verifyNoMoreInteractions(mockPassengerDao);
         verifyNoMoreInteractions(mockScheduleDao);
         verifyNoMoreInteractions(mockMapper);
@@ -171,12 +171,12 @@ class PassengerDataServiceTest {
                 .thenReturn(firstStation);
         when(mockScheduleDao.getStationByName(eq(stationTo)))
                 .thenReturn(secondStation);
-        when(mockAdminDao.getStationOrder(same(line), same(firstStation)))
+        when(mockRouteDao.getStationOrder(same(line), same(firstStation)))
                 .thenReturn(5);
-        when(mockAdminDao.getStationOrder(same(line), same(secondStation)))
+        when(mockRouteDao.getStationOrder(same(line), same(secondStation)))
                 .thenReturn(3);
         when(mockPassengerDao.getCurrentTariff()).thenReturn(0.5f);
-        when(mockAdminDao.inboundDistance(any(Station.class),
+        when(mockRouteDao.inboundDistance(any(Station.class),
                 any(Station.class), any(Line.class))).thenReturn(90);
         when(mockMapper.convert(any(Journey.class)))
                 .thenReturn(new JourneyDto());
@@ -193,11 +193,11 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(2)).getJourneyById(eq(journeyId));
         verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
         verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
-        verify(mockAdminDao, times(1))
+        verify(mockRouteDao, times(1))
                 .getStationOrder(same(line), same(firstStation));
-        verify(mockAdminDao, times(1))
+        verify(mockRouteDao, times(1))
                 .getStationOrder(same(line), same(secondStation));
-        verify(mockAdminDao, times(1)).inboundDistance(same(firstStation),
+        verify(mockRouteDao, times(1)).inboundDistance(same(firstStation),
                 same(secondStation), same(line));
         verify(mockPassengerDao, times(1)).getCurrentTariff();
         verify(mockMapper, times(1)).convert(same(journey));
@@ -205,7 +205,7 @@ class PassengerDataServiceTest {
         verify(mockMapper, times(1)).convert(same(firstStop));
         verify(mockPassengerDao, times(1)).currentTickets(same(journey),
                 same(firstStop), same(secondStop));
-        verifyNoMoreInteractions(mockAdminDao);
+        verifyNoMoreInteractions(mockRouteDao);
         verifyNoMoreInteractions(mockPassengerDao);
         verifyNoMoreInteractions(mockScheduleDao);
         verifyNoMoreInteractions(mockMapper);
@@ -244,12 +244,12 @@ class PassengerDataServiceTest {
                 .thenReturn(firstStation);
         when(mockScheduleDao.getStationByName(eq(stationTo)))
                 .thenReturn(secondStation);
-        when(mockAdminDao.getStationOrder(same(line), same(firstStation)))
+        when(mockRouteDao.getStationOrder(same(line), same(firstStation)))
                 .thenReturn(3);
-        when(mockAdminDao.getStationOrder(same(line), same(secondStation)))
+        when(mockRouteDao.getStationOrder(same(line), same(secondStation)))
                 .thenReturn(5);
         when(mockPassengerDao.getCurrentTariff()).thenReturn(0.5f);
-        when(mockAdminDao.outboundDistance(any(Station.class),
+        when(mockRouteDao.outboundDistance(any(Station.class),
                 any(Station.class), any(Line.class))).thenReturn(90);
         when(mockMapper.convert(any(Journey.class))).thenReturn(journeyDto);
         when(mockMapper.formatPrice(anyFloat())).thenReturn("formattedPrice");
@@ -265,11 +265,11 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(2)).getJourneyById(eq(journeyId));
         verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
         verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
-        verify(mockAdminDao, times(1))
+        verify(mockRouteDao, times(1))
                 .getStationOrder(same(line), same(firstStation));
-        verify(mockAdminDao, times(1))
+        verify(mockRouteDao, times(1))
                 .getStationOrder(same(line), same(secondStation));
-        verify(mockAdminDao, times(1)).outboundDistance(same(firstStation),
+        verify(mockRouteDao, times(1)).outboundDistance(same(firstStation),
                 same(secondStation), same(line));
         verify(mockPassengerDao, times(1)).getCurrentTariff();
         verify(mockMapper, times(1)).convert(same(journey));
@@ -278,7 +278,7 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1)).currentTickets(same(journey),
                 same(firstStop), same(secondStop));
         verify(mockMapper, times(1)).convert(same(secondStop));
-        verifyNoMoreInteractions(mockAdminDao);
+        verifyNoMoreInteractions(mockRouteDao);
         verifyNoMoreInteractions(mockPassengerDao);
         verifyNoMoreInteractions(mockScheduleDao);
         verifyNoMoreInteractions(mockMapper);
@@ -304,7 +304,7 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1)).getTicketById(eq(ticketId));
         verify(mockPassengerDao, times(1)).delete(same(ticket));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -323,7 +323,7 @@ class PassengerDataServiceTest {
 
         verify(mockPassengerDao, times(1)).getTicketById(eq(ticketId));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -353,7 +353,7 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
                 same(lastName), same(dateOfBirth));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -393,7 +393,7 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1))
                 .getTickets(same(journey), same(passenger));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -442,7 +442,7 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1)).currentTickets(same(journey),
                 same(firstStop), same(secondStop));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -492,7 +492,7 @@ class PassengerDataServiceTest {
                 same(firstStop), same(secondStop));
         verify(mockPassengerDao, times(1)).add(any(Ticket.class));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -527,7 +527,7 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
                 same(lastName), same(dateOfBirth));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -574,7 +574,7 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1))
                 .getTickets(same(firstJourney), same(passenger));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -628,7 +628,7 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1))
                 .getTickets(same(secondJourney), same(passenger));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -690,7 +690,7 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1)).currentTickets(same(firstJourney),
                 same(firstStop), same(secondStop));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -766,7 +766,7 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1)).currentTickets(same(secondJourney),
                 same(thirdStop), same(fourthStop));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -840,7 +840,7 @@ class PassengerDataServiceTest {
                 same(thirdStop), same(fourthStop));
         verify(mockPassengerDao, times(2)).add(any(Ticket.class));
         verifyNoMoreInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 

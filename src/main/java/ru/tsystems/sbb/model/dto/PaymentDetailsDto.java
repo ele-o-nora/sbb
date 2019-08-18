@@ -18,7 +18,8 @@ public class PaymentDetailsDto {
 
     @NotNull(message = "Card number is a required field")
     @NotEmpty(message = "Card number cannot be empty")
-    @Pattern(regexp = "\\d{16,18}")
+    @Pattern(regexp = "\\d{16,18}",
+            message = "Card number must consist of 16 or 18 digits")
     private String cardNumber;
 
     @NotNull(message = "Cardholder name is a required field")
@@ -32,6 +33,7 @@ public class PaymentDetailsDto {
 
     @NotNull(message = "Card verification code is a required field")
     @NotEmpty(message = "Card verification code cannot be empty")
-    @Pattern(regexp = "\\d{3}")
+    @Pattern(regexp = "\\d{3}",
+            message = "Card verification code must consist of 3 digits")
     private String cvc;
 }

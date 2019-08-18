@@ -66,11 +66,11 @@ public class AdminDataServiceImpl implements AdminDataService {
         adminDao.add(station);
         Line line = routeDao.getLineById(lineId);
         if (distAfter > 0) {
-            Station nextStation = adminDao.getStation(line, order + 1);
+            Station nextStation = routeDao.getStation(line, order + 1);
             connectStations(station, nextStation, distAfter);
         }
         if (distBefore > 0) {
-            Station prevStation = adminDao.getStation(line, order - 1);
+            Station prevStation = routeDao.getStation(line, order - 1);
             connectStations(station, prevStation, distBefore);
         }
         LineStation lineStation = new LineStation();
@@ -151,8 +151,8 @@ public class AdminDataServiceImpl implements AdminDataService {
 
     private void cleanOldDistance(final int lineId, final int newStationOrder) {
         Line line = routeDao.getLineById(lineId);
-        Station stationBefore = adminDao.getStation(line, newStationOrder - 1);
-        Station stationAfter = adminDao.getStation(line, newStationOrder);
+        Station stationBefore = routeDao.getStation(line, newStationOrder - 1);
+        Station stationAfter = routeDao.getStation(line, newStationOrder);
         adminDao.deleteDistance(stationBefore, stationAfter);
     }
 
@@ -216,7 +216,7 @@ public class AdminDataServiceImpl implements AdminDataService {
         departureStop.setDeparture(curMoment);
         adminDao.add(departureStop);
         for (int i = stations.size() - 2; i >= 0; i--) {
-            int distanceFromPrevStop = adminDao
+            int distanceFromPrevStop = routeDao
                     .inboundDistance(stations.get(i + 1).getStation(),
                             stations.get(i).getStation(),
                             journey.getRoute().getLine());
@@ -247,7 +247,7 @@ public class AdminDataServiceImpl implements AdminDataService {
         departureStop.setDeparture(curMoment);
         adminDao.add(departureStop);
         for (int i = 1; i < stations.size(); i++) {
-            int distanceFromPrevStop = adminDao
+            int distanceFromPrevStop = routeDao
                     .outboundDistance(stations.get(i - 1).getStation(),
                             stations.get(i).getStation(),
                             journey.getRoute().getLine());

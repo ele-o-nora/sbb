@@ -11,6 +11,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Direct interaction with database regarding users, passengers and tickets.
+ */
 public interface PassengerDao {
     User getUserByEmail(String email);
     void add(User user);

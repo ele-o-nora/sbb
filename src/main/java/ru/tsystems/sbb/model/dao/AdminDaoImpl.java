@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.tsystems.sbb.model.entities.Journey;
-import ru.tsystems.sbb.model.entities.Line;
 import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.RouteStation;
@@ -89,17 +88,6 @@ public class AdminDaoImpl implements AdminDao {
     }
 
     @Override
-    public Station getStation(Line line, int order) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select s from Station s "
-                + "join s.lines ls where ls.line = :line "
-                + "and ls.order = :order", Station.class)
-                .setParameter("line", line)
-                .setParameter("order", order)
-                .getSingleResult();
-    }
-
-    @Override
     public void deleteDistance(Station s1, Station s2) {
         Session session = sessionFactory.getCurrentSession();
         session.createQuery("delete from StationsDistance sd "
@@ -115,52 +103,4 @@ public class AdminDaoImpl implements AdminDao {
         return sessionFactory.getCurrentSession().get(Train.class, trainId);
     }
 
-    @Override
-    public int outboundDistance(Station from, Station to, Line line) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select sum(sd.distance) "
-                + "from StationsDistance sd, "
-                + "LineStation lsfrom, LineStation lsto "
-                + "join sd.firstStation s1 join sd.secondStation s2 "
-                + "join s1.lines ls1 join s2.lines ls2 "
-                + "where lsfrom.line = :line and lsto.line = :line "
-                + "and ls1.line = :line and ls2.line = :line "
-                + "and lsfrom.station = :from "
-                + "and lsto.station = :to "
-                + "and ls1.order >= lsfrom.order "
-                + "and ls2.order <= lsto.order "
-                + "and ls1.order < ls2.order", Long.class)
-                .setParameter("line", line)
-                .setParameter("from", from)
-                .setParameter("to", to).uniqueResult().intValue();
-    }
-
-    @Override
-    public int inboundDistance(Station from, Station to, Line line) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select sum(sd.distance) "
-                + "from StationsDistance sd, "
-                + "LineStation lsfrom, LineStation lsto "
-                + "join sd.firstStation s1 join sd.secondStation s2 "
-                + "join s1.lines ls1 join s2.lines ls2 "
-                + "where lsfrom.line = :line and lsto.line = :line "
-                + "and ls1.line = :line and ls2.line = :line "
-                + "and lsfrom.station = :from "
-                + "and lsto.station = :to "
-                + "and ls1.order <= lsfrom.order "
-                + "and ls2.order >= lsto.order "
-                + "and ls1.order > ls2.order", Long.class)
-                .setParameter("line", line)
-                .setParameter("from", from)
-                .setParameter("to", to).uniqueResult().intValue();
-    }
-
-    @Override
-    public int getStationOrder(Line line, Station station) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select ls.order from LineStation ls "
-                + "where ls.line = :line and ls.station = :station", Integer.class)
-                .setParameter("line", line)
-                .setParameter("station", station).getSingleResult();
-    }
 }

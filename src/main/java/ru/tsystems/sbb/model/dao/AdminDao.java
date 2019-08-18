@@ -1,7 +1,6 @@
 package ru.tsystems.sbb.model.dao;
 
 import ru.tsystems.sbb.model.entities.Journey;
-import ru.tsystems.sbb.model.entities.Line;
 import ru.tsystems.sbb.model.entities.LineStation;
 import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.RouteStation;
@@ -13,6 +12,10 @@ import ru.tsystems.sbb.model.entities.Train;
 
 import java.util.List;
 
+/**
+ * Direct interaction with database regarding updating railway network,
+ *  schedule, and pricing.
+ */
 public interface AdminDao {
     void add(Station station);
     void add(LineStation lineStation);
@@ -26,10 +29,6 @@ public interface AdminDao {
     List<Train> getAllTrainModels();
     Train getTrainById(int trainId);
     void add(StationsDistance stationsDistance);
-    Station getStation(Line line, int order);
     void deleteDistance(Station s1, Station s2);
-    int outboundDistance(Station from, Station to, Line line);
-    int inboundDistance(Station from, Station to, Line line);
-    int getStationOrder(Line line, Station station);
     void add(Tariff tariff);
 }
