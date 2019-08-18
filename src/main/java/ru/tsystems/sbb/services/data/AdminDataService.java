@@ -38,7 +38,7 @@ public interface AdminDataService {
 
     /**
      * Creates new route that has specific number, is linked to specific line,
-     *  stops at specific stations on this line and spends on those station
+     *  stops at specific stations on this line and spends on those stations
      *  specific number of minutes.
      * @param routeNumber number of the route to be created
      * @param lineId id indicating which line the route belongs to
