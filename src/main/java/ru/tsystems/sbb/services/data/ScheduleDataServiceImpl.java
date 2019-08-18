@@ -49,7 +49,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     @Override
     public List<JourneyDto> directTrainsFromTo(final String stationFrom,
                                                final String stationTo,
-                                               final LocalDateTime dateTime,
+                                               final LocalDateTime fromOrBy,
                                                final String searchType) {
         Station origin = scheduleDao.getStationByName(stationFrom);
         Station destination = scheduleDao.getStationByName(stationTo);
@@ -59,10 +59,10 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         List<Journey> journeys;
         if (searchType.equalsIgnoreCase(DEFAULT_SEARCH_TYPE)) {
             journeys = scheduleDao.
-                    trainsFromToByDeparture(origin, destination, dateTime);
+                    trainsFromToByDeparture(origin, destination, fromOrBy);
         } else {
             journeys = scheduleDao.
-                    trainsFromToByArrival(origin, destination, dateTime);
+                    trainsFromToByArrival(origin, destination, fromOrBy);
         }
         return journeys.stream().map(journey -> mapper.convert(journey))
                 .collect(Collectors.toList());

@@ -35,15 +35,6 @@ public class RouteDataServiceImpl implements RouteDataService {
     }
 
     @Override
-    public List<StationDto> getAllRouteStations(final int routeId) {
-        Route route = routeDao.getRouteById(routeId);
-        List<Station> stations = routeDao.allRouteStations(route);
-        return stations.stream()
-                .map(station -> mapper.convert(station))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<RouteDto> getAllRoutes(final int lineId) {
         Line line = routeDao.getLineById(lineId);
         List<Route> routes = routeDao.allLineRoutes(line);
