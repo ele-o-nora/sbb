@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setForceEncoding(true);
         http.addFilterBefore(filter, CsrfFilter.class);
         http.authorizeRequests()
-                .antMatchers("/admin", "admin/**").hasRole("ADMIN")
+                .antMatchers("/admin", "/admin/", "admin/**").hasRole("ADMIN")
                 .antMatchers("/editInfo", "/changeName", "/changePassword",
                         "/myTickets").hasRole("USER")
                 .antMatchers("/webjars/**", "/resources/**", "/",
