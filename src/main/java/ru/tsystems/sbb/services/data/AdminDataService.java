@@ -100,7 +100,8 @@ public interface AdminDataService {
      *  limited number of entries on each page, and returns corresponding DTOs.
      * @param start moment in time from which search period begins
      * @param page page on which journeys must fall
-     * @return list of JourneyDto that fit the criteria
+     * @return list of JourneyDto for one calendar day starting with specified
+     *  moment in time that fall onto specified page
      */
     List<JourneyDto> getJourneys(LocalDateTime start, int page);
 
@@ -110,7 +111,8 @@ public interface AdminDataService {
      *  on each page, and returns the list of corresponding DTOs.
      * @param journeyId id indicating which journey the tickets are for
      * @param page page on which the tickets must fall
-     * @return list of TicketDto that fit the criteria
+     * @return list of TicketDto for the specified journey that fall onto
+     *  specified page
      */
     List<TicketDto> getTickets(int journeyId, int page);
 

@@ -121,7 +121,8 @@ public interface PassengerDataService {
      *  Returns list of corresponding DTOs.
      * @param email email indicating for whom tickets will be returned
      * @param page page on which tickets in question must fall
-     * @return list of TicketDto that fit the criteria
+     * @return list of TicketDto for user with specified email that fall onto
+     *  specified page
      */
     List<TicketDto> getUserTickets(String email, int page);
 

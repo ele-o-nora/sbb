@@ -17,7 +17,8 @@ public interface ScheduleViewService {
      *  and the list of scheduled stops.
      * @param stationName name of the station for which the schedule is returned
      * @param momentFrom moment in time that sets the start of the search period
-     * @return map that contains list of scheduled stops, station name, and time
+     * @return map that contains list of scheduled stops, station name, and
+     *  moment in time that indicates the beginning of the search period
      */
     Map<String, Object> getStationSchedule(String stationName,
                                            String momentFrom);
@@ -25,7 +26,7 @@ public interface ScheduleViewService {
     /**
      * Gets from data service complete list of existing stations. Returns map
      *  which contains said list.
-     * @return map that contains the list of the stations
+     * @return map that contains full list of the stations
      */
     Map<String, Object> getStationsList();
 
@@ -40,7 +41,8 @@ public interface ScheduleViewService {
      * @param destination station where journey must stop after origin
      * @param dateTime moment setting the beginning or end of the search period
      * @param searchType indicates whether the search is by departure or arrival
-     * @return map containing origin, destination, and single journeys or pairs
+     * @return map containing origin, destination, and either list of single
+     *  journeys or list of pairs of journeys
      */
     Map<String, Object> getTrainsFromTo(String origin, String destination,
                                         String dateTime, String searchType);

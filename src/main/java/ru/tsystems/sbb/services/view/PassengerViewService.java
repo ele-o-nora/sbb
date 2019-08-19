@@ -89,7 +89,8 @@ public interface PassengerViewService {
      * Gets from data service passenger details for the current user. Returns
      *  map containing said info and empty objects for filling out forms to
      *  either update passenger details or change password.
-     * @return map containing passenger info and two model attributes for forms
+     * @return map containing passenger info and two auxiliary model attributes
+     *  for filling out forms
      * @see ru.tsystems.sbb.model.dto.ChangeNameDto
      * @see ru.tsystems.sbb.model.dto.PasswordDto
      */
@@ -102,7 +103,8 @@ public interface PassengerViewService {
      *  confirmation of successful update.
      * @param firstName new first name of the passenger
      * @param lastName new last name of the passenger
-     * @return map containing passenger info and two model attributes for forms
+     * @return map containing passenger info and two auxiliary model attributes
+     *  for filling out forms
      */
     Map<String, Object> changeName(String firstName, String lastName);
 
@@ -112,7 +114,8 @@ public interface PassengerViewService {
      *  filling out forms to change name or password and confirmation of
      *  successful password change.
      * @param newPassword new password
-     * @return map containing passenger info and two model attributes for forms
+     * @return map containing passenger info and two auxiliary model attributes
+     *  for filling out forms
      */
     Map<String, Object> changePassword(String newPassword);
 
@@ -131,7 +134,7 @@ public interface PassengerViewService {
      *  id. Returns map containing the confirmation of successful return or
      *  the reason for the failure.
      * @param ticketId id of the ticket to be returned
-     * @return map containing the result of the return
+     * @return map containing the result of the ticket return
      */
     Map<String, Object> returnTicket(int ticketId);
 
