@@ -68,7 +68,8 @@ public interface PassengerDao {
      * @param journey journey for which the tickets are counted
      * @param from stop indicating the beginning of the section in question
      * @param to stop indicating the end of the section
-     * @return integer value of number of the tickets that fulfil the criteria
+     * @return integer value of number of the tickets that cover specified
+     *  section of the specified journey
      */
     int currentTickets(Journey journey, ScheduledStop from, ScheduledStop to);
 
@@ -102,7 +103,7 @@ public interface PassengerDao {
      *  and specific passenger.
      * @param journey journey for which tickets will be returned
      * @param passenger passenger for whom tickets will be returned
-     * @return list of Ticket that fit the criteria
+     * @return list of Ticket for specified journey and specified passenger
      */
     List<Ticket> getTickets(Journey journey, Passenger passenger);
 
@@ -113,7 +114,8 @@ public interface PassengerDao {
      * @param start moment in time indicating the beginning of the search period
      * @param page page on which the journeys that will be returned must fall
      * @param searchStep number of entries on one page
-     * @return list of Journey that fit the criteria
+     * @return list of Journey that depart during one calendar day starting with
+     *  specified moment in time and fall onto specified page
      */
     List<Journey> getJourneys(LocalDateTime start, int page, int searchStep);
 
@@ -124,7 +126,8 @@ public interface PassengerDao {
      * @param journey journey for which the tickets will be returned
      * @param page page on which the tickets in question must fall
      * @param searchStep number of entries on one page
-     * @return list of Ticket that fit the criteria
+     * @return list of Ticket for specified journey that fall onto specified
+     *  page
      */
     List<Ticket> getTickets(Journey journey, int page, int searchStep);
 
@@ -132,7 +135,8 @@ public interface PassengerDao {
      * Gets from database the quantity of scheduled journeys that depart during
      *  one calendar day starting with specific moment in time.
      * @param start moment in time indicating the beginning of the search period
-     * @return integer value of number of the journeys that fit the criteria
+     * @return integer value of number of the journeys that depart during one
+     *  calendar day starting with specified moment in time
      */
     int journeysCount(LocalDateTime start);
 
@@ -155,7 +159,8 @@ public interface PassengerDao {
      * @param passenger passenger for whom tickets will be returned
      * @param page page on which the tickets in question must fall
      * @param searchStep number of entries on one page
-     * @return list of Ticket that fit the criteria
+     * @return list of Ticket that belong to the specified passenger and fall
+     *  onto specified page
      */
     List<Ticket> getPassengerTickets(Passenger passenger, int page,
                                      int searchStep);
@@ -164,7 +169,8 @@ public interface PassengerDao {
      * Gets from database the quantity of the tickets that are linked to
      *  specific passenger.
      * @param passenger passenger for whom the tickets will be counted
-     * @return integer value of number of the tickets that fit the criteria
+     * @return integer value of number of the tickets that belong to the
+     *  specified passenger
      */
     int ticketsCount(Passenger passenger);
 

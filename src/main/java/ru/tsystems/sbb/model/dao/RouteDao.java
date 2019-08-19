@@ -65,7 +65,8 @@ public interface RouteDao {
      *  or greater than specific number.
      * @param line line for which relations will be returned
      * @param from ordinal number indicating first of relations to return
-     * @return list of LineStation that fit the criteria
+     * @return list of LineStation that belong to the specified line which
+     *  position on said line is equal or greater than certain position
      */
     List<LineStation> getLineStations(Line line, int from);
 
@@ -74,7 +75,7 @@ public interface RouteDao {
      *  specific position on specific line.
      * @param line line to which station belongs
      * @param order ordinal number indicating station's position on the line
-     * @return Station that fits the criteria
+     * @return Station that occupies specified position on the specified line
      */
     Station getStation(Line line, int order);
 
