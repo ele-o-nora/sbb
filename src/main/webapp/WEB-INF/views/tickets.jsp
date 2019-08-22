@@ -27,6 +27,11 @@
             <div class="row m-2 justify-content-center">
                 <c:if test="${ticket.category ne 'old'}">
                     <div class="border border-dark p-2 col-sm-10">
+                        <c:if test="${ticket.journey.status eq 'Cancelled'}">
+                            <div class="row mt-2 justify-content-center">
+                                <span class="font-weight-bold text-danger">Cancelled</span>
+                            </div>
+                        </c:if>
                         <div class="row mt-2 justify-content-center">
                             <span class="font-weight-bold mr-1">Route: </span> ${ticket.journey.route}
                         </div>
@@ -67,6 +72,11 @@
                 </c:if>
                 <c:if test="${ticket.category eq 'old'}">
                     <div class="border text-muted p-2 col-sm-10">
+                        <c:if test="${ticket.journey.status eq 'Cancelled'}">
+                            <div class="row mt-2 justify-content-center">
+                                <span class="font-weight-bold">Cancelled</span>
+                            </div>
+                        </c:if>
                         <div class="row mt-2 justify-content-center">
                             <span class="font-weight-bold mr-1">Route: </span> ${ticket.journey.route}
                         </div>

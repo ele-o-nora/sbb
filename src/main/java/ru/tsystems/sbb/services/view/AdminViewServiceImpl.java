@@ -239,6 +239,20 @@ public class AdminViewServiceImpl implements AdminViewService {
         return objects;
     }
 
+    @Override
+    public void cancelJourney(int journeyId) {
+        LOGGER.info("Method call: cancelJourney({}) by employee: {}",
+                journeyId, getEmployeeUsername());
+        adminDataService.cancelJourney(journeyId);
+    }
+
+    @Override
+    public void delayJourney(int journeyId, int delay) {
+        LOGGER.info("Method call: delayJourney({}, {}) by employee: {}",
+                journeyId, delay, getEmployeeUsername());
+        adminDataService.delayJourney(journeyId, delay);
+    }
+
     private String getEmployeeUsername() {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();

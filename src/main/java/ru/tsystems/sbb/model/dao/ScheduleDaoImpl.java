@@ -44,6 +44,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 + "where st1.station = :origin and st2.station = :dest"
                 + " and st1.departure >= :from and st1.departure < :to "
                 + "and st1.departure < st2.arrival "
+                + "and j.cancelled = false "
                 + "order by st1.departure asc", Journey.class)
                 .setParameter(ORIGIN, origin)
                 .setParameter("dest", destination)
@@ -62,6 +63,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 + "where st1.station = :origin and st2.station = :dest"
                 + " and st2.arrival <= :by and st2.arrival > :from "
                 + "and st1.departure < st2.arrival"
+                + " and j.cancelled = false"
                 + " order by st1.departure asc", Journey.class)
                 .setParameter(ORIGIN, origin)
                 .setParameter("dest", destination)
@@ -102,6 +104,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 + "where st1.station = :origin and st2.station = :dest "
                 + "and st2.arrival <= :by "
                 + "and st1.departure < st2.arrival"
+                + " and j.cancelled = false"
                 + " order by st2.arrival desc", Journey.class)
                 .setMaxResults(1)
                 .setParameter(ORIGIN, origin)
@@ -120,6 +123,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 + "where st1.station = :origin and st2.station = :dest "
                 + "and st1.departure >= :from "
                 + "and st1.departure < st2.arrival "
+                + "and j.cancelled = false "
                 + "order by st1.departure asc", Journey.class)
                 .setMaxResults(1)
                 .setParameter(ORIGIN, origin)

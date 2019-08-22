@@ -60,7 +60,7 @@
                                 <c:otherwise>
                                     ${train.status}<br/>
                                     <c:if test="${train.enRoute}">
-                                    <a href="#" id="adjustJourney" class="text-danger">Adjust</a>
+                                    <a href="#" onclick="showAdjustJourneyModal(${train.id})" class="text-danger">Adjust</a>
                                     </c:if>
                                 </c:otherwise>
                             </c:choose>
@@ -74,7 +74,7 @@
                     </tr>
                 </c:forEach>
                 <tr>
-                    <td class="align-middle" colspan="4">
+                    <td class="align-middle" colspan="5">
                         <c:if test="${!empty previousPage}">
                             <a href="${pageContext.request.contextPath}/admin/journeys/${today}?page=${previousPage}"
                                class="btn btn-outline-dark float-left">Previous 10</a>
@@ -92,5 +92,49 @@
         </div>
     </div>
 </c:if>
+<div class="modal fade" id="adjustJourneyModal" tabindex="-1" role="dialog" aria-labelledby="adjustJourneyTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="adjustJourneyTitle">Adjust journey</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6 border-right">
+                        <form action="${pageContext.request.contextPath}/admin/delay" method="post">
+                            <input type="hidden" name="journeyId" id="delayId" value="0">
+                            <input type="hidden" name="date" value="${today}">
+                            <div class="form-row justify-content-center mt-1 mb-3">
+                                <div class="col-sm-10">
+                                <input type="number" name="delay" class="form-control" placeholder="Minutes delayed">
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center">
+                                <input type="submit" value="Set delay" class="btn btn-outline-secondary">
+                            </div>
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        </form>
+                    </div>
+                    <div class="col-sm-6">
+                        <form action="${pageContext.request.contextPath}/admin/cancel" method="post">
+                            <input type="hidden" name="journeyId" id="cancelId" value="0">
+                            <input type="hidden" name="date" value="${today}">
+                            <div class="form-row justify-content-center">
+                                <label>Warning: this action is irreversible</label>
+                            </div>
+                            <div class="form-row justify-content-center">
+                                <input type="submit" value="Cancel journey" class="btn btn-outline-danger">
+                            </div>
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

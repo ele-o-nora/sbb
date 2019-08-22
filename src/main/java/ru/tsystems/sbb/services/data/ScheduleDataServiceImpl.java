@@ -165,25 +165,38 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
             if (o1.getArrival() != null && o2.getArrival() != null) {
                 return compareArrivals(o1, o2);
             } else if (o1.getArrival() != null) {
-                return compareTimes(o1.getArrival(), o2.getDeparture());
+                return compareTimes(o1.getArrival().plusMinutes(o1
+                        .getJourney().getDelay()), o2.getDeparture()
+                        .plusMinutes(o2.getJourney().getDelay()));
             } else if (o2.getArrival() != null) {
-                return compareTimes(o1.getDeparture(), o2.getArrival());
+                return compareTimes(o1.getDeparture().plusMinutes(o1
+                        .getJourney().getDelay()), o2.getArrival()
+                        .plusMinutes(o2.getJourney().getDelay()));
             } else {
-                return compareTimes(o1.getDeparture(), o2.getDeparture());
+                return compareTimes(o1.getDeparture().plusMinutes(o1
+                        .getJourney().getDelay()), o2.getDeparture()
+                        .plusMinutes(o2.getJourney().getDelay()));
             }
         }
 
         private int compareArrivals(ScheduledStop o1, ScheduledStop o2) {
-            if (o1.getArrival().isBefore(o2.getArrival())) {
+            if (o1.getArrival().plusMinutes(o1.getJourney().getDelay())
+                    .isBefore(o2.getArrival().plusMinutes(o2.getJourney()
+                            .getDelay()))) {
                 return -1;
-            } else if (o1.getArrival().isAfter(o2.getArrival())) {
+            } else if (o1.getArrival().plusMinutes(o1.getJourney().getDelay())
+                    .isAfter(o2.getArrival().plusMinutes(o2.getJourney()
+                            .getDelay()))) {
                 return 1;
             } else if (o1.getDeparture() != null
                     && o2.getDeparture() != null) {
-                if (o1.getDeparture().isBefore(o2.getDeparture())) {
+                if (o1.getDeparture().plusMinutes(o1.getJourney().getDelay())
+                        .isBefore(o2.getDeparture().plusMinutes(o2.getJourney()
+                                .getDelay()))) {
                     return -1;
-                } else if (o1.getDeparture()
-                        .isAfter(o2.getDeparture())) {
+                } else if (o1.getDeparture().plusMinutes(o1.getJourney().getDelay())
+                        .isAfter(o2.getDeparture().plusMinutes(o2.getJourney()
+                                .getDelay()))) {
                     return 1;
                 } else {
                     return 0;

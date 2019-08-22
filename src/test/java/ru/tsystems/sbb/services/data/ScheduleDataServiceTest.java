@@ -474,12 +474,15 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorSameArrivalSameDepartureTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -510,11 +513,14 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorSameArrivalOnlyFirstDepartureTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -545,11 +551,14 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorSameArrivalOnlySecondDepartureTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -580,12 +589,15 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorSameArrivalFirstEarlierDepartureTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 10));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -616,12 +628,15 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorSameArrivalSecondEarlierDepartureTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 10));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -652,10 +667,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorFirstEarlierArrivalTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -686,10 +704,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorSecondEarlierArrivalTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -720,10 +741,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorFirstArrivalSameAsSecondDepartureTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -754,10 +778,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorFirstArrivalBeforeSecondDepartureTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -788,10 +815,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorFirstArrivalAfterSecondDepartureTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -822,10 +852,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorFirstDepartureSameAsSecondArrivalTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -856,10 +889,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorFirstDepartureBeforeSecondArrivalTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -890,10 +926,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorFirstDepartureAfterSecondArrivalTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -924,10 +963,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorSameDeparturesTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -958,10 +1000,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorFirstEarlierDepartureTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
@@ -992,10 +1037,13 @@ class ScheduleDataServiceTest {
 
     @Test
     void stationScheduleComparatorSecondEarlierDepartureTest() {
+        Journey journey = new Journey();
         ScheduledStop first = new ScheduledStop();
         first.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
+        first.setJourney(journey);
         ScheduledStop second = new ScheduledStop();
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
+        second.setJourney(journey);
         Station station = new Station();
         String stationName = "stationName";
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);

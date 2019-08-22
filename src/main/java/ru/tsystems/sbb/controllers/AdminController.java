@@ -152,4 +152,19 @@ public class AdminController {
     public ModelAndView journeyInfo(@PathVariable final int id) {
         return new ModelAndView("journeyInfo", viewService.journeyInfo(id));
     }
+
+    @PostMapping("/cancel")
+    public String cancelJourney(@RequestParam final int journeyId,
+                                @RequestParam final String date) {
+        viewService.cancelJourney(journeyId);
+        return "redirect:/admin/journeys/" + date;
+    }
+
+    @PostMapping("/delay")
+    public String delayJourney(@RequestParam final int journeyId,
+                               @RequestParam final int delay,
+                               @RequestParam final String date) {
+        viewService.delayJourney(journeyId, delay);
+        return "redirect:/admin/journeys/" + date;
+    }
 }

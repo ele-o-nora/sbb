@@ -207,3 +207,10 @@ function showRouteStations(id) {
     $(id).toggle();
     return false;
 }
+
+function showAdjustJourneyModal(journeyId) {
+    $('#delayId').val(journeyId);
+    $('#cancelId').val(journeyId);
+    $('#adjustJourneyModal').modal();
+    return false;
+}

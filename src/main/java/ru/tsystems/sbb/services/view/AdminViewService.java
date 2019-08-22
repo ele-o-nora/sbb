@@ -151,4 +151,18 @@ public interface AdminViewService {
      * @return map that contains journey with specified id
      */
     Map<String, Object> journeyInfo(int journeyId);
+
+    /**
+     * Calls to data service to mark specific journey as cancelled.
+     * @param journeyId id indicating which journey to cancel
+     */
+    void cancelJourney(int journeyId);
+
+    /**
+     * Calls to data service in order to set specific journey's delay
+     *  to specific amount.
+     * @param journeyId id indicating which journey to adjust
+     * @param delay number of minutes this journey is now delayed
+     */
+    void delayJourney(int journeyId, int delay);
 }

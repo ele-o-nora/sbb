@@ -147,7 +147,7 @@ public interface AdminDataService {
     void cancelJourney(int journeyId);
 
     /**
-     * Adjust specific journey's delay.
+     * Sets specific journey's delay to specific amount.
      * @param journeyId id indicating which journey to update
      * @param delay number of minutes journey is now delayed
      */
