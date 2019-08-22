@@ -103,4 +103,8 @@ public class AdminDaoImpl implements AdminDao {
         return sessionFactory.getCurrentSession().get(Train.class, trainId);
     }
 
+    @Override
+    public void update(Journey journey) {
+        sessionFactory.getCurrentSession().update(journey);
+    }
 }

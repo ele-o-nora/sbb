@@ -139,4 +139,17 @@ public interface AdminDataService {
      * @return JourneyDto with specified id
      */
     JourneyDto getJourneyById(int journeyId);
+
+    /**
+     * Marks specific journey as cancelled.
+     * @param journeyId id indicating which journey to cancel
+     */
+    void cancelJourney(int journeyId);
+
+    /**
+     * Adjust specific journey's delay.
+     * @param journeyId id indicating which journey to update
+     * @param delay number of minutes journey is now delayed
+     */
+    void delayJourney(int journeyId, int delay);
 }

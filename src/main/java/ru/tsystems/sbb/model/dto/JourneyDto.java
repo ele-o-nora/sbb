@@ -20,4 +20,5 @@ public class JourneyDto {
     @ToString.Exclude
     private List<ScheduledStopDto> stops;
     private String status;
+    private boolean enRoute;
 }

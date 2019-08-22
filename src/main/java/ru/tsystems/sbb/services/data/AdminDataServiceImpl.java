@@ -317,4 +317,18 @@ public class AdminDataServiceImpl implements AdminDataService {
     public JourneyDto getJourneyById(int journeyId) {
         return mapper.convert(passengerDao.getJourneyById(journeyId));
     }
+
+    @Override
+    public void cancelJourney(int journeyId) {
+        Journey journey = passengerDao.getJourneyById(journeyId);
+        journey.setCancelled(true);
+        adminDao.update(journey);
+    }
+
+    @Override
+    public void delayJourney(int journeyId, int delay) {
+        Journey journey = passengerDao.getJourneyById(journeyId);
+        journey.setDelay(delay);
+        adminDao.update(journey);
+    }
 }

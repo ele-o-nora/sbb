@@ -103,4 +103,10 @@ public interface AdminDao {
      * @param tariff tariff to be added to the database
      */
     void add(Tariff tariff);
+
+    /**
+     * Updates existing scheduled journey.
+     * @param journey journey to be updated
+     */
+    void update(Journey journey);
 }

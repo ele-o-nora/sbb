@@ -36,10 +36,6 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
     @Autowired
     private Clock clock;
 
-    private static final String OLD = "old";
-    private static final String CURRENT = "current";
-    private static final String FUTURE = "future";
-
     @Override
     public JourneyDto convert(final Journey journey) {
         JourneyDto journeyDto = mapper.map(journey, JourneyDto.class);
@@ -54,6 +50,12 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
             journeyDto.setStatus("Delayed " + journey.getDelay() + " min");
         } else {
             journeyDto.setStatus("On time");
+        }
+        if (!journey.isCancelled() && journey.getStops()
+                .get(journey.getStops().size() - 1)
+                .getArrival().plusMinutes(journey.getDelay())
+                .isAfter(LocalDateTime.now(clock))) {
+            journeyDto.setEnRoute(true);
         }
         return journeyDto;
     }
@@ -94,8 +96,7 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
         if (scheduledStop.getJourney().isCancelled()) {
             scheduledStopDto.setStatus("Cancelled");
         } else if (scheduledStop.getJourney().getDelay() > 0) {
-            scheduledStopDto.setStatus("Delayed "
-                    + scheduledStop.getJourney().getDelay() + " min");
+            scheduledStopDto.setStatus("Delayed");
         } else {
             scheduledStopDto.setStatus("On time");
         }
@@ -120,12 +121,12 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
         ticketDto.setPassenger(convert(ticket.getPassenger()));
         ticketDto.setFormattedPrice(formatPrice(ticket.getPrice()));
         if (ticket.getTo().getArrival().isBefore(LocalDateTime.now(clock))) {
-            ticketDto.setCategory(OLD);
+            ticketDto.setCategory("old");
         } else if (ticket.getFrom().getDeparture()
                 .isAfter(LocalDateTime.now(clock))) {
-            ticketDto.setCategory(FUTURE);
+            ticketDto.setCategory("future");
         } else {
-            ticketDto.setCategory(CURRENT);
+            ticketDto.setCategory("current");
         }
         return ticketDto;
     }

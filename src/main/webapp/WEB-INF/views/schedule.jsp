@@ -34,8 +34,8 @@
                 <tr>
                     <th scope="col">Route</th>
                     <th scope="col">Direction</th>
-                    <th scope="col">Arrives</th>
-                    <th scope="col">Departs</th>
+                    <th scope="col">ETA</th>
+                    <th scope="col">ETD</th>
                     <th scope="col">Status</th>
                 </tr>
                 </thead>
@@ -44,9 +44,18 @@
                     <tr>
                         <td>${train.route}</td>
                         <td>${train.direction}</td>
-                        <td>${train.arrival}</td>
-                        <td>${train.departure}</td>
-                        <td>${train.status}</td>
+                        <td>${train.actualArrival}</td>
+                        <td>${train.actualDeparture}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${train.status eq 'Cancelled'}">
+                                    <span class="text-danger">${train.status}</span>
+                                </c:when>
+                                <c:otherwise>
+                                    ${train.status}
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                     </tr>
                 </c:forEach>
                 </tbody>

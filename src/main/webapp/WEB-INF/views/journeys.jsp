@@ -52,7 +52,19 @@
                             </c:forEach>
                         </td>
                         <td class="align-middle">${train.trainType.model}</td>
-                        <td class="align-middle">${train.status}</td>
+                        <td class="align-middle">
+                            <c:choose>
+                                <c:when test="${train.status eq 'Cancelled'}">
+                                    <span class="text-danger">${train.status}</span>
+                                </c:when>
+                                <c:otherwise>
+                                    ${train.status}<br/>
+                                    <c:if test="${train.enRoute}">
+                                    <a href="#" id="adjustJourney" class="text-danger">Adjust</a>
+                                    </c:if>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                         <td class="align-middle">
                             <a href="${pageContext.request.contextPath}/admin/journey/${train.id}" class="text-danger">
                                 Detailed schedule</a><br/>
