@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ru.tsystems.sbb.config.ViewServiceTestConfig;
 import ru.tsystems.sbb.model.dto.BuyerDetailsDto;
+import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
 import ru.tsystems.sbb.model.dto.StationDto;
@@ -23,6 +24,8 @@ import ru.tsystems.sbb.services.data.RouteDataService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -258,20 +261,26 @@ class PassengerViewServiceTest {
     @Test
     void finalizeTicketSaleSuccessTest() {
         TicketOrderDto order = new TicketOrderDto();
+        order.setJourney(new JourneyDto());
         String firstName = "firstName";
         String lastName = "lastName";
         LocalDate dateOfBirth = LocalDate.of(2002, 2, 20);
         List<StationDto> stations = new ArrayList<>();
+        List<TicketDto> tickets = new ArrayList<>();
         when(mockPassengerDataService.buyTicket(any(TicketOrderDto.class),
                 anyString(), anyString(), any(LocalDate.class)))
                 .thenReturn("success");
         when(mockRouteDataService.allStations()).thenReturn(stations);
+        when(mockPassengerDataService.getPassengerTickets(anyInt(), anyString(),
+                anyString(), any(LocalDate.class))).thenReturn(tickets);
 
         Map<String, Object> result = passengerViewService
                 .finalizeTicketSale(order, firstName, lastName, dateOfBirth);
 
         verify(mockRouteDataService, times(1)).allStations();
         verify(mockPassengerDataService, times(1)).buyTicket(same(order),
+                same(firstName), same(lastName), same(dateOfBirth));
+        verify(mockPassengerDataService, times(1)).getPassengerTickets(eq(0),
                 same(firstName), same(lastName), same(dateOfBirth));
         verifyNoMoreInteractions(mockRouteDataService);
         verifyNoMoreInteractions(mockPassengerDataService);
@@ -280,6 +289,8 @@ class PassengerViewServiceTest {
         assertSame(stations, result.get("stations"));
         assertTrue(result.containsKey("status"));
         assertEquals(TICKET_SUCCESS, result.get("status"));
+        assertTrue(result.containsKey("tickets"));
+        assertSame(tickets, result.get("tickets"));
     }
 
     @Test
@@ -313,21 +324,32 @@ class PassengerViewServiceTest {
     @Test
     void finalizeTicketsSaleSuccessTest() {
         TransferTicketOrderDto order = new TransferTicketOrderDto();
+        order.setFirstTrain(new TicketOrderDto());
+        order.setSecondTrain(new TicketOrderDto());
+        order.getFirstTrain().setJourney(new JourneyDto());
+        order.getSecondTrain().setJourney(new JourneyDto());
         String firstName = "firstName";
         String lastName = "lastName";
         LocalDate dateOfBirth = LocalDate.of(2002, 2, 20);
         List<StationDto> stations = new ArrayList<>();
+        TicketDto ticket = new TicketDto();
+        List<TicketDto> tickets = Collections.singletonList(ticket);
+        List<TicketDto> expected = Arrays.asList(ticket, ticket);
         when(mockPassengerDataService
                 .buyTickets(any(TransferTicketOrderDto.class),
                         anyString(), anyString(), any(LocalDate.class)))
                 .thenReturn("success");
         when(mockRouteDataService.allStations()).thenReturn(stations);
+        when(mockPassengerDataService.getPassengerTickets(anyInt(), anyString(),
+                anyString(), any(LocalDate.class))).thenReturn(tickets);
 
         Map<String, Object> result = passengerViewService
                 .finalizeTicketsSale(order, firstName, lastName, dateOfBirth);
 
         verify(mockRouteDataService, times(1)).allStations();
         verify(mockPassengerDataService, times(1)).buyTickets(same(order),
+                same(firstName), same(lastName), same(dateOfBirth));
+        verify(mockPassengerDataService, times(2)).getPassengerTickets(eq(0),
                 same(firstName), same(lastName), same(dateOfBirth));
         verifyNoMoreInteractions(mockRouteDataService);
         verifyNoMoreInteractions(mockPassengerDataService);
@@ -336,6 +358,8 @@ class PassengerViewServiceTest {
         assertSame(stations, result.get("stations"));
         assertTrue(result.containsKey("status"));
         assertEquals(TICKET_SUCCESS, result.get("status"));
+        assertTrue(result.containsKey("tickets"));
+        assertEquals(expected, result.get("tickets"));
     }
 
     @Test

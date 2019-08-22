@@ -35,6 +35,7 @@
                     <th scope="col">Direction</th>
                     <th scope="col">Departure</th>
                     <th scope="col">Train model</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Links</th>
                 </tr>
                 </thead>
@@ -51,6 +52,7 @@
                             </c:forEach>
                         </td>
                         <td class="align-middle">${train.trainType.model}</td>
+                        <td class="align-middle">${train.status}</td>
                         <td class="align-middle">
                             <a href="${pageContext.request.contextPath}/admin/journey/${train.id}" class="text-danger">
                                 Detailed schedule</a><br/>

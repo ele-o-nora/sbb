@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -37,5 +38,11 @@ public class Journey extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "destination_id")
     private Station destination;
+
+    @Column
+    private int delay;
+
+    @Column
+    private boolean cancelled;
 
 }

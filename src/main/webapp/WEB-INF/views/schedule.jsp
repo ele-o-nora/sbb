@@ -36,6 +36,7 @@
                     <th scope="col">Direction</th>
                     <th scope="col">Arrives</th>
                     <th scope="col">Departs</th>
+                    <th scope="col">Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -45,6 +46,7 @@
                         <td>${train.direction}</td>
                         <td>${train.arrival}</td>
                         <td>${train.departure}</td>
+                        <td>${train.status}</td>
                     </tr>
                 </c:forEach>
                 </tbody>

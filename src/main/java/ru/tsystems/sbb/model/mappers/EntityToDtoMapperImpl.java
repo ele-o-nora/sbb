@@ -48,6 +48,13 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
         List<ScheduledStopDto> stopsDto = journey.getStops().stream()
                 .map(this::convert).collect(Collectors.toList());
         journeyDto.setStops(stopsDto);
+        if (journey.isCancelled()) {
+            journeyDto.setStatus("Cancelled");
+        } else if (journey.getDelay() > 0) {
+            journeyDto.setStatus("Delayed " + journey.getDelay() + " min");
+        } else {
+            journeyDto.setStatus("On time");
+        }
         return journeyDto;
     }
 
@@ -83,8 +90,19 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
         scheduledStopDto.setDirection(scheduledStop
                 .getJourney().getDestination().getName());
         scheduledStopDto.setJourneyId(scheduledStop.getJourney().getId());
-        scheduledStopDto.setArrival(scheduledStop.getArrival());
-        scheduledStopDto.setDeparture(scheduledStop.getDeparture());
+        scheduledStopDto.setDelay(scheduledStop.getJourney().getDelay());
+        if (scheduledStop.getJourney().isCancelled()) {
+            scheduledStopDto.setStatus("Cancelled");
+        } else if (scheduledStop.getJourney().getDelay() > 0) {
+            scheduledStopDto.setStatus("Delayed "
+                    + scheduledStop.getJourney().getDelay() + " min");
+        } else {
+            scheduledStopDto.setStatus("On time");
+        }
+        scheduledStopDto.setArrivals(scheduledStop.getArrival(),
+                scheduledStop.getJourney().getDelay());
+        scheduledStopDto.setDepartures(scheduledStop.getDeparture(),
+                scheduledStop.getJourney().getDelay());
         return scheduledStopDto;
     }
 

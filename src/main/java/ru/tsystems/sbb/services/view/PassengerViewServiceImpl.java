@@ -20,6 +20,7 @@ import ru.tsystems.sbb.services.data.PassengerDataService;
 import ru.tsystems.sbb.services.data.RouteDataService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,9 +158,10 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                 firstName, lastName, dateOfBirth);
         if (saleResult.equalsIgnoreCase(SUCCESS)) {
             objects.put(STATUS, TICKET_SUCCESS);
-            List<TicketDto> tickets = passengerDataService
+            List<TicketDto> tickets = new ArrayList<>();
+            tickets.addAll(passengerDataService
                     .getPassengerTickets(order.getFirstTrain().getJourney()
-                                    .getId(), firstName, lastName, dateOfBirth);
+                            .getId(), firstName, lastName, dateOfBirth));
             tickets.addAll(passengerDataService
                     .getPassengerTickets(order.getSecondTrain().getJourney()
                                     .getId(), firstName,lastName, dateOfBirth));

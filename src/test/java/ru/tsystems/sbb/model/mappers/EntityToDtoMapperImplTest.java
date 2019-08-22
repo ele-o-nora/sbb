@@ -19,6 +19,7 @@ import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.entities.Ticket;
+import ru.tsystems.sbb.model.entities.Train;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,8 +27,10 @@ import static org.mockito.Mockito.when;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 
 @ExtendWith(MockitoExtension.class)
 class EntityToDtoMapperImplTest {
@@ -212,5 +215,133 @@ class EntityToDtoMapperImplTest {
         TicketDto result = entityToDtoMapper.convert(ticket);
 
         assertEquals("future", result.getCategory());
+    }
+
+    @Test
+    void convertScheduledStopOnTimeTest() {
+        ScheduledStop scheduledStop = new ScheduledStop();
+        scheduledStop.setStation(new Station());
+        scheduledStop.getStation().setName("stationName");
+        scheduledStop.setJourney(new Journey());
+        scheduledStop.getJourney().setRoute(new Route());
+        scheduledStop.getJourney().getRoute().setNumber("routeNumber");
+        scheduledStop.getJourney().setDestination(new Station());
+        scheduledStop.getJourney().getDestination().setName("destination");
+        scheduledStop.setArrival(LocalDateTime.now(mockClock));
+        String expectedArrival = "2020-02-02 00:00";
+        when(mockMapper.map(any(ScheduledStop.class), any()))
+                .thenReturn(new ScheduledStopDto());
+
+        ScheduledStopDto result = entityToDtoMapper.convert(scheduledStop);
+
+        assertEquals("On time", result.getStatus());
+        assertEquals(expectedArrival, result.getArrival());
+        assertEquals(expectedArrival, result.getActualArrival());
+        assertEquals("-", result.getDeparture());
+        assertEquals("-", result.getActualDeparture());
+    }
+
+    @Test
+    void convertScheduledStopDelayedTest() {
+        ScheduledStop scheduledStop = new ScheduledStop();
+        scheduledStop.setStation(new Station());
+        scheduledStop.getStation().setName("stationName");
+        scheduledStop.setJourney(new Journey());
+        scheduledStop.getJourney().setRoute(new Route());
+        scheduledStop.getJourney().getRoute().setNumber("routeNumber");
+        scheduledStop.getJourney().setDestination(new Station());
+        scheduledStop.getJourney().getDestination().setName("destination");
+        scheduledStop.setDeparture(LocalDateTime.now(mockClock));
+        scheduledStop.getJourney().setDelay(10);
+        String expectedDeparture = "2020-02-02 00:00";
+        String expectedActualDeparture = "2020-02-02 00:10";
+        when(mockMapper.map(any(ScheduledStop.class), any()))
+                .thenReturn(new ScheduledStopDto());
+
+        ScheduledStopDto result = entityToDtoMapper.convert(scheduledStop);
+
+        assertEquals("Delayed 10 min", result.getStatus());
+        assertEquals(expectedDeparture, result.getDeparture());
+        assertEquals(expectedActualDeparture, result.getActualDeparture());
+        assertEquals("-", result.getArrival());
+        assertEquals("-", result.getActualArrival());
+    }
+
+    @Test
+    void convertScheduledStopCancelledTest() {
+        ScheduledStop scheduledStop = new ScheduledStop();
+        scheduledStop.setStation(new Station());
+        scheduledStop.getStation().setName("stationName");
+        scheduledStop.setJourney(new Journey());
+        scheduledStop.getJourney().setRoute(new Route());
+        scheduledStop.getJourney().getRoute().setNumber("routeNumber");
+        scheduledStop.getJourney().setDestination(new Station());
+        scheduledStop.getJourney().getDestination().setName("destination");
+        scheduledStop.setArrival(LocalDateTime.now(mockClock));
+        scheduledStop.setDeparture(LocalDateTime.now(mockClock));
+        scheduledStop.getJourney().setCancelled(true);
+        when(mockMapper.map(any(ScheduledStop.class), any()))
+                .thenReturn(new ScheduledStopDto());
+
+        ScheduledStopDto result = entityToDtoMapper.convert(scheduledStop);
+
+        assertEquals("Cancelled", result.getStatus());
+        assertEquals("-", result.getDeparture());
+        assertEquals("-", result.getArrival());
+        assertEquals("-", result.getActualArrival());
+        assertEquals("-", result.getActualDeparture());
+    }
+
+    @Test
+    void convertJourneyOnTimeTest() {
+        Journey journey = new Journey();
+        journey.setRoute(new Route());
+        journey.getRoute().setNumber("routeNumber");
+        journey.setDestination(new Station());
+        journey.getDestination().setName("destination");
+        journey.setTrainType(new Train());
+        journey.setStops(Collections.emptyList());
+        when(mockMapper.map(any(Journey.class), any()))
+                .thenReturn(new JourneyDto());
+
+        JourneyDto result = entityToDtoMapper.convert(journey);
+
+        assertEquals("On time", result.getStatus());
+    }
+
+    @Test
+    void convertJourneyDelayedTest() {
+        Journey journey = new Journey();
+        journey.setRoute(new Route());
+        journey.getRoute().setNumber("routeNumber");
+        journey.setDestination(new Station());
+        journey.getDestination().setName("destination");
+        journey.setTrainType(new Train());
+        journey.setStops(Collections.emptyList());
+        journey.setDelay(10);
+        when(mockMapper.map(any(Journey.class), any()))
+                .thenReturn(new JourneyDto());
+
+        JourneyDto result = entityToDtoMapper.convert(journey);
+
+        assertEquals("Delayed 10 min", result.getStatus());
+    }
+
+    @Test
+    void convertJourneyCancelledTest() {
+        Journey journey = new Journey();
+        journey.setRoute(new Route());
+        journey.getRoute().setNumber("routeNumber");
+        journey.setDestination(new Station());
+        journey.getDestination().setName("destination");
+        journey.setTrainType(new Train());
+        journey.setStops(Collections.emptyList());
+        journey.setCancelled(true);
+        when(mockMapper.map(any(Journey.class), any()))
+                .thenReturn(new JourneyDto());
+
+        JourneyDto result = entityToDtoMapper.convert(journey);
+
+        assertEquals("Cancelled", result.getStatus());
     }
 }

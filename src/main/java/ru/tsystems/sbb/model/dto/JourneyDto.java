@@ -19,4 +19,5 @@ public class JourneyDto {
     private TrainDto trainType;
     @ToString.Exclude
     private List<ScheduledStopDto> stops;
+    private String status;
 }
