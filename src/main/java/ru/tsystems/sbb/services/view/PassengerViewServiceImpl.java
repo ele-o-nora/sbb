@@ -51,6 +51,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     private static final String SUCCESS = "success";
     private static final String STATUS = "status";
     private static final String PASSENGER = "passenger";
+    private static final String TICKETS = "tickets";
 
     @Override
     public Map<String, Object> register(final String firstName,
@@ -135,6 +136,10 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                 firstName, lastName, dateOfBirth);
         if (saleResult.equalsIgnoreCase(SUCCESS)) {
             objects.put(STATUS, TICKET_SUCCESS);
+            List<TicketDto> tickets = passengerDataService
+                    .getPassengerTickets(ticketOrder.getJourney().getId(),
+                            firstName, lastName, dateOfBirth);
+            objects.put(TICKETS, tickets);
         } else {
             objects.put(STATUS, TICKET_FAIL + saleResult);
         }
@@ -152,6 +157,13 @@ public class PassengerViewServiceImpl implements PassengerViewService {
                 firstName, lastName, dateOfBirth);
         if (saleResult.equalsIgnoreCase(SUCCESS)) {
             objects.put(STATUS, TICKET_SUCCESS);
+            List<TicketDto> tickets = passengerDataService
+                    .getPassengerTickets(order.getFirstTrain().getJourney()
+                                    .getId(), firstName, lastName, dateOfBirth);
+            tickets.addAll(passengerDataService
+                    .getPassengerTickets(order.getSecondTrain().getJourney()
+                                    .getId(), firstName,lastName, dateOfBirth));
+            objects.put(TICKETS, tickets);
         } else {
             objects.put(STATUS, TICKET_FAIL + saleResult);
         }
@@ -208,7 +220,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         Map<String, Object> objects = new HashMap<>();
         List<TicketDto> tickets = passengerDataService
                 .getUserTickets(auth.getName(), page);
-        objects.put("tickets", tickets);
+        objects.put(TICKETS, tickets);
         if (page > 1) {
             objects.put("previousPage", (page - 1));
         }

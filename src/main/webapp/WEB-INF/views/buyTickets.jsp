@@ -14,14 +14,64 @@
 <body class="text-center">
 <%@include file="header.jsp" %>
 <c:if test="${!empty status}">
-    <p class="text-danger m-5">${status}</p>
+    <p class="text-danger mt-5">${status}</p>
+    <c:if test="${!empty tickets}">
+        <h6 class="text-secondary m-2">Your tickets</h6>
+        <div class="row justify-content-center mb-3">
+            <div class="col-sm-8">
+                <c:forEach items="${tickets}" var="ticket">
+                    <div class="row m-2 justify-content-center">
+                        <div class="border border-dark p-2 col-sm-10">
+                            <div class="row mt-2 justify-content-center">
+                                <span class="font-weight-bold mr-1">Passenger: </span> ${ticket.passenger.firstName} ${ticket.passenger.lastName}
+                            </div>
+                            <div class="row mb-2 justify-content-center">
+                                <span class="font-weight-bold mr-1"> Date of birth: </span> ${ticket.passenger.dateOfBirth}
+                            </div>
+                            <div class="row m-2 p-2 border-top">
+                                <div class="col">
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1">Route: </span> ${ticket.journey.route}
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1"> Direction: </span> ${ticket.journey.destination}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row m-2 p-2 border-top border-bottom">
+                                <div class="col-sm-6">
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1">From: </span> ${ticket.stationFrom.station}
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1"> Departure: </span> ${ticket.stationFrom.departure}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1">To: </span> ${ticket.stationTo.station}
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1"> Arrival: </span> ${ticket.stationTo.arrival}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row m-2 justify-content-center">
+                                <span class="font-weight-bold mr-1">Price: </span> ${ticket.formattedPrice}
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+    </c:if>
     <a href="${pageContext.request.contextPath}/" class="text-secondary">Back to main page</a>
 </c:if>
 <c:if test="${empty status}"><h5 class="text-secondary m-3">Passenger details:</h5>
     <c:if test="${!empty ticketOrder}">
         <form:form modelAttribute="buyerDetails" method="post"
                    action="${pageContext.request.contextPath}/finalizeTicketSale">
-            <form:errors path = "*" cssClass = "text-danger" element = "div" />
+            <form:errors path="*" cssClass="text-danger" element="div"/>
             <div class="form-row justify-content-center m-1">
                 <c:if test="${empty passenger}">
                     <div class="col-sm-3">
@@ -115,7 +165,7 @@
     <c:if test="${!empty transferTickets}">
         <form:form modelAttribute="buyerDetails" method="post"
                    action="${pageContext.request.contextPath}/finalizeTicketsSale" autocomplete="off">
-            <form:errors path = "*" cssClass = "text-danger" element = "div" />
+            <form:errors path="*" cssClass="text-danger" element="div"/>
             <div class="form-row justify-content-center m-1">
                 <c:if test="${empty passenger}">
                     <div class="col-sm-3">

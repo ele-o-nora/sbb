@@ -127,6 +127,18 @@ public interface PassengerDataService {
     List<TicketDto> getUserTickets(String email, int page);
 
     /**
+     * Gets from DAO list of tickets for specific journey where the passenger
+     *  has specific name and date of birth. Returns list of corresponding DTOs.
+     * @param journeyId id indicating for which journey tickets will be returned.
+     * @param firstName passenger's first name
+     * @param lastName passenger's last name
+     * @param dateOfBirth passenger's dateOfBirth
+     * @return list of TicketDto for specified journey and specified passenger
+     */
+    List<TicketDto> getPassengerTickets(int journeyId, String firstName,
+                                        String lastName, LocalDate dateOfBirth);
+
+    /**
      * Gets from DAO total quantity of tickets for user with specific email
      *  and calculates and returns total number of pages the tickets can fill.
      * @param email email indicating for whom tickets will be counted

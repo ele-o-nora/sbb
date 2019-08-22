@@ -266,6 +266,19 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     }
 
     @Override
+    public List<TicketDto> getPassengerTickets(final int journeyId,
+                                               final String firstName,
+                                               final String lastName,
+                                               final LocalDate dateOfBirth) {
+        Journey journey = passengerDao.getJourneyById(journeyId);
+        Passenger passenger = passengerDao.getPassengerByInfo(firstName,
+                lastName, dateOfBirth);
+        return passengerDao.getTickets(journey, passenger).stream()
+                .map(ticket -> mapper.convert(ticket))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public String returnTicket(final int ticketId) {
         Ticket ticket = passengerDao.getTicketById(ticketId);
         if (ChronoUnit.MINUTES.between(LocalDateTime.now(clock),
