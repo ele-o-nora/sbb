@@ -52,7 +52,7 @@ public interface AdminViewService {
 
     /**
      * Gets from data service lists of specific line's stations and specific
-     *  route's stations. Returns list containing these lists, line and route.
+     *  route's stations. Returns map containing these lists, line and route.
      * @param lineId id indicating line which stations will be returned
      * @param routeId id indication route which stations will be returned
      * @return map containing line and route specified by ids and lists

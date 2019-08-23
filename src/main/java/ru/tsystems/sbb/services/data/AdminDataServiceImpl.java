@@ -1,6 +1,7 @@
 package ru.tsystems.sbb.services.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tsystems.sbb.model.dao.AdminDao;
@@ -22,6 +23,7 @@ import ru.tsystems.sbb.model.entities.Tariff;
 import ru.tsystems.sbb.model.entities.Train;
 import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
+import javax.annotation.PostConstruct;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,6 +52,9 @@ public class AdminDataServiceImpl implements AdminDataService {
 
     @Autowired
     private Clock clock;
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     private static final int SEARCH_RESULTS_STEP = 10;
 
@@ -202,7 +207,7 @@ public class AdminDataServiceImpl implements AdminDataService {
                         train.getSpeed());
             }
         }
-        //TODO: publish topic
+        jmsTemplate.send(session -> session.createTextMessage("New schedule"));
     }
 
     private void scheduleInbound(final Journey journey,
@@ -324,7 +329,7 @@ public class AdminDataServiceImpl implements AdminDataService {
         Journey journey = passengerDao.getJourneyById(journeyId);
         journey.setCancelled(true);
         adminDao.update(journey);
-        //TODO: publish topic
+        jmsTemplate.send(session -> session.createTextMessage("Cancellation"));
     }
 
     @Override
@@ -332,6 +337,11 @@ public class AdminDataServiceImpl implements AdminDataService {
         Journey journey = passengerDao.getJourneyById(journeyId);
         journey.setDelay(delay);
         adminDao.update(journey);
-        //TODO: publish topic
+        jmsTemplate.send(session -> session.createTextMessage("Delay"));
+    }
+
+    @PostConstruct
+    public void init() {
+        jmsTemplate.send(session -> session.createTextMessage("Startup"));
     }
 }
