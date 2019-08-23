@@ -16,12 +16,12 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Autowired
     private SessionFactory sessionFactory;
-    private static final int SEARCH_PERIOD = 4;
     private static final String ORIGIN = "origin";
 
     @Override
     public List<ScheduledStop> stationSchedule(final Station station,
-                                               final LocalDateTime from) {
+                                               final LocalDateTime from,
+                                               final int searchPeriod) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select distinct s from ScheduledStop s "
                 + "where s.station = :station "
@@ -30,14 +30,15 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 ScheduledStop.class)
                 .setParameter("station", station)
                 .setParameter("from", from)
-                .setParameter("to", from.plusHours(SEARCH_PERIOD))
+                .setParameter("to", from.plusHours(searchPeriod))
                 .getResultList();
     }
 
     @Override
     public List<Journey> trainsFromToByDeparture(final Station origin,
-                                      final Station destination,
-                                      final LocalDateTime from) {
+                                                 final Station destination,
+                                                 final LocalDateTime from,
+                                                 final int searchPeriod) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select j from Journey j "
                 + "join j.stops st1 join j.stops st2 "
@@ -49,14 +50,15 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 .setParameter(ORIGIN, origin)
                 .setParameter("dest", destination)
                 .setParameter("from", from)
-                .setParameter("to", from.plusHours(SEARCH_PERIOD))
+                .setParameter("to", from.plusHours(searchPeriod))
                 .getResultList();
     }
 
     @Override
     public List<Journey> trainsFromToByArrival(final Station origin,
                                                final Station destination,
-                                               final LocalDateTime by) {
+                                               final LocalDateTime by,
+                                               final int searchPeriod) {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select j from Journey j "
                 + "join j.stops st1 join j.stops st2 "
@@ -68,7 +70,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 .setParameter(ORIGIN, origin)
                 .setParameter("dest", destination)
                 .setParameter("by", by)
-                .setParameter("from", by.minusHours(SEARCH_PERIOD))
+                .setParameter("from", by.minusHours(searchPeriod))
                 .getResultList();
     }
 

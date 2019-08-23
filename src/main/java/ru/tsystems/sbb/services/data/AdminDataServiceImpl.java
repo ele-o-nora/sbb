@@ -202,6 +202,7 @@ public class AdminDataServiceImpl implements AdminDataService {
                         train.getSpeed());
             }
         }
+        //TODO: publish topic
     }
 
     private void scheduleInbound(final Journey journey,
@@ -323,6 +324,7 @@ public class AdminDataServiceImpl implements AdminDataService {
         Journey journey = passengerDao.getJourneyById(journeyId);
         journey.setCancelled(true);
         adminDao.update(journey);
+        //TODO: publish topic
     }
 
     @Override
@@ -330,5 +332,6 @@ public class AdminDataServiceImpl implements AdminDataService {
         Journey journey = passengerDao.getJourneyById(journeyId);
         journey.setDelay(delay);
         adminDao.update(journey);
+        //TODO: publish topic
     }
 }

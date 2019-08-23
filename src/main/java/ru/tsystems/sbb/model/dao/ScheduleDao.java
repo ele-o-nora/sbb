@@ -16,11 +16,13 @@ public interface ScheduleDao {
      *  about trains passing specific station during specific time period.
      * @param station station for which the schedule will be returned
      * @param from moment in time that sets the beginning of the search period
+     * @param searchPeriod number of hours the search period lasts
      * @return list of ScheduledStop for specified station which departure or
      *  arrival fall into the period of time starting with specified moment
      * @see ScheduledStop
      */
-    List<ScheduledStop> stationSchedule(Station station, LocalDateTime from);
+    List<ScheduledStop> stationSchedule(Station station, LocalDateTime from,
+                                        int searchPeriod);
 
     /**
      * Gets from database the list of scheduled journeys that depart from origin
@@ -28,11 +30,12 @@ public interface ScheduleDao {
      * @param origin station which train departs from during specified time
      * @param destination station where train must stop after origin
      * @param from moment in time that sets the beginning of the search period
+     * @param searchPeriod number of hours the search period lasts
      * @return list of Journey that depart from origin during certain period
      *  of time after specified moment and later stop at destination
      */
     List<Journey> trainsFromToByDeparture(Station origin, Station destination,
-                               LocalDateTime from);
+                               LocalDateTime from, int searchPeriod);
 
     /**
      * Gets from database the list of scheduled journeys that arrive at
@@ -41,11 +44,12 @@ public interface ScheduleDao {
      * @param origin station where train must stop before destination
      * @param destination station where train arrives during specified time
      * @param by moment in time that sets the end of the search period
+     * @param searchPeriod number of hours the search period lasts
      * @return list of Journey that arrive at destination during certain period
      *  before specified moment having stopped at origin before that
      */
     List<Journey> trainsFromToByArrival(Station origin, Station destination,
-                                          LocalDateTime by);
+                                        LocalDateTime by, int searchPeriod);
 
     /**
      * Gets from database the station that has specific name.
