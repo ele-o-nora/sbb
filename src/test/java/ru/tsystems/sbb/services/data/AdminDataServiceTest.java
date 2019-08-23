@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.jms.core.JmsTemplate;
 import ru.tsystems.sbb.model.dao.AdminDao;
 import ru.tsystems.sbb.model.dao.PassengerDao;
 import ru.tsystems.sbb.model.dao.RouteDao;
@@ -65,6 +66,9 @@ class AdminDataServiceTest {
 
     @Mock
     private Clock mockClock;
+
+    @Mock
+    private JmsTemplate mockJmsTemplate;
 
     private final static LocalDate LOCAL_DATE = LocalDate.of(2020, 2, 2);
 
@@ -247,8 +251,10 @@ class AdminDataServiceTest {
         verify(mockRouteDao, times(9)).inboundDistance(same(station),
                 same(station), same(line));
         verify(mockAdminDao, times(12)).add(any(ScheduledStop.class));
+        verify(mockJmsTemplate, times(1)).send(any());
         verifyNoMoreInteractions(mockRouteDao);
         verifyNoMoreInteractions(mockAdminDao);
+        verifyNoMoreInteractions(mockJmsTemplate);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockPassengerDao);
         verifyZeroInteractions(mockMapper);
@@ -287,8 +293,10 @@ class AdminDataServiceTest {
         verify(mockRouteDao, times(9)).outboundDistance(same(station),
                 same(station), same(line));
         verify(mockAdminDao, times(12)).add(any(ScheduledStop.class));
+        verify(mockJmsTemplate, times(1)).send(any());
         verifyNoMoreInteractions(mockRouteDao);
         verifyNoMoreInteractions(mockAdminDao);
+        verifyNoMoreInteractions(mockJmsTemplate);
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockPassengerDao);
         verifyZeroInteractions(mockMapper);
