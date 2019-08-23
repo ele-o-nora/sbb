@@ -59,6 +59,13 @@ public interface ScheduleDao {
     Station getStationByName(String stationName);
 
     /**
+     * Gets from database a station with specific id.
+     * @param id id of the station to get
+     * @return Station with specified id
+     */
+    Station getStationById(int id);
+
+    /**
      * Gets from database the list of stations that are reachable from both
      *  origin and destination via existing routes.
      * @param origin first of the stations to be connected via transfer station

@@ -51,17 +51,6 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public List<Station> allRouteStations(final Route route) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select s "
-                + "from Station s join s.routes r join s.lines ls "
-                + "where r = :route "
-                + "order by ls.order asc", Station.class)
-                .setParameter("route", route)
-                .getResultList();
-    }
-
-    @Override
     public Route getRouteById(final int routeId) {
         Session session = sessionFactory.getCurrentSession();
         return session.get(Route.class, routeId);

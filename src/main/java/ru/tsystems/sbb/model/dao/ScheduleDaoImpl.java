@@ -83,6 +83,11 @@ public class ScheduleDaoImpl implements ScheduleDao {
     }
 
     @Override
+    public Station getStationById(int id) {
+        return sessionFactory.getCurrentSession().get(Station.class, id);
+    }
+
+    @Override
     public List<Station> getTransferStations(final Station origin,
                                              final Station destination) {
         Session session = sessionFactory.getCurrentSession();

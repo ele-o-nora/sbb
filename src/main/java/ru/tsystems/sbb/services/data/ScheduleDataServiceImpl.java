@@ -172,8 +172,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     }
 
     @Override
-    public List<ScheduledStopDto> fullTodaySchedule(String stationName) {
-        Station station = scheduleDao.getStationByName(stationName);
+    public List<ScheduledStopDto> fullTodaySchedule(int stationId) {
+        Station station = scheduleDao.getStationById(stationId);
         List<ScheduledStop> schedule = scheduleDao
                 .stationSchedule(station, LocalDate.now(clock).atStartOfDay(),
                         FULL_SCHEDULE_SEARCH_PERIOD);

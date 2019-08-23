@@ -64,9 +64,9 @@ public interface ScheduleDataService {
      * Gets from DAO list of scheduled stops for station with specific name that
      *  contain information about trains stopping at this station during current
      *  day. Returns the list of corresponding DTOs.
-     * @param stationName name of the station for which the schedule is returned
+     * @param stationId id of the station for which the schedule is returned
      * @return list of ScheduledStopDto for specified station where arrival or
      *  departure fall on the current day
      */
-    List<ScheduledStopDto> fullTodaySchedule(String stationName);
+    List<ScheduledStopDto> fullTodaySchedule(int stationId);
 }

@@ -40,13 +40,6 @@ public interface RouteDao {
     List<Route> allLineRoutes(Line line);
 
     /**
-     * Gets from database the list of all stations where specific route stops.
-     * @param route route for which the list of stations is returned
-     * @return list of Station that are linked to specified route
-     */
-    List<Station> allRouteStations(Route route);
-
-    /**
      * Gets from database the route that is identified by specific id.
      * @param routeId id that indicates which route to get
      * @return Route that has specified id

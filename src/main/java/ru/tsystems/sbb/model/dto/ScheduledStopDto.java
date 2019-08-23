@@ -16,8 +16,6 @@ public class ScheduledStopDto {
     private int id;
     private String station;
     @ToString.Exclude
-    private int journeyId;
-    @ToString.Exclude
     private String route;
     @ToString.Exclude
     private String direction;

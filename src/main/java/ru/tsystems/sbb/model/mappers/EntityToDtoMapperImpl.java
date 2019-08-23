@@ -91,7 +91,6 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
                 .getJourney().getRoute().getNumber());
         scheduledStopDto.setDirection(scheduledStop
                 .getJourney().getDestination().getName());
-        scheduledStopDto.setJourneyId(scheduledStop.getJourney().getId());
         scheduledStopDto.setDelay(scheduledStop.getJourney().getDelay());
         if (scheduledStop.getJourney().isCancelled()) {
             scheduledStopDto.setStatus("Cancelled");
