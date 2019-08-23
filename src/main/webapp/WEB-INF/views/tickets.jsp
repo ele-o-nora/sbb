@@ -21,109 +21,111 @@
     </div>
 </c:if>
 <c:if test="${!empty tickets}">
-<div class="row justify-content-center">
-    <div class="col-sm-8">
-        <c:forEach items="${tickets}" var="ticket">
-            <div class="row m-2 justify-content-center">
-                <c:if test="${ticket.category ne 'old'}">
-                    <div class="border border-dark p-2 col-sm-10">
-                        <c:if test="${ticket.journey.status eq 'Cancelled'}">
+    <div class="row justify-content-center">
+        <div class="col-sm-8">
+            <c:forEach items="${tickets}" var="ticket">
+                <div class="row m-2 justify-content-center">
+                    <c:if test="${ticket.category ne 'old'}">
+                        <div class="border border-dark p-2 col-sm-10">
                             <div class="row mt-2 justify-content-center">
-                                <span class="font-weight-bold text-danger">Cancelled</span>
+                                <span class="font-weight-bold mr-1">Route: </span> ${ticket.journey.route}
                             </div>
-                        </c:if>
-                        <div class="row mt-2 justify-content-center">
-                            <span class="font-weight-bold mr-1">Route: </span> ${ticket.journey.route}
-                        </div>
-                        <div class="row mb-2 justify-content-center">
-                            <span class="font-weight-bold mr-1"> Direction: </span> ${ticket.journey.destination}
-                        </div>
-                        <div class="row m-2 p-2 border-top border-bottom">
-                            <div class="col-sm-6">
-                                <div class="row justify-content-center">
-                                    <span class="font-weight-bold mr-1">From: </span> ${ticket.stationFrom.station}
-                                </div>
-                                <div class="row justify-content-center">
-                                    <span class="font-weight-bold mr-1"> Departure: </span> ${ticket.stationFrom.departure}
-                                </div>
+                            <div class="row mb-2 justify-content-center">
+                                <span class="font-weight-bold mr-1"> Direction: </span> ${ticket.journey.destination}
                             </div>
-                            <div class="col-sm-6">
-                                <div class="row justify-content-center">
-                                    <span class="font-weight-bold mr-1">To: </span> ${ticket.stationTo.station}
+                            <div class="row m-2 p-2 border-top border-bottom">
+                                <div class="col-sm-6">
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1">From: </span> ${ticket.stationFrom.station}
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1"> Departure: </span> ${ticket.stationFrom.departure}
+                                    </div>
                                 </div>
-                                <div class="row justify-content-center">
-                                    <span class="font-weight-bold mr-1"> Arrival: </span> ${ticket.stationTo.arrival}
+                                <div class="col-sm-6">
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1">To: </span> ${ticket.stationTo.station}
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1"> Arrival: </span> ${ticket.stationTo.arrival}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row m-2 justify-content-center">
-                            <span class="font-weight-bold mr-1">Price: </span> ${ticket.formattedPrice}
-                        </div>
-                        <c:if test="${ticket.category eq 'future'}">
                             <div class="row m-2 justify-content-center">
-                                <form action="${pageContext.request.contextPath}/returnTicket" method="post">
-                                    <input type="hidden" value="${ticket.id}" name="ticketId">
-                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                    <input type="submit" value="Return ticket" class="btn btn-outline-danger">
-                                </form>
+                                <span class="font-weight-bold mr-1">Price: </span> ${ticket.formattedPrice}
                             </div>
-                        </c:if>
-                    </div>
-                </c:if>
-                <c:if test="${ticket.category eq 'old'}">
-                    <div class="border text-muted p-2 col-sm-10">
-                        <c:if test="${ticket.journey.status eq 'Cancelled'}">
+                            <c:if test="${ticket.category eq 'future'}">
+                                <div class="row m-2 justify-content-center">
+                                    <form action="${pageContext.request.contextPath}/returnTicket" method="post">
+                                        <input type="hidden" value="${ticket.id}" name="ticketId">
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <input type="submit" value="Return ticket" class="btn btn-outline-danger">
+                                    </form>
+                                </div>
+                            </c:if>
+                        </div>
+                    </c:if>
+                    <c:if test="${ticket.category eq 'old'}">
+                        <div class="border text-muted p-2 col-sm-10">
+                            <c:if test="${ticket.journey.status eq 'Cancelled'}">
+                                <div class="row m-2 pb-2 border-bottom">
+                                    <div class="col">
+                                        <div class="row justify-content-center">
+                                            <span class="font-weight-bold text-danger">Cancelled</span>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <span class="text-danger">Please contact customer service</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
                             <div class="row mt-2 justify-content-center">
-                                <span class="font-weight-bold">Cancelled</span>
+                                <span class="font-weight-bold mr-1">Route: </span> ${ticket.journey.route}
                             </div>
-                        </c:if>
-                        <div class="row mt-2 justify-content-center">
-                            <span class="font-weight-bold mr-1">Route: </span> ${ticket.journey.route}
-                        </div>
-                        <div class="row mb-2 justify-content-center">
-                            <span class="font-weight-bold mr-1">Direction: </span> ${ticket.journey.destination}
-                        </div>
-                        <div class="row m-2 p-2 border-top border-bottom">
-                            <div class="col-sm-6">
-                                <div class="row justify-content-center">
-                                    <span class="font-weight-bold mr-1">From: </span> ${ticket.stationFrom.station}
-                                </div>
-                                <div class="row justify-content-center">
-                                    <span class="font-weight-bold mr-1">Departure: </span> ${ticket.stationFrom.departure}
-                                </div>
+                            <div class="row mb-2 justify-content-center">
+                                <span class="font-weight-bold mr-1">Direction: </span> ${ticket.journey.destination}
                             </div>
-                            <div class="col-sm-6">
-                                <div class="row justify-content-center">
-                                    <span class="font-weight-bold mr-1">To: </span> ${ticket.stationTo.station}
+                            <div class="row m-2 p-2 border-top border-bottom">
+                                <div class="col-sm-6">
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1">From: </span> ${ticket.stationFrom.station}
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1">Departure: </span> ${ticket.stationFrom.departure}
+                                    </div>
                                 </div>
-                                <div class="row justify-content-center">
-                                    <span class="font-weight-bold mr-1">Arrival: </span> ${ticket.stationTo.arrival}
+                                <div class="col-sm-6">
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1">To: </span> ${ticket.stationTo.station}
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <span class="font-weight-bold mr-1">Arrival: </span> ${ticket.stationTo.arrival}
+                                    </div>
                                 </div>
                             </div>
+                            <div class="row m-2 justify-content-center">
+                                <span class="font-weight-bold mr-1 ml-1">Price: </span> ${ticket.formattedPrice}
+                            </div>
                         </div>
-                        <div class="row m-2 justify-content-center">
-                            <span class="font-weight-bold mr-1 ml-1">Price: </span> ${ticket.formattedPrice}
-                        </div>
-                    </div>
-                </c:if>
-            </div>
-        </c:forEach>
-        <div class="row m-3">
-            <div class="col">
-                <c:if test="${!empty previousPage}">
-                    <a href="${pageContext.request.contextPath}/myTickets?page=${previousPage}"
-                       class="btn btn-outline-dark float-left">Previous page</a>
-                </c:if>
-            </div>
-            <div class="col">
-                <c:if test="${!empty nextPage}">
-                    <a href="${pageContext.request.contextPath}/myTickets?page=${nextPage}"
-                       class="btn btn-outline-dark float-right">Next page</a>
-                </c:if>
+                    </c:if>
+                </div>
+            </c:forEach>
+            <div class="row m-3">
+                <div class="col">
+                    <c:if test="${!empty previousPage}">
+                        <a href="${pageContext.request.contextPath}/myTickets?page=${previousPage}"
+                           class="btn btn-outline-dark float-left">Previous page</a>
+                    </c:if>
+                </div>
+                <div class="col">
+                    <c:if test="${!empty nextPage}">
+                        <a href="${pageContext.request.contextPath}/myTickets?page=${nextPage}"
+                           class="btn btn-outline-dark float-right">Next page</a>
+                    </c:if>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </c:if>
 </body>
 </html>

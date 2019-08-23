@@ -151,6 +151,41 @@ class EntityToDtoMapperImplTest {
     }
 
     @Test
+    void convertCancelledJourneyTicketTest() {
+        Ticket ticket = new Ticket();
+        Journey journey = new Journey();
+        journey.setRoute(new Route());
+        journey.getRoute().setNumber("routeNumber");
+        journey.setDestination(new Station());
+        journey.getDestination().setName("destination");
+        journey.setCancelled(true);
+        ScheduledStop stop = new ScheduledStop();
+        stop.setStation(new Station());
+        stop.getStation().setName("stationName");
+        stop.setJourney(journey);
+        stop.setArrival(LOCAL_DATE.minusDays(1).atStartOfDay());
+        journey.setStops(Collections.singletonList(stop));
+        ticket.setFrom(stop);
+        ticket.setTo(stop);
+        ticket.setJourney(journey);
+        ticket.setPassenger(new Passenger());
+        ticket.getPassenger().setDateOfBirth(LOCAL_DATE.minusYears(20));
+        ticket.setPrice(10);
+        when(mockMapper.map(any(Ticket.class), any()))
+                .thenReturn(new TicketDto());
+        when(mockMapper.map(any(Journey.class), any()))
+                .thenReturn(new JourneyDto());
+        when(mockMapper.map(any(ScheduledStop.class), any()))
+                .thenReturn(new ScheduledStopDto());
+        when(mockMapper.map(any(Passenger.class), any()))
+                .thenReturn(new PassengerDto());
+
+        TicketDto result = entityToDtoMapper.convert(ticket);
+
+        assertEquals("old", result.getCategory());
+    }
+
+    @Test
     void convertCurrentTicketTest() {
         Ticket ticket = new Ticket();
         Journey journey = new Journey();
@@ -283,14 +318,15 @@ class EntityToDtoMapperImplTest {
         scheduledStop.setArrival(LocalDateTime.now(mockClock));
         scheduledStop.setDeparture(LocalDateTime.now(mockClock));
         scheduledStop.getJourney().setCancelled(true);
+        String expected = "2020-02-02 00:00";
         when(mockMapper.map(any(ScheduledStop.class), any()))
                 .thenReturn(new ScheduledStopDto());
 
         ScheduledStopDto result = entityToDtoMapper.convert(scheduledStop);
 
         assertEquals("Cancelled", result.getStatus());
-        assertEquals("-", result.getDeparture());
-        assertEquals("-", result.getArrival());
+        assertEquals(expected, result.getDeparture());
+        assertEquals(expected, result.getArrival());
         assertEquals("-", result.getActualArrival());
         assertEquals("-", result.getActualDeparture());
     }

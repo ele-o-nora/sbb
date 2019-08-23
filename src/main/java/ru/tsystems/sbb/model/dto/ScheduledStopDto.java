@@ -28,11 +28,17 @@ public class ScheduledStopDto {
     private int delay;
     private String status;
 
-    public void setArrivals(final LocalDateTime arrivalTime, final int delay) {
-        if (arrivalTime != null && !status.equals("Cancelled")) {
+    public void setArrivals(final LocalDateTime arrivalTime, final int delay,
+                            final boolean cancelled) {
+        if (arrivalTime != null) {
             DateTimeFormatter formatter = DateTimeFormatter
                     .ofPattern("yyyy-MM-dd HH:mm");
-            actualArrival = formatter.format(arrivalTime.plusMinutes(delay));
+            if (!cancelled) {
+                actualArrival = formatter.format(arrivalTime
+                        .plusMinutes(delay));
+            } else {
+                actualArrival = "-";
+            }
             arrival = formatter.format(arrivalTime);
         } else {
             actualArrival = "-";
@@ -41,13 +47,17 @@ public class ScheduledStopDto {
     }
 
     public void setDepartures(final LocalDateTime departureTime,
-                              final int delay) {
-        if (departureTime != null && !status.equals("Cancelled")) {
+                              final int delay, final boolean cancelled) {
+        if (departureTime != null) {
             DateTimeFormatter formatter = DateTimeFormatter
                     .ofPattern("yyyy-MM-dd HH:mm");
             departure = formatter.format(departureTime);
-            actualDeparture = formatter.format(departureTime
-                    .plusMinutes(delay));
+            if (!cancelled) {
+                actualDeparture = formatter.format(departureTime
+                        .plusMinutes(delay));
+            } else {
+                actualDeparture = "-";
+            }
         } else {
             departure = "-";
             actualDeparture = "-";

@@ -101,9 +101,11 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
             scheduledStopDto.setStatus("On time");
         }
         scheduledStopDto.setArrivals(scheduledStop.getArrival(),
-                scheduledStop.getJourney().getDelay());
+                scheduledStop.getJourney().getDelay(),
+                scheduledStop.getJourney().isCancelled());
         scheduledStopDto.setDepartures(scheduledStop.getDeparture(),
-                scheduledStop.getJourney().getDelay());
+                scheduledStop.getJourney().getDelay(),
+                scheduledStop.getJourney().isCancelled());
         return scheduledStopDto;
     }
 
@@ -120,7 +122,8 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
         ticketDto.setStationTo(convert(ticket.getTo()));
         ticketDto.setPassenger(convert(ticket.getPassenger()));
         ticketDto.setFormattedPrice(formatPrice(ticket.getPrice()));
-        if (ticket.getTo().getArrival().isBefore(LocalDateTime.now(clock))) {
+        if (ticket.getJourney().isCancelled() || ticket.getTo().getArrival()
+                .isBefore(LocalDateTime.now(clock))) {
             ticketDto.setCategory("old");
         } else if (ticket.getFrom().getDeparture()
                 .isAfter(LocalDateTime.now(clock))) {
