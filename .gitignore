@@ -26,8 +26,9 @@ hs_err_pid*
 *.iml
 .idea/
 
-/src/main/resources/db.properties
 /target/
-/src/main/webapp/resources/doom.jpg
-/src/main/webapp/resources/wall.jpg
-/src/test/resources/log4j2-test.properties
+/railways/src/main/resources/db.properties
+/railways/src/main/webapp/resources/doom.jpg
+/railways/src/main/webapp/resources/wall.jpg
+/railways/target/
+/railways/src/test/resources/log4j2-test.properties
