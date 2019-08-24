@@ -51,6 +51,11 @@ class ScheduleDataServiceTest {
     private ScheduleDao mockScheduleDao;
 
     private static final int TRANSFER_TIME = 15;
+    private static final String STATION_FROM = "stationFrom";
+    private static final String STATION_TO = "stationTo";
+    private static final String DEPARTURE = "departure";
+    private static final String ARRIVAL = "arrival";
+    private static final String STATION_NAME = "stationName";
 
     @BeforeEach
     void initMocks(){
@@ -59,10 +64,10 @@ class ScheduleDataServiceTest {
 
     @Test
     void directTrainsFromToDifferentLinesTest() {
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = "departure";
+        String searchType = DEPARTURE;
         Station firstStation = new Station();
         LineStation first = new LineStation();
         first.setLine(new Line());
@@ -90,10 +95,10 @@ class ScheduleDataServiceTest {
 
     @Test
     void directTrainsFromToByDepartureTest() {
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = "departure";
+        String searchType = DEPARTURE;
         Station first = new Station();
         Station second = new Station();
         LineStation lineStation = new LineStation();
@@ -133,10 +138,10 @@ class ScheduleDataServiceTest {
 
     @Test
     void directTrainsFromToByArrivalTest() {
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = "arrival";
+        String searchType = ARRIVAL;
         Station first = new Station();
         Station second = new Station();
         LineStation lineStation = new LineStation();
@@ -176,10 +181,10 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByDepartureEmptyFirstTrainTest() {
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = "departure";
+        String searchType = DEPARTURE;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
@@ -214,10 +219,10 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByDepartureEmptySecondTrainTest() {
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = "departure";
+        String searchType = DEPARTURE;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
@@ -263,10 +268,10 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByDepartureSuccessTest() {
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = "departure";
+        String searchType = DEPARTURE;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
@@ -326,10 +331,10 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByArrivalEmptySecondTrainTest() {
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = "arrival";
+        String searchType = ARRIVAL;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
@@ -364,10 +369,10 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByArrivalEmptyFirstTrainTest() {
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = "arrival";
+        String searchType = ARRIVAL;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
@@ -413,10 +418,10 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByArrivalSuccessTest() {
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = "arrival";
+        String searchType = ARRIVAL;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
@@ -485,7 +490,7 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -523,7 +528,7 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -561,7 +566,7 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -600,7 +605,7 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -639,7 +644,7 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 10));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -676,7 +681,7 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -713,7 +718,7 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -750,7 +755,7 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -787,7 +792,7 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -824,7 +829,7 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -861,7 +866,7 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -898,7 +903,7 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -935,7 +940,7 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -972,7 +977,7 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -1009,7 +1014,7 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -1046,7 +1051,7 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = "stationName";
+        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();

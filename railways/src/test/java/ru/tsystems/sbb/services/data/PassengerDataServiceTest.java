@@ -76,6 +76,12 @@ class PassengerDataServiceTest {
     private static final String NO_SEATS = "No available seats.";
     private static final String SAME_PASSENGER = "You already have a ticket "
             + "for this journey.";
+    private static final String STATION_FROM = "stationFrom";
+    private static final String STATION_TO = "stationTo";
+    private static final String FORMATTED_PRICE = "formattedPrice";
+    private static final String SUCCESS = "success";
+    private static final String FIRST_NAME = "firstName";
+    private static final String LAST_NAME = "lastName";
 
     @BeforeEach
     void initMocks() {
@@ -91,8 +97,8 @@ class PassengerDataServiceTest {
     @Test
     void prepareTicketOrderInboundNotEnoughTimeTest() {
         int journeyId = 0;
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         Journey journey = new Journey();
         journey.setRoute(new Route());
         Line line =  new Line();
@@ -118,7 +124,7 @@ class PassengerDataServiceTest {
                 any(Station.class), any(Line.class))).thenReturn(90);
         when(mockMapper.convert(any(Journey.class)))
                 .thenReturn(new JourneyDto());
-        when(mockMapper.formatPrice(anyFloat())).thenReturn("formattedPrice");
+        when(mockMapper.formatPrice(anyFloat())).thenReturn(FORMATTED_PRICE);
 
         TicketOrderDto result = passengerDataService
                 .prepareTicketOrder(journeyId, stationFrom, stationTo);
@@ -147,8 +153,8 @@ class PassengerDataServiceTest {
     @Test
     void prepareTicketOrderInboundNotEnoughSeatsTest() {
         int journeyId = 0;
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         Journey journey = new Journey();
         journey.setRoute(new Route());
         Line line =  new Line();
@@ -180,7 +186,7 @@ class PassengerDataServiceTest {
                 any(Station.class), any(Line.class))).thenReturn(90);
         when(mockMapper.convert(any(Journey.class)))
                 .thenReturn(new JourneyDto());
-        when(mockMapper.formatPrice(anyFloat())).thenReturn("formattedPrice");
+        when(mockMapper.formatPrice(anyFloat())).thenReturn(FORMATTED_PRICE);
         when(mockMapper.convert(any(ScheduledStop.class)))
                 .thenReturn(new ScheduledStopDto());
         when(mockPassengerDao.currentTickets(any(Journey.class),
@@ -217,8 +223,8 @@ class PassengerDataServiceTest {
     @Test
     void prepareTicketOrderOutboundSuccessTest() {
         int journeyId = 0;
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
+        String stationFrom = STATION_FROM;
+        String stationTo = STATION_TO;
         Journey journey = new Journey();
         journey.setRoute(new Route());
         Line line =  new Line();
@@ -252,7 +258,7 @@ class PassengerDataServiceTest {
         when(mockRouteDao.outboundDistance(any(Station.class),
                 any(Station.class), any(Line.class))).thenReturn(90);
         when(mockMapper.convert(any(Journey.class))).thenReturn(journeyDto);
-        when(mockMapper.formatPrice(anyFloat())).thenReturn("formattedPrice");
+        when(mockMapper.formatPrice(anyFloat())).thenReturn(FORMATTED_PRICE);
         when(mockMapper.convert(same(firstStop))).thenReturn(firstStopDto);
         when(mockMapper.convert(same(secondStop))).thenReturn(secondStopDto);
         when(mockPassengerDao.currentTickets(any(Journey.class),
@@ -288,7 +294,7 @@ class PassengerDataServiceTest {
         assertSame(firstStopDto, result.getOrigin());
         assertSame(secondStopDto, result.getDestination());
         assertEquals(1.5f, result.getPrice());
-        assertEquals("formattedPrice", result.getFormattedPrice());
+        assertEquals(FORMATTED_PRICE, result.getFormattedPrice());
     }
 
     @Test
@@ -308,7 +314,7 @@ class PassengerDataServiceTest {
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
-        assertEquals("success", result);
+        assertEquals(SUCCESS, result);
     }
 
     @Test
@@ -337,8 +343,8 @@ class PassengerDataServiceTest {
         ticketOrder.setOrigin(new ScheduledStopDto());
         ticketOrder.getOrigin().setId(1);
         ticketOrder.setDestination(new ScheduledStopDto());
-        String firstName = "firstName";
-        String lastName = "lastName";
+        String firstName = FIRST_NAME;
+        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         ScheduledStop firstStop = new ScheduledStop();
         firstStop.setDeparture(LocalDateTime.of(2020, 2, 2, 0, 5));
@@ -367,8 +373,8 @@ class PassengerDataServiceTest {
         ticketOrder.setOrigin(new ScheduledStopDto());
         ticketOrder.getOrigin().setId(1);
         ticketOrder.setDestination(new ScheduledStopDto());
-        String firstName = "firstName";
-        String lastName = "lastName";
+        String firstName = FIRST_NAME;
+        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey journey = new Journey();
         ScheduledStop firstStop = new ScheduledStop();
@@ -408,8 +414,8 @@ class PassengerDataServiceTest {
         ticketOrder.getOrigin().setId(1);
         ticketOrder.setDestination(new ScheduledStopDto());
         ticketOrder.getDestination().setId(2);
-        String firstName = "firstName";
-        String lastName = "lastName";
+        String firstName = FIRST_NAME;
+        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey journey = new Journey();
         journey.setTrainType(new Train());
@@ -457,8 +463,8 @@ class PassengerDataServiceTest {
         ticketOrder.getOrigin().setId(1);
         ticketOrder.setDestination(new ScheduledStopDto());
         ticketOrder.getDestination().setId(2);
-        String firstName = "firstName";
-        String lastName = "lastName";
+        String firstName = FIRST_NAME;
+        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey journey = new Journey();
         journey.setTrainType(new Train());
@@ -496,7 +502,7 @@ class PassengerDataServiceTest {
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
-        assertEquals("success", result);
+        assertEquals(SUCCESS, result);
     }
 
     @Test
@@ -511,8 +517,8 @@ class PassengerDataServiceTest {
         ticketOrder.getFirstTrain().setDestination(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setOrigin(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
-        String firstName = "firstName";
-        String lastName = "lastName";
+        String firstName = FIRST_NAME;
+        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         ScheduledStop firstStop = new ScheduledStop();
         firstStop.setDeparture(LocalDateTime.of(2020, 2, 2, 0, 5));
@@ -547,8 +553,8 @@ class PassengerDataServiceTest {
         ticketOrder.getFirstTrain().setDestination(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setOrigin(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
-        String firstName = "firstName";
-        String lastName = "lastName";
+        String firstName = FIRST_NAME;
+        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey firstJourney = new Journey();
         ScheduledStop firstStop = new ScheduledStop();
@@ -595,8 +601,8 @@ class PassengerDataServiceTest {
         ticketOrder.getFirstTrain().setDestination(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setOrigin(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
-        String firstName = "firstName";
-        String lastName = "lastName";
+        String firstName = FIRST_NAME;
+        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey firstJourney = new Journey();
         Journey secondJourney = new Journey();
@@ -650,8 +656,8 @@ class PassengerDataServiceTest {
         ticketOrder.getFirstTrain().getDestination().setId(2);
         ticketOrder.getSecondTrain().setOrigin(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
-        String firstName = "firstName";
-        String lastName = "lastName";
+        String firstName = FIRST_NAME;
+        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey firstJourney = new Journey();
         firstJourney.setTrainType(new Train());
@@ -714,8 +720,8 @@ class PassengerDataServiceTest {
         ticketOrder.getSecondTrain().getOrigin().setId(3);
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
         ticketOrder.getSecondTrain().getDestination().setId(4);
-        String firstName = "firstName";
-        String lastName = "lastName";
+        String firstName = FIRST_NAME;
+        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey firstJourney = new Journey();
         firstJourney.setTrainType(new Train());
@@ -790,8 +796,8 @@ class PassengerDataServiceTest {
         ticketOrder.getSecondTrain().getOrigin().setId(3);
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
         ticketOrder.getSecondTrain().getDestination().setId(4);
-        String firstName = "firstName";
-        String lastName = "lastName";
+        String firstName = FIRST_NAME;
+        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey firstJourney = new Journey();
         firstJourney.setTrainType(new Train());
@@ -844,6 +850,6 @@ class PassengerDataServiceTest {
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
-        assertEquals("success", result);
+        assertEquals(SUCCESS, result);
     }
 }

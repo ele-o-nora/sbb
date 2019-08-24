@@ -38,6 +38,9 @@ class PassengerControllerTest {
     @Mock
     private PassengerViewService mockViewService;
 
+    private static final String EDIT_INFO = "editInfo";
+    private static final String BUY_TICKETS = "buyTickets";
+
     @BeforeEach
     void initMocks(){
         MockitoAnnotations.initMocks(this);
@@ -85,7 +88,7 @@ class PassengerControllerTest {
 
         verifyZeroInteractions(mockViewService);
 
-        assertEquals("editInfo", mav.getViewName());
+        assertEquals(EDIT_INFO, mav.getViewName());
         assertTrue(mav.getModel().containsKey("changeNameDto"));
         assertEquals(new ChangeNameDto(), mav.getModel().get("changeNameDto"));
     }
@@ -101,7 +104,7 @@ class PassengerControllerTest {
                 .changePassword(same(passwordDto.getPassword()));
         verifyNoMoreInteractions(mockViewService);
 
-        assertEquals("editInfo", mav.getViewName());
+        assertEquals(EDIT_INFO, mav.getViewName());
     }
 
     @Test
@@ -113,7 +116,7 @@ class PassengerControllerTest {
 
         verifyZeroInteractions(mockViewService);
 
-        assertEquals("editInfo", mav.getViewName());
+        assertEquals(EDIT_INFO, mav.getViewName());
         assertTrue(mav.getModel().containsKey("passwordDto"));
         assertEquals(new PasswordDto(), mav.getModel().get("passwordDto"));
     }
@@ -129,7 +132,7 @@ class PassengerControllerTest {
                         same(changeNameDto.getLastName()));
         verifyNoMoreInteractions(mockViewService);
 
-        assertEquals("editInfo", mav.getViewName());
+        assertEquals(EDIT_INFO, mav.getViewName());
     }
 
     @Test
@@ -145,7 +148,7 @@ class PassengerControllerTest {
         verify(mockViewService, times(1)).prepBuyerInfo();
         verifyNoMoreInteractions(mockViewService);
 
-        assertEquals("buyTickets", mav.getViewName());
+        assertEquals(BUY_TICKETS, mav.getViewName());
     }
 
     @Test
@@ -167,7 +170,7 @@ class PassengerControllerTest {
                 same(buyerDetails.getPassenger().getDateOfBirth()));
         verifyNoMoreInteractions(mockViewService);
 
-        assertEquals("buyTickets", mav.getViewName());
+        assertEquals(BUY_TICKETS, mav.getViewName());
     }
 
     @Test
@@ -183,7 +186,7 @@ class PassengerControllerTest {
         verify(mockViewService, times(1)).prepBuyerInfo();
         verifyNoMoreInteractions(mockViewService);
 
-        assertEquals("buyTickets", mav.getViewName());
+        assertEquals(BUY_TICKETS, mav.getViewName());
 
     }
 
@@ -206,7 +209,7 @@ class PassengerControllerTest {
                 same(buyerDetails.getPassenger().getDateOfBirth()));
         verifyNoMoreInteractions(mockViewService);
 
-        assertEquals("buyTickets", mav.getViewName());
+        assertEquals(BUY_TICKETS, mav.getViewName());
     }
 
 }
