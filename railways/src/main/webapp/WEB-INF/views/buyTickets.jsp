@@ -65,7 +65,7 @@
             </div>
         </div>
     </c:if>
-    <a href="${pageContext.request.contextPath}/" class="text-secondary">Back to main page</a>
+    <a href="${pageContext.request.contextPath}/" class="text-secondary mb-3">Back to main page</a>
 </c:if>
 <c:if test="${empty status}"><h5 class="text-secondary m-3">Passenger details:</h5>
     <c:if test="${!empty ticketOrder}">
