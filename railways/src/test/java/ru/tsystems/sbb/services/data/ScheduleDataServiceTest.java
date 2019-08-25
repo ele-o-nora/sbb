@@ -64,10 +64,7 @@ class ScheduleDataServiceTest {
 
     @Test
     void directTrainsFromToDifferentLinesTest() {
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = DEPARTURE;
         Station firstStation = new Station();
         LineStation first = new LineStation();
         first.setLine(new Line());
@@ -76,17 +73,17 @@ class ScheduleDataServiceTest {
         LineStation second = new LineStation();
         second.setLine(new Line());
         secondStation.setLines(Collections.singletonList(second));
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(firstStation);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(secondStation);
 
         List<JourneyDto> result = scheduleDataService
-                .directTrainsFromTo(stationFrom, stationTo,
-                        dateTime, searchType);
+                .directTrainsFromTo(STATION_FROM, STATION_TO,
+                        dateTime, DEPARTURE);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verifyNoMoreInteractions(mockScheduleDao);
         verifyZeroInteractions(mockMapper);
 
@@ -95,10 +92,7 @@ class ScheduleDataServiceTest {
 
     @Test
     void directTrainsFromToByDepartureTest() {
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = DEPARTURE;
         Station first = new Station();
         Station second = new Station();
         LineStation lineStation = new LineStation();
@@ -109,9 +103,9 @@ class ScheduleDataServiceTest {
         Journey journey = new Journey();
         journeys.add(journey);
         JourneyDto journeyDto = new JourneyDto();
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(first);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(second);
         when(mockScheduleDao.trainsFromToByDeparture(any(Station.class),
                 any(Station.class), any(LocalDateTime.class), anyInt()))
@@ -120,11 +114,11 @@ class ScheduleDataServiceTest {
                 .thenReturn(journeyDto);
 
         List<JourneyDto> result = scheduleDataService
-                .directTrainsFromTo(stationFrom, stationTo,
-                        dateTime, searchType);
+                .directTrainsFromTo(STATION_FROM, STATION_TO,
+                        dateTime, DEPARTURE);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockScheduleDao, times(1))
                 .trainsFromToByDeparture(same(first), same(second),
                         same(dateTime), anyInt());
@@ -138,10 +132,7 @@ class ScheduleDataServiceTest {
 
     @Test
     void directTrainsFromToByArrivalTest() {
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = ARRIVAL;
         Station first = new Station();
         Station second = new Station();
         LineStation lineStation = new LineStation();
@@ -152,9 +143,9 @@ class ScheduleDataServiceTest {
         Journey journey = new Journey();
         journeys.add(journey);
         JourneyDto journeyDto = new JourneyDto();
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(first);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(second);
         when(mockScheduleDao.trainsFromToByArrival(any(Station.class),
                 any(Station.class), any(LocalDateTime.class), anyInt()))
@@ -163,11 +154,11 @@ class ScheduleDataServiceTest {
                 .thenReturn(journeyDto);
 
         List<JourneyDto> result = scheduleDataService
-                .directTrainsFromTo(stationFrom, stationTo,
-                        dateTime, searchType);
+                .directTrainsFromTo(STATION_FROM, STATION_TO,
+                        dateTime, ARRIVAL);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockScheduleDao, times(1))
                 .trainsFromToByArrival(same(first), same(second),
                         same(dateTime), anyInt());
@@ -181,18 +172,15 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByDepartureEmptyFirstTrainTest() {
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = DEPARTURE;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
         List<Station> transferStations = Collections
                 .singletonList(transfer);
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(first);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(second);
         when(mockScheduleDao.getTransferStations(any(Station.class),
                 any(Station.class))).thenReturn(transferStations);
@@ -201,11 +189,11 @@ class ScheduleDataServiceTest {
                 .thenReturn(new ArrayList<>());
 
         List<TransferTrainsDto> result = scheduleDataService
-                .trainsWithTransfer(stationFrom, stationTo,
-                        dateTime, searchType);
+                .trainsWithTransfer(STATION_FROM, STATION_TO,
+                        dateTime, DEPARTURE);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockScheduleDao, times(1))
                 .getTransferStations(same(first), same(second));
         verify(mockScheduleDao, times(1))
@@ -219,10 +207,7 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByDepartureEmptySecondTrainTest() {
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = DEPARTURE;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
@@ -235,9 +220,9 @@ class ScheduleDataServiceTest {
         firstJourney.setStops(Collections.singletonList(transferStop));
         List<Journey> trainsToTransfer = Collections
                 .singletonList(firstJourney);
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(first);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(second);
         when(mockScheduleDao.getTransferStations(any(Station.class),
                 any(Station.class))).thenReturn(transferStations);
@@ -246,11 +231,11 @@ class ScheduleDataServiceTest {
                 .thenReturn(trainsToTransfer);
 
         List<TransferTrainsDto> result = scheduleDataService
-                .trainsWithTransfer(stationFrom, stationTo,
-                        dateTime, searchType);
+                .trainsWithTransfer(STATION_FROM, STATION_TO,
+                        dateTime, DEPARTURE);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockScheduleDao, times(1))
                 .getTransferStations(same(first), same(second));
         verify(mockScheduleDao, times(1))
@@ -268,10 +253,7 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByDepartureSuccessTest() {
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = DEPARTURE;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
@@ -287,9 +269,9 @@ class ScheduleDataServiceTest {
         Journey secondJourney = new Journey();
         JourneyDto firstJourneyDto = new JourneyDto();
         JourneyDto secondJourneyDto = new JourneyDto();
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(first);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(second);
         when(mockScheduleDao.getTransferStations(any(Station.class),
                 any(Station.class))).thenReturn(transferStations);
@@ -305,11 +287,11 @@ class ScheduleDataServiceTest {
                 .thenReturn(secondJourneyDto);
 
         List<TransferTrainsDto> result = scheduleDataService
-                .trainsWithTransfer(stationFrom, stationTo,
-                        dateTime, searchType);
+                .trainsWithTransfer(STATION_FROM, STATION_TO,
+                        dateTime, DEPARTURE);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockScheduleDao, times(1))
                 .getTransferStations(same(first), same(second));
         verify(mockScheduleDao, times(1))
@@ -331,18 +313,15 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByArrivalEmptySecondTrainTest() {
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = ARRIVAL;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
         List<Station> transferStations = Collections
                 .singletonList(transfer);
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(first);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(second);
         when(mockScheduleDao.getTransferStations(any(Station.class),
                 any(Station.class))).thenReturn(transferStations);
@@ -351,11 +330,11 @@ class ScheduleDataServiceTest {
                 .thenReturn(new ArrayList<>());
 
         List<TransferTrainsDto> result = scheduleDataService
-                .trainsWithTransfer(stationFrom, stationTo,
-                        dateTime, searchType);
+                .trainsWithTransfer(STATION_FROM, STATION_TO,
+                        dateTime, ARRIVAL);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockScheduleDao, times(1))
                 .getTransferStations(same(first), same(second));
         verify(mockScheduleDao, times(1))
@@ -369,10 +348,7 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByArrivalEmptyFirstTrainTest() {
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = ARRIVAL;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
@@ -385,9 +361,9 @@ class ScheduleDataServiceTest {
         secondJourney.setStops(Collections.singletonList(transferStop));
         List<Journey> trainsFromTransfer = Collections
                 .singletonList(secondJourney);
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(first);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(second);
         when(mockScheduleDao.getTransferStations(any(Station.class),
                 any(Station.class))).thenReturn(transferStations);
@@ -396,11 +372,11 @@ class ScheduleDataServiceTest {
                 .thenReturn(trainsFromTransfer);
 
         List<TransferTrainsDto> result = scheduleDataService
-                .trainsWithTransfer(stationFrom, stationTo,
-                        dateTime, searchType);
+                .trainsWithTransfer(STATION_FROM, STATION_TO,
+                        dateTime, ARRIVAL);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockScheduleDao, times(1))
                 .getTransferStations(same(first), same(second));
         verify(mockScheduleDao, times(1))
@@ -418,10 +394,7 @@ class ScheduleDataServiceTest {
 
     @Test
     void transferTrainsByArrivalSuccessTest() {
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         LocalDateTime dateTime = LocalDateTime.of(2020, 2, 2, 20, 2);
-        String searchType = ARRIVAL;
         Station first = new Station();
         Station second = new Station();
         Station transfer = new Station();
@@ -437,9 +410,9 @@ class ScheduleDataServiceTest {
         Journey firstJourney = new Journey();
         JourneyDto firstJourneyDto = new JourneyDto();
         JourneyDto secondJourneyDto = new JourneyDto();
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(first);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(second);
         when(mockScheduleDao.getTransferStations(any(Station.class),
                 any(Station.class))).thenReturn(transferStations);
@@ -455,11 +428,11 @@ class ScheduleDataServiceTest {
                 .thenReturn(secondJourneyDto);
 
         List<TransferTrainsDto> result = scheduleDataService
-                .trainsWithTransfer(stationFrom, stationTo,
-                        dateTime, searchType);
+                .trainsWithTransfer(STATION_FROM, STATION_TO,
+                        dateTime, ARRIVAL);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockScheduleDao, times(1))
                 .getTransferStations(same(first), same(second));
         verify(mockScheduleDao, times(1))
@@ -490,7 +463,6 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -502,9 +474,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -528,7 +500,6 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -540,9 +511,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -566,7 +537,6 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -578,9 +548,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -605,7 +575,6 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -617,9 +586,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -644,7 +613,6 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 10));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -656,9 +624,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -681,7 +649,6 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -693,9 +660,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -718,7 +685,6 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -730,9 +696,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -755,7 +721,6 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -767,9 +732,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -792,7 +757,6 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -804,9 +768,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -829,7 +793,6 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -841,9 +804,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -866,7 +829,6 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -878,9 +840,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -903,7 +865,6 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -915,9 +876,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -940,7 +901,6 @@ class ScheduleDataServiceTest {
         second.setArrival(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -952,9 +912,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -977,7 +937,6 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -989,9 +948,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -1014,7 +973,6 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 20));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -1026,9 +984,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);
@@ -1051,7 +1009,6 @@ class ScheduleDataServiceTest {
         second.setDeparture(LocalDateTime.of(2020, 2, 2, 20, 2));
         second.setJourney(journey);
         Station station = new Station();
-        String stationName = STATION_NAME;
         LocalDateTime from = LocalDateTime.of(2020, 2, 2, 20, 0);
         ScheduledStopDto firstStop = new ScheduledStopDto();
         ScheduledStopDto secondStop = new ScheduledStopDto();
@@ -1063,9 +1020,9 @@ class ScheduleDataServiceTest {
         when(mockMapper.convert(same(second))).thenReturn(secondStop);
 
         List<ScheduledStopDto> result = scheduleDataService
-                .stationSchedule(stationName, from);
+                .stationSchedule(STATION_NAME, from);
 
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationName));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_NAME));
         verify(mockScheduleDao, times(1))
                 .stationSchedule(same(station), same(from), anyInt());
         verifyNoMoreInteractions(mockScheduleDao);

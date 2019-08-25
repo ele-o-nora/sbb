@@ -24,6 +24,7 @@ import ru.tsystems.sbb.model.entities.StationsDistance;
 import ru.tsystems.sbb.model.entities.Train;
 import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -34,9 +35,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -300,5 +303,42 @@ class AdminDataServiceTest {
         verifyZeroInteractions(mockScheduleDao);
         verifyZeroInteractions(mockPassengerDao);
         verifyZeroInteractions(mockMapper);
+    }
+
+    @Test
+    void delayJourneyTest() {
+        Journey journey = new Journey();
+        ScheduledStop firstStop = new ScheduledStop();
+        firstStop.setDeparture(LocalDateTime.now(mockClock));
+        ScheduledStop middleStop = new ScheduledStop();
+        middleStop.setArrival(LocalDateTime.now(mockClock));
+        middleStop.setDeparture(LocalDateTime.now(mockClock));
+        ScheduledStop lastStop = new ScheduledStop();
+        lastStop.setArrival(LocalDateTime.now(mockClock));
+        journey.setStops(Arrays.asList(firstStop, middleStop, lastStop));
+        LocalDateTime expected = LocalDateTime.now(mockClock).plusMinutes(5);
+        when(mockPassengerDao.getJourneyById(anyInt())).thenReturn(journey);
+
+        adminDataService.delayJourney(0, 5);
+
+        verify(mockPassengerDao, times(1)).getJourneyById(eq(0));
+        verify(mockAdminDao, times(1)).update(same(journey));
+        verify(mockAdminDao, times(1)).update(same(firstStop));
+        verify(mockAdminDao, times(1)).update(same(middleStop));
+        verify(mockAdminDao, times(1)).update(same(lastStop));
+        verify(mockJmsTemplate, times(1)).send(any());
+        verifyNoMoreInteractions(mockPassengerDao);
+        verifyNoMoreInteractions(mockAdminDao);
+        verifyNoMoreInteractions(mockJmsTemplate);
+        verifyZeroInteractions(mockScheduleDao);
+        verifyZeroInteractions(mockRouteDao);
+        verifyZeroInteractions(mockMapper);
+
+        assertNull(firstStop.getEta());
+        assertEquals(expected, firstStop.getEtd());
+        assertEquals(expected, middleStop.getEta());
+        assertEquals(expected, middleStop.getEtd());
+        assertNull(lastStop.getEtd());
+        assertEquals(expected, lastStop.getEta());
     }
 }

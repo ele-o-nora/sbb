@@ -63,6 +63,23 @@ class AdminViewServiceTest {
     @Autowired
     private Clock mockClock;
 
+    private static final String ROUTE_NUMBER = "routeNumber";
+    private static final String ROUTE = "route";
+    private static final String ROUTES = "routes";
+    private static final String ROUTE_STATIONS = "routeStations";
+    private static final String LINE = "line";
+    private static final String LINES = "lines";
+    private static final String TODAY = "today";
+    private static final String NEXT_DAY = "nextDay";
+    private static final String PREVIOUS_DAY = "previousDay";
+    private static final String NEXT_PAGE = "nextPage";
+    private static final String PREVIOUS_PAGE = "previousPage";
+    private static final String JOURNEY = "journey";
+    private static final String JOURNEYS = "journeys";
+    private static final String TICKETS = "tickets";
+    private static final String TARIFF = "tariff";
+    private static final String TRAIN_MODELS = "trainModels";
+
     @AfterEach
     void resetMocks() {
         reset(mockAdminDataService);
@@ -92,7 +109,7 @@ class AdminViewServiceTest {
 
     @Test
     void newRouteStopPatternZeroRouteIdTest() {
-        String routeNumber = "routeNumber";
+        String routeNumber = ROUTE_NUMBER;
         int routeId = 0;
         int lineId = 0;
         String[] stations = new String[]{};
@@ -107,18 +124,18 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockRouteDataService);
         verifyZeroInteractions(mockAdminDataService);
 
-        assertTrue(result.containsKey("routeNumber"));
-        assertSame(routeNumber, result.get("routeNumber"));
-        assertTrue(result.containsKey("line"));
-        assertSame(line, result.get("line"));
-        assertTrue(result.containsKey("routeStations"));
-        assertSame(stations, result.get("routeStations"));
-        assertFalse(result.containsKey("route"));
+        assertTrue(result.containsKey(ROUTE_NUMBER));
+        assertSame(routeNumber, result.get(ROUTE_NUMBER));
+        assertTrue(result.containsKey(LINE));
+        assertSame(line, result.get(LINE));
+        assertTrue(result.containsKey(ROUTE_STATIONS));
+        assertSame(stations, result.get(ROUTE_STATIONS));
+        assertFalse(result.containsKey(ROUTE));
     }
 
     @Test
     void newRouteStopPatternNonZeroRouteIdTest() {
-        String routeNumber = "routeNumber";
+        String routeNumber = ROUTE_NUMBER;
         int routeId = 1;
         int lineId = 0;
         String[] stations = new String[]{};
@@ -136,14 +153,14 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockRouteDataService);
         verifyZeroInteractions(mockAdminDataService);
 
-        assertTrue(result.containsKey("routeNumber"));
-        assertSame(routeNumber, result.get("routeNumber"));
-        assertTrue(result.containsKey("line"));
-        assertSame(line, result.get("line"));
-        assertTrue(result.containsKey("routeStations"));
-        assertSame(stations, result.get("routeStations"));
-        assertTrue(result.containsKey("route"));
-        assertSame(route, result.get("route"));
+        assertTrue(result.containsKey(ROUTE_NUMBER));
+        assertSame(routeNumber, result.get(ROUTE_NUMBER));
+        assertTrue(result.containsKey(LINE));
+        assertSame(line, result.get(LINE));
+        assertTrue(result.containsKey(ROUTE_STATIONS));
+        assertSame(stations, result.get(ROUTE_STATIONS));
+        assertTrue(result.containsKey(ROUTE));
+        assertSame(route, result.get(ROUTE));
     }
 
     @Test
@@ -168,16 +185,16 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockAdminDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("today"));
-        assertSame(date, result.get("today"));
-        assertTrue(result.containsKey("previousDay"));
-        assertEquals("2020-02-01", result.get("previousDay"));
-        assertTrue(result.containsKey("nextDay"));
-        assertEquals("2020-02-03", result.get("nextDay"));
-        assertTrue(result.containsKey("journeys"));
-        assertSame(journeys, result.get("journeys"));
-        assertFalse(result.containsKey("previousPage"));
-        assertFalse(result.containsKey("nextPage"));
+        assertTrue(result.containsKey(TODAY));
+        assertSame(date, result.get(TODAY));
+        assertTrue(result.containsKey(PREVIOUS_DAY));
+        assertEquals("2020-02-01", result.get(PREVIOUS_DAY));
+        assertTrue(result.containsKey(NEXT_DAY));
+        assertEquals("2020-02-03", result.get(NEXT_DAY));
+        assertTrue(result.containsKey(JOURNEYS));
+        assertSame(journeys, result.get(JOURNEYS));
+        assertFalse(result.containsKey(PREVIOUS_PAGE));
+        assertFalse(result.containsKey(NEXT_PAGE));
     }
 
     @Test
@@ -202,17 +219,17 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockAdminDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("today"));
-        assertSame(date, result.get("today"));
-        assertTrue(result.containsKey("previousDay"));
-        assertEquals("2020-02-01", result.get("previousDay"));
-        assertTrue(result.containsKey("nextDay"));
-        assertEquals("2020-02-03", result.get("nextDay"));
-        assertTrue(result.containsKey("journeys"));
-        assertSame(journeys, result.get("journeys"));
-        assertTrue(result.containsKey("nextPage"));
-        assertEquals(2, result.get("nextPage"));
-        assertFalse(result.containsKey("previousPage"));
+        assertTrue(result.containsKey(TODAY));
+        assertSame(date, result.get(TODAY));
+        assertTrue(result.containsKey(PREVIOUS_DAY));
+        assertEquals("2020-02-01", result.get(PREVIOUS_DAY));
+        assertTrue(result.containsKey(NEXT_DAY));
+        assertEquals("2020-02-03", result.get(NEXT_DAY));
+        assertTrue(result.containsKey(JOURNEYS));
+        assertSame(journeys, result.get(JOURNEYS));
+        assertTrue(result.containsKey(NEXT_PAGE));
+        assertEquals(2, result.get(NEXT_PAGE));
+        assertFalse(result.containsKey(PREVIOUS_PAGE));
     }
 
     @Test
@@ -237,18 +254,18 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockAdminDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("today"));
-        assertSame(date, result.get("today"));
-        assertTrue(result.containsKey("previousDay"));
-        assertEquals("2020-02-01", result.get("previousDay"));
-        assertTrue(result.containsKey("nextDay"));
-        assertEquals("2020-02-03", result.get("nextDay"));
-        assertTrue(result.containsKey("journeys"));
-        assertSame(journeys, result.get("journeys"));
-        assertTrue(result.containsKey("nextPage"));
-        assertEquals(3, result.get("nextPage"));
-        assertTrue(result.containsKey("previousPage"));
-        assertEquals(1, result.get("previousPage"));
+        assertTrue(result.containsKey(TODAY));
+        assertSame(date, result.get(TODAY));
+        assertTrue(result.containsKey(PREVIOUS_DAY));
+        assertEquals("2020-02-01", result.get(PREVIOUS_DAY));
+        assertTrue(result.containsKey(NEXT_DAY));
+        assertEquals("2020-02-03", result.get(NEXT_DAY));
+        assertTrue(result.containsKey(JOURNEYS));
+        assertSame(journeys, result.get(JOURNEYS));
+        assertTrue(result.containsKey(NEXT_PAGE));
+        assertEquals(3, result.get(NEXT_PAGE));
+        assertTrue(result.containsKey(PREVIOUS_PAGE));
+        assertEquals(1, result.get(PREVIOUS_PAGE));
     }
 
     @Test
@@ -273,17 +290,17 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockAdminDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("today"));
-        assertSame(date, result.get("today"));
-        assertTrue(result.containsKey("previousDay"));
-        assertEquals("2020-02-01", result.get("previousDay"));
-        assertTrue(result.containsKey("nextDay"));
-        assertEquals("2020-02-03", result.get("nextDay"));
-        assertTrue(result.containsKey("journeys"));
-        assertSame(journeys, result.get("journeys"));
-        assertTrue(result.containsKey("previousPage"));
-        assertEquals(1, result.get("previousPage"));
-        assertFalse(result.containsKey("nextPage"));
+        assertTrue(result.containsKey(TODAY));
+        assertSame(date, result.get(TODAY));
+        assertTrue(result.containsKey(PREVIOUS_DAY));
+        assertEquals("2020-02-01", result.get(PREVIOUS_DAY));
+        assertTrue(result.containsKey(NEXT_DAY));
+        assertEquals("2020-02-03", result.get(NEXT_DAY));
+        assertTrue(result.containsKey(JOURNEYS));
+        assertSame(journeys, result.get(JOURNEYS));
+        assertTrue(result.containsKey(PREVIOUS_PAGE));
+        assertEquals(1, result.get(PREVIOUS_PAGE));
+        assertFalse(result.containsKey(NEXT_PAGE));
     }
 
     @Test
@@ -307,12 +324,12 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockAdminDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("journey"));
-        assertSame(journey, result.get("journey"));
-        assertTrue(result.containsKey("tickets"));
-        assertSame(tickets, result.get("tickets"));
-        assertFalse(result.containsKey("previousPage"));
-        assertFalse(result.containsKey("nextPage"));
+        assertTrue(result.containsKey(JOURNEY));
+        assertSame(journey, result.get(JOURNEY));
+        assertTrue(result.containsKey(TICKETS));
+        assertSame(tickets, result.get(TICKETS));
+        assertFalse(result.containsKey(PREVIOUS_PAGE));
+        assertFalse(result.containsKey(NEXT_PAGE));
     }
 
     @Test
@@ -336,13 +353,13 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockAdminDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("journey"));
-        assertSame(journey, result.get("journey"));
-        assertTrue(result.containsKey("tickets"));
-        assertSame(tickets, result.get("tickets"));
-        assertTrue(result.containsKey("nextPage"));
-        assertEquals(2, result.get("nextPage"));
-        assertFalse(result.containsKey("previousPage"));
+        assertTrue(result.containsKey(JOURNEY));
+        assertSame(journey, result.get(JOURNEY));
+        assertTrue(result.containsKey(TICKETS));
+        assertSame(tickets, result.get(TICKETS));
+        assertTrue(result.containsKey(NEXT_PAGE));
+        assertEquals(2, result.get(NEXT_PAGE));
+        assertFalse(result.containsKey(PREVIOUS_PAGE));
 
     }
 
@@ -367,14 +384,14 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockAdminDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("journey"));
-        assertSame(journey, result.get("journey"));
-        assertTrue(result.containsKey("tickets"));
-        assertSame(tickets, result.get("tickets"));
-        assertTrue(result.containsKey("previousPage"));
-        assertEquals(1, result.get("previousPage"));
-        assertTrue(result.containsKey("nextPage"));
-        assertEquals(3, result.get("nextPage"));
+        assertTrue(result.containsKey(JOURNEY));
+        assertSame(journey, result.get(JOURNEY));
+        assertTrue(result.containsKey(TICKETS));
+        assertSame(tickets, result.get(TICKETS));
+        assertTrue(result.containsKey(PREVIOUS_PAGE));
+        assertEquals(1, result.get(PREVIOUS_PAGE));
+        assertTrue(result.containsKey(NEXT_PAGE));
+        assertEquals(3, result.get(NEXT_PAGE));
 
     }
 
@@ -399,13 +416,13 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockAdminDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("journey"));
-        assertSame(journey, result.get("journey"));
-        assertTrue(result.containsKey("tickets"));
-        assertSame(tickets, result.get("tickets"));
-        assertTrue(result.containsKey("previousPage"));
-        assertEquals(1, result.get("previousPage"));
-        assertFalse(result.containsKey("nextPage"));
+        assertTrue(result.containsKey(JOURNEY));
+        assertSame(journey, result.get(JOURNEY));
+        assertTrue(result.containsKey(TICKETS));
+        assertSame(tickets, result.get(TICKETS));
+        assertTrue(result.containsKey(PREVIOUS_PAGE));
+        assertEquals(1, result.get(PREVIOUS_PAGE));
+        assertFalse(result.containsKey(NEXT_PAGE));
     }
 
     @Test
@@ -435,15 +452,38 @@ class AdminViewServiceTest {
         verifyNoMoreInteractions(mockRouteDataService);
         verifyNoMoreInteractions(mockAdminDataService);
 
-        assertTrue(result.containsKey("today"));
-        assertEquals(today, result.get("today"));
-        assertTrue(result.containsKey("tariff"));
-        assertEquals(tariff, result.get("tariff"));
-        assertTrue(result.containsKey("lines"));
-        assertSame(lines, result.get("lines"));
-        assertTrue(result.containsKey("trainModels"));
-        assertSame(trainModels, result.get("trainModels"));
-        assertTrue(result.containsKey("routes"));
-        assertEquals(expectedRoutes, result.get("routes"));
+        assertTrue(result.containsKey(TODAY));
+        assertEquals(today, result.get(TODAY));
+        assertTrue(result.containsKey(TARIFF));
+        assertEquals(tariff, result.get(TARIFF));
+        assertTrue(result.containsKey(LINES));
+        assertSame(lines, result.get(LINES));
+        assertTrue(result.containsKey(TRAIN_MODELS));
+        assertSame(trainModels, result.get(TRAIN_MODELS));
+        assertTrue(result.containsKey(ROUTES));
+        assertEquals(expectedRoutes, result.get(ROUTES));
+    }
+
+    @Test
+    void delayNegativeTest() {
+        adminViewService.delayJourney(0, -1);
+        verifyZeroInteractions(mockAdminDataService);
+        verifyZeroInteractions(mockRouteDataService);
+    }
+
+    @Test
+    void delayZeroTest() {
+        adminViewService.delayJourney(0, 0);
+        verify(mockAdminDataService, times(1)).delayJourney(eq(0), eq(0));
+        verifyNoMoreInteractions(mockAdminDataService);
+        verifyZeroInteractions(mockRouteDataService);
+    }
+
+    @Test
+    void delayPositiveTest() {
+        adminViewService.delayJourney(0, 10);
+        verify(mockAdminDataService, times(1)).delayJourney(eq(0), eq(10));
+        verifyNoMoreInteractions(mockAdminDataService);
+        verifyZeroInteractions(mockRouteDataService);
     }
 }

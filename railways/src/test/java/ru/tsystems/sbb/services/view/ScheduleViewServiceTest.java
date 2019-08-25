@@ -59,10 +59,24 @@ class ScheduleViewServiceTest {
     private ScheduleDataService mockScheduleDataService;
 
     private static final LocalDate LOCAL_DATE = LocalDate.of(2020, 2, 2);
-    private static final String ERROR = "There was an error processing your "
+    private static final String ERROR_TEXT = "There was an error processing your "
             + "request. Please check your inputs.";
-    private static final String FAIL = "Sorry, there were no trains found "
+    private static final String FAIL_TEXT = "Sorry, there were no trains found "
             + "fulfilling your search criteria :(";
+
+    private static final String STATION_NAME = "stationName";
+    private static final String PATTERN = "yyyy-MM-dd HH:mm";
+    private static final String ERROR = "error";
+    private static final String TRAINS = "trains";
+    private static final String MOMENT_FROM = "momentFrom";
+    private static final String DATE_TIME = "2020-02-02 20:02";
+    private static final String STATIONS = "stations";
+    private static final String SIGN_UP_DTO = "signUpDto";
+    private static final String FAIL = "fail";
+    private static final String ORIGIN = "origin";
+    private static final String DESTINATION = "destination";
+    private static final String SEARCH_TYPE = "departure";
+    private static final String CONNECTIONS = "connections";
 
     @AfterEach
     void resetMocks() {
@@ -72,105 +86,99 @@ class ScheduleViewServiceTest {
 
     @Test
     void getStationScheduleExceptionTest() {
-        String stationName = "stationName";
-        String momentFrom = "2020-02-02 20:02";
-        LocalDateTime moment = LocalDateTime.parse(momentFrom,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        LocalDateTime moment = LocalDateTime.parse(DATE_TIME,
+                DateTimeFormatter.ofPattern(PATTERN));
         when(mockScheduleDataService.stationSchedule(anyString(),
                 any(LocalDateTime.class))).thenThrow(new NoResultException());
 
         Map<String, Object> result = scheduleViewService
-                .getStationSchedule(stationName, momentFrom);
+                .getStationSchedule(STATION_NAME, DATE_TIME);
 
         verify(mockScheduleDataService, times(1))
-                .stationSchedule(same(stationName), eq(moment));
+                .stationSchedule(same(STATION_NAME), eq(moment));
         verifyNoMoreInteractions(mockScheduleDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("error"));
-        assertEquals(ERROR, result.get("error"));
-        assertFalse(result.containsKey("trains"));
-        assertFalse(result.containsKey("stationName"));
-        assertFalse(result.containsKey("momentFrom"));
+        assertTrue(result.containsKey(ERROR));
+        assertEquals(ERROR_TEXT, result.get(ERROR));
+        assertFalse(result.containsKey(TRAINS));
+        assertFalse(result.containsKey(STATION_NAME));
+        assertFalse(result.containsKey(MOMENT_FROM));
     }
 
     @Test
     void getStationScheduleNullDateTest() {
-        String stationName = "stationName";
         List<ScheduledStopDto> trains = new ArrayList<>();
         when(mockScheduleDataService.stationSchedule(anyString(),
                 any(LocalDateTime.class))).thenReturn(trains);
 
         Map<String, Object> result = scheduleViewService
-                .getStationSchedule(stationName, null);
+                .getStationSchedule(STATION_NAME, null);
 
         verify(mockScheduleDataService, times(1))
-                .stationSchedule(same(stationName), eq(LOCAL_DATE.atStartOfDay()));
+                .stationSchedule(same(STATION_NAME), eq(LOCAL_DATE.atStartOfDay()));
         verifyNoMoreInteractions(mockScheduleDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("trains"));
-        assertSame(trains, result.get("trains"));
-        assertTrue(result.containsKey("stationName"));
-        assertSame(stationName, result.get(stationName));
-        assertTrue(result.containsKey("momentFrom"));
-        assertEquals(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-                .format(LOCAL_DATE.atStartOfDay()), result.get("momentFrom"));
-        assertFalse(result.containsKey("error"));
+        assertTrue(result.containsKey(TRAINS));
+        assertSame(trains, result.get(TRAINS));
+        assertTrue(result.containsKey(STATION_NAME));
+        assertSame(STATION_NAME, result.get(STATION_NAME));
+        assertTrue(result.containsKey(MOMENT_FROM));
+        assertEquals(DateTimeFormatter.ofPattern(PATTERN)
+                .format(LOCAL_DATE.atStartOfDay()), result.get(MOMENT_FROM));
+        assertFalse(result.containsKey(ERROR));
     }
 
     @Test
     void getStationScheduleEmptyDateTest() {
-        String stationName = "stationName";
         String momentFrom = "";
         List<ScheduledStopDto> trains = new ArrayList<>();
         when(mockScheduleDataService.stationSchedule(anyString(),
                 any(LocalDateTime.class))).thenReturn(trains);
 
         Map<String, Object> result = scheduleViewService
-                .getStationSchedule(stationName, momentFrom);
+                .getStationSchedule(STATION_NAME, momentFrom);
 
         verify(mockScheduleDataService, times(1))
-                .stationSchedule(same(stationName), eq(LOCAL_DATE.atStartOfDay()));
+                .stationSchedule(same(STATION_NAME), eq(LOCAL_DATE.atStartOfDay()));
         verifyNoMoreInteractions(mockScheduleDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("trains"));
-        assertSame(trains, result.get("trains"));
-        assertTrue(result.containsKey("stationName"));
-        assertSame(stationName, result.get(stationName));
-        assertTrue(result.containsKey("momentFrom"));
-        assertEquals(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-                .format(LOCAL_DATE.atStartOfDay()), result.get("momentFrom"));
-        assertFalse(result.containsKey("error"));
+        assertTrue(result.containsKey(TRAINS));
+        assertSame(trains, result.get(TRAINS));
+        assertTrue(result.containsKey(STATION_NAME));
+        assertSame(STATION_NAME, result.get(STATION_NAME));
+        assertTrue(result.containsKey(MOMENT_FROM));
+        assertEquals(DateTimeFormatter.ofPattern(PATTERN)
+                .format(LOCAL_DATE.atStartOfDay()), result.get(MOMENT_FROM));
+        assertFalse(result.containsKey(ERROR));
 
     }
 
     @Test
     void getStationScheduleFixedDateTest() {
-        String stationName = "stationName";
-        String momentFrom = "2020-02-02 20:02";
-        LocalDateTime moment = LocalDateTime.parse(momentFrom,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        LocalDateTime moment = LocalDateTime.parse(DATE_TIME,
+                DateTimeFormatter.ofPattern(PATTERN));
         List<ScheduledStopDto> trains = new ArrayList<>();
         when(mockScheduleDataService.stationSchedule(anyString(),
                 any(LocalDateTime.class))).thenReturn(trains);
 
         Map<String, Object> result = scheduleViewService
-                .getStationSchedule(stationName, momentFrom);
+                .getStationSchedule(STATION_NAME, DATE_TIME);
 
         verify(mockScheduleDataService, times(1))
-                .stationSchedule(same(stationName), eq(moment));
+                .stationSchedule(same(STATION_NAME), eq(moment));
         verifyNoMoreInteractions(mockScheduleDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("trains"));
-        assertSame(trains, result.get("trains"));
-        assertTrue(result.containsKey("stationName"));
-        assertSame(stationName, result.get(stationName));
-        assertTrue(result.containsKey("momentFrom"));
-        assertEquals(momentFrom, result.get("momentFrom"));
-        assertFalse(result.containsKey("error"));
+        assertTrue(result.containsKey(TRAINS));
+        assertSame(trains, result.get(TRAINS));
+        assertTrue(result.containsKey(STATION_NAME));
+        assertSame(STATION_NAME, result.get(STATION_NAME));
+        assertTrue(result.containsKey(MOMENT_FROM));
+        assertEquals(DATE_TIME, result.get(MOMENT_FROM));
+        assertFalse(result.containsKey(ERROR));
     }
 
     @Test
@@ -185,10 +193,10 @@ class ScheduleViewServiceTest {
         verifyNoMoreInteractions(mockRouteDataService);
         verifyZeroInteractions(mockScheduleDataService);
 
-        assertTrue(result.containsKey("stations"));
-        assertSame(stations, result.get("stations"));
-        assertTrue(result.containsKey("signUpDto"));
-        assertEquals(new SignUpDto(), result.get("signUpDto"));
+        assertTrue(result.containsKey(STATIONS));
+        assertSame(stations, result.get(STATIONS));
+        assertTrue(result.containsKey(SIGN_UP_DTO));
+        assertEquals(new SignUpDto(), result.get(SIGN_UP_DTO));
     }
 
     @Test
@@ -202,46 +210,38 @@ class ScheduleViewServiceTest {
         verifyNoMoreInteractions(mockRouteDataService);
         verifyZeroInteractions(mockScheduleDataService);
 
-        assertTrue(result.containsKey("stations"));
-        assertSame(stations, result.get("stations"));
-        assertFalse(result.containsKey("signUpDto"));
+        assertTrue(result.containsKey(STATIONS));
+        assertSame(stations, result.get(STATIONS));
+        assertFalse(result.containsKey(SIGN_UP_DTO));
     }
 
     @Test
     void getTrainsFromToExceptionTest() {
-        String origin = "origin";
-        String destination = "destination";
-        String dateTime = "2020-02-02 20:02";
-        String searchType = "departure";
         when(mockScheduleDataService.directTrainsFromTo(anyString(),
                 anyString(), any(LocalDateTime.class), anyString()))
                 .thenThrow(new NoResultException());
 
         Map<String, Object> result = scheduleViewService
-                .getTrainsFromTo(origin, destination, dateTime, searchType);
+                .getTrainsFromTo(ORIGIN, DESTINATION, DATE_TIME, SEARCH_TYPE);
 
         verify(mockScheduleDataService, times(1))
-                .directTrainsFromTo(same(origin), same(destination),
-                        eq(LocalDateTime.parse(dateTime, DateTimeFormatter
-                        .ofPattern("yyyy-MM-dd HH:mm"))), same(searchType));
+                .directTrainsFromTo(same(ORIGIN), same(DESTINATION),
+                        eq(LocalDateTime.parse(DATE_TIME, DateTimeFormatter
+                        .ofPattern(PATTERN))), same(SEARCH_TYPE));
         verifyNoMoreInteractions(mockScheduleDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("error"));
-        assertEquals(ERROR, result.get("error"));
-        assertFalse(result.containsKey("trains"));
-        assertFalse(result.containsKey("connections"));
-        assertFalse(result.containsKey("origin"));
-        assertFalse(result.containsKey("destination"));
-        assertFalse(result.containsKey("fail"));
+        assertTrue(result.containsKey(ERROR));
+        assertEquals(ERROR_TEXT, result.get(ERROR));
+        assertFalse(result.containsKey(TRAINS));
+        assertFalse(result.containsKey(CONNECTIONS));
+        assertFalse(result.containsKey(ORIGIN));
+        assertFalse(result.containsKey(DESTINATION));
+        assertFalse(result.containsKey(FAIL));
     }
 
     @Test
     void getTrainsFromToDirectSuccessTest() {
-        String origin = "origin";
-        String destination = "destination";
-        String dateTime = "2020-02-02 20:02";
-        String searchType = "departure";
         List<JourneyDto> trains = new ArrayList<>();
         trains.add(new JourneyDto());
         when(mockScheduleDataService.directTrainsFromTo(anyString(),
@@ -249,33 +249,29 @@ class ScheduleViewServiceTest {
                 .thenReturn(trains);
 
         Map<String, Object> result = scheduleViewService
-                .getTrainsFromTo(origin, destination, dateTime, searchType);
+                .getTrainsFromTo(ORIGIN, DESTINATION, DATE_TIME, SEARCH_TYPE);
 
         verify(mockScheduleDataService, times(1))
-                .directTrainsFromTo(same(origin), same(destination),
-                        eq(LocalDateTime.parse(dateTime, DateTimeFormatter
-                                .ofPattern("yyyy-MM-dd HH:mm"))),
-                        same(searchType));
+                .directTrainsFromTo(same(ORIGIN), same(DESTINATION),
+                        eq(LocalDateTime.parse(DATE_TIME, DateTimeFormatter
+                                .ofPattern(PATTERN))),
+                        same(SEARCH_TYPE));
         verifyNoMoreInteractions(mockScheduleDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("trains"));
-        assertSame(trains, result.get("trains"));
-        assertTrue(result.containsKey("origin"));
-        assertSame(origin, result.get("origin"));
-        assertTrue(result.containsKey("destination"));
-        assertSame(destination, result.get("destination"));
-        assertFalse(result.containsKey("connections"));
-        assertFalse(result.containsKey("fail"));
-        assertFalse(result.containsKey("error"));
+        assertTrue(result.containsKey(TRAINS));
+        assertSame(trains, result.get(TRAINS));
+        assertTrue(result.containsKey(ORIGIN));
+        assertSame(ORIGIN, result.get(ORIGIN));
+        assertTrue(result.containsKey(DESTINATION));
+        assertSame(DESTINATION, result.get(DESTINATION));
+        assertFalse(result.containsKey(CONNECTIONS));
+        assertFalse(result.containsKey(FAIL));
+        assertFalse(result.containsKey(ERROR));
     }
 
     @Test
     void getTrainsFromToTransferSuccessTest() {
-        String origin = "origin";
-        String destination = "destination";
-        String dateTime = "2020-02-02 20:02";
-        String searchType = "departure";
         List<JourneyDto> trains = new ArrayList<>();
         List<TransferTrainsDto> connections = new ArrayList<>();
         connections.add(new TransferTrainsDto());
@@ -287,39 +283,35 @@ class ScheduleViewServiceTest {
                 .thenReturn(connections);
 
         Map<String, Object> result = scheduleViewService
-                .getTrainsFromTo(origin, destination, dateTime, searchType);
+                .getTrainsFromTo(ORIGIN, DESTINATION, DATE_TIME, SEARCH_TYPE);
 
         verify(mockScheduleDataService, times(1))
-                .directTrainsFromTo(same(origin), same(destination),
-                        eq(LocalDateTime.parse(dateTime, DateTimeFormatter
-                                .ofPattern("yyyy-MM-dd HH:mm"))),
-                        same(searchType));
+                .directTrainsFromTo(same(ORIGIN), same(DESTINATION),
+                        eq(LocalDateTime.parse(DATE_TIME, DateTimeFormatter
+                                .ofPattern(PATTERN))),
+                        same(SEARCH_TYPE));
         verify(mockScheduleDataService, times(1))
-                .trainsWithTransfer(same(origin), same(destination),
-                        eq(LocalDateTime.parse(dateTime, DateTimeFormatter
-                                .ofPattern("yyyy-MM-dd HH:mm"))),
-                        same(searchType));
+                .trainsWithTransfer(same(ORIGIN), same(DESTINATION),
+                        eq(LocalDateTime.parse(DATE_TIME, DateTimeFormatter
+                                .ofPattern(PATTERN))),
+                        same(SEARCH_TYPE));
         verifyNoMoreInteractions(mockScheduleDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("connections"));
-        assertSame(connections, result.get("connections"));
-        assertTrue(result.containsKey("origin"));
-        assertSame(origin, result.get("origin"));
-        assertTrue(result.containsKey("destination"));
-        assertSame(destination, result.get("destination"));
-        assertFalse(result.containsKey("trains"));
-        assertFalse(result.containsKey("fail"));
-        assertFalse(result.containsKey("error"));
+        assertTrue(result.containsKey(CONNECTIONS));
+        assertSame(connections, result.get(CONNECTIONS));
+        assertTrue(result.containsKey(ORIGIN));
+        assertSame(ORIGIN, result.get(ORIGIN));
+        assertTrue(result.containsKey(DESTINATION));
+        assertSame(DESTINATION, result.get(DESTINATION));
+        assertFalse(result.containsKey(TRAINS));
+        assertFalse(result.containsKey(FAIL));
+        assertFalse(result.containsKey(ERROR));
 
     }
 
     @Test
     void getTrainsFromToFailTest() {
-        String origin = "origin";
-        String destination = "destination";
-        String dateTime = "2020-02-02 20:02";
-        String searchType = "departure";
         List<JourneyDto> trains = new ArrayList<>();
         List<TransferTrainsDto> connections = new ArrayList<>();
         when(mockScheduleDataService.directTrainsFromTo(anyString(),
@@ -330,30 +322,30 @@ class ScheduleViewServiceTest {
                 .thenReturn(connections);
 
         Map<String, Object> result = scheduleViewService
-                .getTrainsFromTo(origin, destination, dateTime, searchType);
+                .getTrainsFromTo(ORIGIN, DESTINATION, DATE_TIME, SEARCH_TYPE);
 
         verify(mockScheduleDataService, times(1))
-                .directTrainsFromTo(same(origin), same(destination),
-                        eq(LocalDateTime.parse(dateTime, DateTimeFormatter
-                                .ofPattern("yyyy-MM-dd HH:mm"))),
-                        same(searchType));
+                .directTrainsFromTo(same(ORIGIN), same(DESTINATION),
+                        eq(LocalDateTime.parse(DATE_TIME, DateTimeFormatter
+                                .ofPattern(PATTERN))),
+                        same(SEARCH_TYPE));
         verify(mockScheduleDataService, times(1))
-                .trainsWithTransfer(same(origin), same(destination),
-                        eq(LocalDateTime.parse(dateTime, DateTimeFormatter
-                                .ofPattern("yyyy-MM-dd HH:mm"))),
-                        same(searchType));
+                .trainsWithTransfer(same(ORIGIN), same(DESTINATION),
+                        eq(LocalDateTime.parse(DATE_TIME, DateTimeFormatter
+                                .ofPattern(PATTERN))),
+                        same(SEARCH_TYPE));
         verifyNoMoreInteractions(mockScheduleDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("fail"));
-        assertEquals(FAIL, result.get("fail"));
-        assertTrue(result.containsKey("origin"));
-        assertSame(origin, result.get("origin"));
-        assertTrue(result.containsKey("destination"));
-        assertSame(destination, result.get("destination"));
-        assertFalse(result.containsKey("trains"));
-        assertFalse(result.containsKey("connections"));
-        assertFalse(result.containsKey("error"));
+        assertTrue(result.containsKey(FAIL));
+        assertEquals(FAIL_TEXT, result.get(FAIL));
+        assertTrue(result.containsKey(ORIGIN));
+        assertSame(ORIGIN, result.get(ORIGIN));
+        assertTrue(result.containsKey(DESTINATION));
+        assertSame(DESTINATION, result.get(DESTINATION));
+        assertFalse(result.containsKey(TRAINS));
+        assertFalse(result.containsKey(CONNECTIONS));
+        assertFalse(result.containsKey(ERROR));
     }
 
 }

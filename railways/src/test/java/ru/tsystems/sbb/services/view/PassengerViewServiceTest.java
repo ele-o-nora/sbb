@@ -70,6 +70,25 @@ class PassengerViewServiceTest {
     private static final String TICKET_RETURN_SUCCESS = "Ticket successfully "
             + "returned. Your refund will be processed shortly.";
 
+    private static final String STATION_FROM = "stationFrom";
+    private static final String STATION_TO = "stationTo";
+    private static final String TRANSFER = "transfer";
+    private static final String STATUS = "status";
+    private static final String BUYER_DETAILS = "buyerDetails";
+    private static final String TICKET_ORDER = "ticketOrder";
+    private static final String TRANSFER_TICKETS = "transferTickets";
+    private static final String PASSENGER = "passenger";
+    private static final String FAIL_STATUS = "failStatus";
+    private static final String FIRST_NAME = "firstName";
+    private static final String LAST_NAME = "lastName";
+    private static final String STATIONS = "stations";
+    private static final String SUCCESS = "success";
+    private static final String TICKETS = "tickets";
+    private static final String NEXT_PAGE = "nextPage";
+    private static final String PREVIOUS_PAGE = "previousPage";
+    private static final String USERNAME = "testUser";
+    private static final String SIGN_UP_DTO = "signUpDto";
+
     @AfterEach
     void resetMocks() {
         reset(mockRouteDataService);
@@ -79,132 +98,117 @@ class PassengerViewServiceTest {
     @Test
     void prepTicketSaleFailTest() {
         int journeyId = 0;
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
         TicketOrderDto ticketOrder = new TicketOrderDto();
-        ticketOrder.setStatus("testStatus");
-        String expectedStatus = TICKET_PREP_FAIL + ticketOrder.getStatus();
+        ticketOrder.setStatus(FAIL_STATUS);
+        String expectedStatus = TICKET_PREP_FAIL + FAIL_STATUS;
         when(mockPassengerDataService.prepareTicketOrder(anyInt(),
                 anyString(), anyString())).thenReturn(ticketOrder);
 
         Map<String, Object> result = passengerViewService
-                .prepTicketSale(journeyId, stationFrom, stationTo);
+                .prepTicketSale(journeyId, STATION_FROM, STATION_TO);
 
         verify(mockPassengerDataService, times(1))
-                .prepareTicketOrder(eq(journeyId), same(stationFrom),
-                        same(stationTo));
+                .prepareTicketOrder(eq(journeyId), same(STATION_FROM),
+                        same(STATION_TO));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("status"));
-        assertEquals(expectedStatus, result.get("status"));
-        assertFalse(result.containsKey("buyerDetails"));
-        assertFalse(result.containsKey("ticketOrder"));
-        assertFalse(result.containsKey("passenger"));
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(expectedStatus, result.get(STATUS));
+        assertFalse(result.containsKey(BUYER_DETAILS));
+        assertFalse(result.containsKey(TICKET_ORDER));
+        assertFalse(result.containsKey(PASSENGER));
     }
 
     @Test
     void prepTicketSaleSuccessTest() {
         int journeyId = 0;
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
         TicketOrderDto ticketOrder = new TicketOrderDto();
 
         when(mockPassengerDataService.prepareTicketOrder(anyInt(),
                 anyString(), anyString())).thenReturn(ticketOrder);
 
         Map<String, Object> result = passengerViewService
-                .prepTicketSale(journeyId, stationFrom, stationTo);
+                .prepTicketSale(journeyId, STATION_FROM, STATION_TO);
 
         verify(mockPassengerDataService, times(1))
-                .prepareTicketOrder(eq(journeyId), same(stationFrom),
-                        same(stationTo));
+                .prepareTicketOrder(eq(journeyId), same(STATION_FROM),
+                        same(STATION_TO));
         verify(mockPassengerDataService, times(1))
-                .getPassenger(eq("testUser"));
+                .getPassenger(eq(USERNAME));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("buyerDetails"));
-        assertEquals(new BuyerDetailsDto(), result.get("buyerDetails"));
-        assertTrue(result.containsKey("ticketOrder"));
-        assertSame(ticketOrder, result.get("ticketOrder"));
-        assertFalse(result.containsKey("status"));
+        assertTrue(result.containsKey(BUYER_DETAILS));
+        assertEquals(new BuyerDetailsDto(), result.get(BUYER_DETAILS));
+        assertTrue(result.containsKey(TICKET_ORDER));
+        assertSame(ticketOrder, result.get(TICKET_ORDER));
+        assertFalse(result.containsKey(STATUS));
     }
 
     @Test
     void prepTicketsSaleFirstFailTest() {
         int firstJourneyId = 1;
         int secondJourneyId = 2;
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
-        String transfer = "transfer";
         TransferTicketOrderDto transferTickets = new TransferTicketOrderDto();
         transferTickets.setFirstTrain(new TicketOrderDto());
-        transferTickets.getFirstTrain().setStatus("testStatus");
-        String expectedStatus = TICKET_PREP_FAIL + transferTickets
-                .getFirstTrain().getStatus();
+        transferTickets.getFirstTrain().setStatus(FAIL_STATUS);
+        String expectedStatus = TICKET_PREP_FAIL + FAIL_STATUS;
         when(mockPassengerDataService.prepareTicketsOrder(anyInt(), anyInt(),
                 anyString(), anyString(), anyString()))
                 .thenReturn(transferTickets);
 
         Map<String, Object> result = passengerViewService
                 .prepTicketsSale(firstJourneyId, secondJourneyId,
-                        stationFrom, stationTo, transfer);
+                        STATION_FROM, STATION_TO, TRANSFER);
 
         verify(mockPassengerDataService, times(1))
                 .prepareTicketsOrder(eq(firstJourneyId), eq(secondJourneyId),
-                        same(stationFrom), same(stationTo), same(transfer));
+                        same(STATION_FROM), same(STATION_TO), same(TRANSFER));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("status"));
-        assertEquals(expectedStatus, result.get("status"));
-        assertFalse(result.containsKey("buyerDetails"));
-        assertFalse(result.containsKey("transferTickets"));
-        assertFalse(result.containsKey("passenger"));
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(expectedStatus, result.get(STATUS));
+        assertFalse(result.containsKey(BUYER_DETAILS));
+        assertFalse(result.containsKey(TRANSFER_TICKETS));
+        assertFalse(result.containsKey(PASSENGER));
     }
 
     @Test
     void prepTicketsSaleSecondFailTest() {
         int firstJourneyId = 1;
         int secondJourneyId = 2;
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
-        String transfer = "transfer";
         TransferTicketOrderDto transferTickets = new TransferTicketOrderDto();
         transferTickets.setFirstTrain(new TicketOrderDto());
         transferTickets.setSecondTrain(new TicketOrderDto());
-        transferTickets.getSecondTrain().setStatus("testStatus");
-        String expectedStatus = TICKET_PREP_FAIL + transferTickets
-                .getSecondTrain().getStatus();
+        transferTickets.getSecondTrain().setStatus(FAIL_STATUS);
+        String expectedStatus = TICKET_PREP_FAIL + FAIL_STATUS;
         when(mockPassengerDataService.prepareTicketsOrder(anyInt(), anyInt(),
                 anyString(), anyString(), anyString()))
                 .thenReturn(transferTickets);
 
         Map<String, Object> result = passengerViewService
                 .prepTicketsSale(firstJourneyId, secondJourneyId,
-                        stationFrom, stationTo, transfer);
+                        STATION_FROM, STATION_TO, TRANSFER);
 
         verify(mockPassengerDataService, times(1))
                 .prepareTicketsOrder(eq(firstJourneyId), eq(secondJourneyId),
-                        same(stationFrom), same(stationTo), same(transfer));
+                        same(STATION_FROM), same(STATION_TO), same(TRANSFER));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("status"));
-        assertEquals(expectedStatus, result.get("status"));
-        assertFalse(result.containsKey("buyerDetails"));
-        assertFalse(result.containsKey("transferTickets"));
-        assertFalse(result.containsKey("passenger"));
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(expectedStatus, result.get(STATUS));
+        assertFalse(result.containsKey(BUYER_DETAILS));
+        assertFalse(result.containsKey(TRANSFER_TICKETS));
+        assertFalse(result.containsKey(PASSENGER));
     }
 
     @Test
     void prepTicketsSaleSuccessTest() {
         int firstJourneyId = 1;
         int secondJourneyId = 2;
-        String stationFrom = "stationFrom";
-        String stationTo = "stationTo";
-        String transfer = "transfer";
         TransferTicketOrderDto transferTickets = new TransferTicketOrderDto();
         transferTickets.setFirstTrain(new TicketOrderDto());
         transferTickets.setSecondTrain(new TicketOrderDto());
@@ -214,111 +218,105 @@ class PassengerViewServiceTest {
 
         Map<String, Object> result = passengerViewService
                 .prepTicketsSale(firstJourneyId, secondJourneyId,
-                        stationFrom, stationTo, transfer);
+                        STATION_FROM, STATION_TO, TRANSFER);
 
         verify(mockPassengerDataService, times(1))
                 .prepareTicketsOrder(eq(firstJourneyId), eq(secondJourneyId),
-                        same(stationFrom), same(stationTo), same(transfer));
+                        same(STATION_FROM), same(STATION_TO), same(TRANSFER));
         verify(mockPassengerDataService, times(1))
-                .getPassenger(eq("testUser"));
+                .getPassenger(eq(USERNAME));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("buyerDetails"));
-        assertEquals(new BuyerDetailsDto(), result.get("buyerDetails"));
-        assertTrue(result.containsKey("transferTickets"));
-        assertSame(transferTickets, result.get("transferTickets"));
-        assertFalse(result.containsKey("status"));
+        assertTrue(result.containsKey(BUYER_DETAILS));
+        assertEquals(new BuyerDetailsDto(), result.get(BUYER_DETAILS));
+        assertTrue(result.containsKey(TRANSFER_TICKETS));
+        assertSame(transferTickets, result.get(TRANSFER_TICKETS));
+        assertFalse(result.containsKey(STATUS));
     }
 
     @Test
     void finalizeTicketSaleFailTest() {
         TicketOrderDto order = new TicketOrderDto();
-        String firstName = "firstName";
-        String lastName = "lastName";
         LocalDate dateOfBirth = LocalDate.of(2002, 2, 20);
         List<StationDto> stations = new ArrayList<>();
         when(mockPassengerDataService.buyTicket(any(TicketOrderDto.class),
                 anyString(), anyString(), any(LocalDate.class)))
-                .thenReturn("fail");
+                .thenReturn(FAIL_STATUS);
         when(mockRouteDataService.allStations()).thenReturn(stations);
 
         Map<String, Object> result = passengerViewService
-                .finalizeTicketSale(order, firstName, lastName, dateOfBirth);
+                .finalizeTicketSale(order, FIRST_NAME, LAST_NAME, dateOfBirth);
 
         verify(mockRouteDataService, times(1)).allStations();
         verify(mockPassengerDataService, times(1)).buyTicket(same(order),
-                same(firstName), same(lastName), same(dateOfBirth));
+                same(FIRST_NAME), same(LAST_NAME), same(dateOfBirth));
         verifyNoMoreInteractions(mockRouteDataService);
         verifyNoMoreInteractions(mockPassengerDataService);
 
-        assertTrue(result.containsKey("stations"));
-        assertSame(stations, result.get("stations"));
-        assertTrue(result.containsKey("status"));
-        assertEquals(TICKET_FAIL + "fail", result.get("status"));
+        assertTrue(result.containsKey(STATIONS));
+        assertSame(stations, result.get(STATIONS));
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(TICKET_FAIL + FAIL_STATUS, result.get(STATUS));
     }
 
     @Test
     void finalizeTicketSaleSuccessTest() {
         TicketOrderDto order = new TicketOrderDto();
         order.setJourney(new JourneyDto());
-        String firstName = "firstName";
-        String lastName = "lastName";
         LocalDate dateOfBirth = LocalDate.of(2002, 2, 20);
         List<StationDto> stations = new ArrayList<>();
         List<TicketDto> tickets = new ArrayList<>();
         when(mockPassengerDataService.buyTicket(any(TicketOrderDto.class),
                 anyString(), anyString(), any(LocalDate.class)))
-                .thenReturn("success");
+                .thenReturn(SUCCESS);
         when(mockRouteDataService.allStations()).thenReturn(stations);
         when(mockPassengerDataService.getPassengerTickets(anyInt(), anyString(),
                 anyString(), any(LocalDate.class))).thenReturn(tickets);
 
         Map<String, Object> result = passengerViewService
-                .finalizeTicketSale(order, firstName, lastName, dateOfBirth);
+                .finalizeTicketSale(order, FIRST_NAME, LAST_NAME, dateOfBirth);
 
         verify(mockRouteDataService, times(1)).allStations();
         verify(mockPassengerDataService, times(1)).buyTicket(same(order),
-                same(firstName), same(lastName), same(dateOfBirth));
+                same(FIRST_NAME), same(LAST_NAME), same(dateOfBirth));
         verify(mockPassengerDataService, times(1)).getPassengerTickets(eq(0),
-                same(firstName), same(lastName), same(dateOfBirth));
+                same(FIRST_NAME), same(LAST_NAME), same(dateOfBirth));
         verifyNoMoreInteractions(mockRouteDataService);
         verifyNoMoreInteractions(mockPassengerDataService);
 
-        assertTrue(result.containsKey("stations"));
-        assertSame(stations, result.get("stations"));
-        assertTrue(result.containsKey("status"));
-        assertEquals(TICKET_SUCCESS, result.get("status"));
-        assertTrue(result.containsKey("tickets"));
-        assertSame(tickets, result.get("tickets"));
+        assertTrue(result.containsKey(STATIONS));
+        assertSame(stations, result.get(STATIONS));
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(TICKET_SUCCESS, result.get(STATUS));
+        assertTrue(result.containsKey(TICKETS));
+        assertSame(tickets, result.get(TICKETS));
     }
 
     @Test
     void finalizeTicketsSaleFailTest() {
         TransferTicketOrderDto order = new TransferTicketOrderDto();
-        String firstName = "firstName";
-        String lastName = "lastName";
         LocalDate dateOfBirth = LocalDate.of(2002, 2, 20);
         List<StationDto> stations = new ArrayList<>();
         when(mockPassengerDataService
                 .buyTickets(any(TransferTicketOrderDto.class),
                 anyString(), anyString(), any(LocalDate.class)))
-                .thenReturn("fail");
+                .thenReturn(FAIL_STATUS);
         when(mockRouteDataService.allStations()).thenReturn(stations);
 
         Map<String, Object> result = passengerViewService
-                .finalizeTicketsSale(order, firstName, lastName, dateOfBirth);
+                .finalizeTicketsSale(order, FIRST_NAME, LAST_NAME, dateOfBirth);
 
         verify(mockRouteDataService, times(1)).allStations();
         verify(mockPassengerDataService, times(1)).buyTickets(same(order),
-                same(firstName), same(lastName), same(dateOfBirth));
+                same(FIRST_NAME), same(LAST_NAME), same(dateOfBirth));
         verifyNoMoreInteractions(mockRouteDataService);
         verifyNoMoreInteractions(mockPassengerDataService);
 
-        assertTrue(result.containsKey("stations"));
-        assertSame(stations, result.get("stations"));
-        assertTrue(result.containsKey("status"));
-        assertEquals(TICKET_FAIL + "fail", result.get("status"));
+        assertTrue(result.containsKey(STATIONS));
+        assertSame(stations, result.get(STATIONS));
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(TICKET_FAIL + FAIL_STATUS, result.get(STATUS));
     }
 
     @Test
@@ -328,8 +326,6 @@ class PassengerViewServiceTest {
         order.setSecondTrain(new TicketOrderDto());
         order.getFirstTrain().setJourney(new JourneyDto());
         order.getSecondTrain().setJourney(new JourneyDto());
-        String firstName = "firstName";
-        String lastName = "lastName";
         LocalDate dateOfBirth = LocalDate.of(2002, 2, 20);
         List<StationDto> stations = new ArrayList<>();
         TicketDto ticket = new TicketDto();
@@ -338,28 +334,28 @@ class PassengerViewServiceTest {
         when(mockPassengerDataService
                 .buyTickets(any(TransferTicketOrderDto.class),
                         anyString(), anyString(), any(LocalDate.class)))
-                .thenReturn("success");
+                .thenReturn(SUCCESS);
         when(mockRouteDataService.allStations()).thenReturn(stations);
         when(mockPassengerDataService.getPassengerTickets(anyInt(), anyString(),
                 anyString(), any(LocalDate.class))).thenReturn(tickets);
 
         Map<String, Object> result = passengerViewService
-                .finalizeTicketsSale(order, firstName, lastName, dateOfBirth);
+                .finalizeTicketsSale(order, FIRST_NAME, LAST_NAME, dateOfBirth);
 
         verify(mockRouteDataService, times(1)).allStations();
         verify(mockPassengerDataService, times(1)).buyTickets(same(order),
-                same(firstName), same(lastName), same(dateOfBirth));
+                same(FIRST_NAME), same(LAST_NAME), same(dateOfBirth));
         verify(mockPassengerDataService, times(2)).getPassengerTickets(eq(0),
-                same(firstName), same(lastName), same(dateOfBirth));
+                same(FIRST_NAME), same(LAST_NAME), same(dateOfBirth));
         verifyNoMoreInteractions(mockRouteDataService);
         verifyNoMoreInteractions(mockPassengerDataService);
 
-        assertTrue(result.containsKey("stations"));
-        assertSame(stations, result.get("stations"));
-        assertTrue(result.containsKey("status"));
-        assertEquals(TICKET_SUCCESS, result.get("status"));
-        assertTrue(result.containsKey("tickets"));
-        assertEquals(expected, result.get("tickets"));
+        assertTrue(result.containsKey(STATIONS));
+        assertSame(stations, result.get(STATIONS));
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(TICKET_SUCCESS, result.get(STATUS));
+        assertTrue(result.containsKey(TICKETS));
+        assertEquals(expected, result.get(TICKETS));
     }
 
     @Test
@@ -374,16 +370,16 @@ class PassengerViewServiceTest {
         Map<String, Object> result = passengerViewService.getUserTickets(page);
 
         verify(mockPassengerDataService, times(1))
-                .getUserTickets(eq("testUser"), eq(page));
+                .getUserTickets(eq(USERNAME), eq(page));
         verify(mockPassengerDataService, times(1))
-                .maxUserTicketPages(eq("testUser"));
+                .maxUserTicketPages(eq(USERNAME));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("tickets"));
-        assertSame(tickets, result.get("tickets"));
-        assertFalse(result.containsKey("previousPage"));
-        assertFalse(result.containsKey("nextPage"));
+        assertTrue(result.containsKey(TICKETS));
+        assertSame(tickets, result.get(TICKETS));
+        assertFalse(result.containsKey(PREVIOUS_PAGE));
+        assertFalse(result.containsKey(NEXT_PAGE));
     }
 
     @Test
@@ -398,17 +394,17 @@ class PassengerViewServiceTest {
         Map<String, Object> result = passengerViewService.getUserTickets(page);
 
         verify(mockPassengerDataService, times(1))
-                .getUserTickets(eq("testUser"), eq(page));
+                .getUserTickets(eq(USERNAME), eq(page));
         verify(mockPassengerDataService, times(1))
-                .maxUserTicketPages(eq("testUser"));
+                .maxUserTicketPages(eq(USERNAME));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("tickets"));
-        assertSame(tickets, result.get("tickets"));
-        assertTrue(result.containsKey("nextPage"));
-        assertEquals(2, result.get("nextPage"));
-        assertFalse(result.containsKey("previousPage"));
+        assertTrue(result.containsKey(TICKETS));
+        assertSame(tickets, result.get(TICKETS));
+        assertTrue(result.containsKey(NEXT_PAGE));
+        assertEquals(2, result.get(NEXT_PAGE));
+        assertFalse(result.containsKey(PREVIOUS_PAGE));
     }
 
     @Test
@@ -423,18 +419,18 @@ class PassengerViewServiceTest {
         Map<String, Object> result = passengerViewService.getUserTickets(page);
 
         verify(mockPassengerDataService, times(1))
-                .getUserTickets(eq("testUser"), eq(page));
+                .getUserTickets(eq(USERNAME), eq(page));
         verify(mockPassengerDataService, times(1))
-                .maxUserTicketPages(eq("testUser"));
+                .maxUserTicketPages(eq(USERNAME));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("tickets"));
-        assertSame(tickets, result.get("tickets"));
-        assertTrue(result.containsKey("previousPage"));
-        assertEquals(1, result.get("previousPage"));
-        assertTrue(result.containsKey("nextPage"));
-        assertEquals(3, result.get("nextPage"));
+        assertTrue(result.containsKey(TICKETS));
+        assertSame(tickets, result.get(TICKETS));
+        assertTrue(result.containsKey(PREVIOUS_PAGE));
+        assertEquals(1, result.get(PREVIOUS_PAGE));
+        assertTrue(result.containsKey(NEXT_PAGE));
+        assertEquals(3, result.get(NEXT_PAGE));
     }
 
     @Test
@@ -449,59 +445,59 @@ class PassengerViewServiceTest {
         Map<String, Object> result = passengerViewService.getUserTickets(page);
 
         verify(mockPassengerDataService, times(1))
-                .getUserTickets(eq("testUser"), eq(page));
+                .getUserTickets(eq(USERNAME), eq(page));
         verify(mockPassengerDataService, times(1))
-                .maxUserTicketPages(eq("testUser"));
+                .maxUserTicketPages(eq(USERNAME));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("tickets"));
-        assertSame(tickets, result.get("tickets"));
-        assertTrue(result.containsKey("previousPage"));
-        assertEquals(1, result.get("previousPage"));
-        assertFalse(result.containsKey("nextPage"));
+        assertTrue(result.containsKey(TICKETS));
+        assertSame(tickets, result.get(TICKETS));
+        assertTrue(result.containsKey(PREVIOUS_PAGE));
+        assertEquals(1, result.get(PREVIOUS_PAGE));
+        assertFalse(result.containsKey(NEXT_PAGE));
     }
 
     @Test
     void returnTicketFailTest() {
         int ticketId = 0;
         when(mockPassengerDataService.returnTicket(anyInt()))
-                .thenReturn("fail");
+                .thenReturn(FAIL_STATUS);
 
         Map<String, Object> result = passengerViewService
                 .returnTicket(ticketId);
 
         verify(mockPassengerDataService, times(1)).returnTicket(eq(ticketId));
         verify(mockPassengerDataService, times(1))
-                .getUserTickets(eq("testUser"), eq(1));
+                .getUserTickets(eq(USERNAME), eq(1));
         verify(mockPassengerDataService, times(1))
-                .maxUserTicketPages(eq("testUser"));
+                .maxUserTicketPages(eq(USERNAME));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("status"));
-        assertEquals(TICKET_RETURN_FAIL + "fail", result.get("status"));
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(TICKET_RETURN_FAIL + FAIL_STATUS, result.get(STATUS));
     }
 
     @Test
     void returnTicketSuccessTest() {
         int ticketId = 0;
         when(mockPassengerDataService.returnTicket(anyInt()))
-                .thenReturn("success");
+                .thenReturn(SUCCESS);
 
         Map<String, Object> result = passengerViewService
                 .returnTicket(ticketId);
 
         verify(mockPassengerDataService, times(1)).returnTicket(eq(ticketId));
         verify(mockPassengerDataService, times(1))
-                .getUserTickets(eq("testUser"), eq(1));
+                .getUserTickets(eq(USERNAME), eq(1));
         verify(mockPassengerDataService, times(1))
-                .maxUserTicketPages(eq("testUser"));
+                .maxUserTicketPages(eq(USERNAME));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("status"));
-        assertEquals(TICKET_RETURN_SUCCESS, result.get("status"));
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(TICKET_RETURN_SUCCESS, result.get(STATUS));
     }
 
     @Test
@@ -512,13 +508,13 @@ class PassengerViewServiceTest {
 
         Map<String, Object> result = passengerViewService.prepBuyerInfo();
 
-        verify(mockPassengerDataService, times(1)).getPassenger(eq("testUser"));
+        verify(mockPassengerDataService, times(1)).getPassenger(eq(USERNAME));
         verifyNoMoreInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("passenger"));
-        assertSame(passengerDto, result.get("passenger"));
-        assertFalse(result.containsKey("signUpDto"));
+        assertTrue(result.containsKey(PASSENGER));
+        assertSame(passengerDto, result.get(PASSENGER));
+        assertFalse(result.containsKey(SIGN_UP_DTO));
     }
 
     @Test
@@ -529,8 +525,8 @@ class PassengerViewServiceTest {
         verifyZeroInteractions(mockPassengerDataService);
         verifyZeroInteractions(mockRouteDataService);
 
-        assertTrue(result.containsKey("signUpDto"));
-        assertEquals(new SignUpDto(), result.get("signUpDto"));
-        assertFalse(result.containsKey("passenger"));
+        assertTrue(result.containsKey(SIGN_UP_DTO));
+        assertEquals(new SignUpDto(), result.get(SIGN_UP_DTO));
+        assertFalse(result.containsKey(PASSENGER));
     }
 }

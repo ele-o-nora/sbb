@@ -76,6 +76,7 @@ class PassengerDataServiceTest {
     private static final String NO_SEATS = "No available seats.";
     private static final String SAME_PASSENGER = "You already have a ticket "
             + "for this journey.";
+
     private static final String STATION_FROM = "stationFrom";
     private static final String STATION_TO = "stationTo";
     private static final String FORMATTED_PRICE = "formattedPrice";
@@ -97,8 +98,6 @@ class PassengerDataServiceTest {
     @Test
     void prepareTicketOrderInboundNotEnoughTimeTest() {
         int journeyId = 0;
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         Journey journey = new Journey();
         journey.setRoute(new Route());
         Line line =  new Line();
@@ -107,13 +106,13 @@ class PassengerDataServiceTest {
         Station secondStation = new Station();
         ScheduledStop scheduledStop = new ScheduledStop();
         scheduledStop.setStation(new Station());
-        scheduledStop.getStation().setName(stationFrom);
+        scheduledStop.getStation().setName(STATION_FROM);
         scheduledStop.setDeparture(LocalDateTime.of(2020, 2, 2, 0, 5));
         journey.setStops(Collections.singletonList(scheduledStop));
         when(mockPassengerDao.getJourneyById(anyInt())).thenReturn(journey);
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(firstStation);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(secondStation);
         when(mockRouteDao.getStationOrder(same(line), same(firstStation)))
                 .thenReturn(5);
@@ -127,11 +126,11 @@ class PassengerDataServiceTest {
         when(mockMapper.formatPrice(anyFloat())).thenReturn(FORMATTED_PRICE);
 
         TicketOrderDto result = passengerDataService
-                .prepareTicketOrder(journeyId, stationFrom, stationTo);
+                .prepareTicketOrder(journeyId, STATION_FROM, STATION_TO);
 
         verify(mockPassengerDao, times(2)).getJourneyById(eq(journeyId));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockRouteDao, times(1))
                 .getStationOrder(same(line), same(firstStation));
         verify(mockRouteDao, times(1))
@@ -153,8 +152,6 @@ class PassengerDataServiceTest {
     @Test
     void prepareTicketOrderInboundNotEnoughSeatsTest() {
         int journeyId = 0;
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         Journey journey = new Journey();
         journey.setRoute(new Route());
         Line line =  new Line();
@@ -165,17 +162,17 @@ class PassengerDataServiceTest {
         Station secondStation = new Station();
         ScheduledStop firstStop = new ScheduledStop();
         firstStop.setStation(new Station());
-        firstStop.getStation().setName(stationFrom);
+        firstStop.getStation().setName(STATION_FROM);
         firstStop.setDeparture(LocalDateTime.of(2020, 2, 2, 0, 20));
         ScheduledStop secondStop = new ScheduledStop();
         secondStop.setStation(new Station());
-        secondStop.getStation().setName(stationTo);
+        secondStop.getStation().setName(STATION_TO);
         secondStop.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
         journey.setStops(Arrays.asList(firstStop, secondStop));
         when(mockPassengerDao.getJourneyById(anyInt())).thenReturn(journey);
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(firstStation);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(secondStation);
         when(mockRouteDao.getStationOrder(same(line), same(firstStation)))
                 .thenReturn(5);
@@ -194,11 +191,11 @@ class PassengerDataServiceTest {
                 .thenReturn(10);
 
         TicketOrderDto result = passengerDataService
-                .prepareTicketOrder(journeyId, stationFrom, stationTo);
+                .prepareTicketOrder(journeyId, STATION_FROM, STATION_TO);
 
         verify(mockPassengerDao, times(2)).getJourneyById(eq(journeyId));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockRouteDao, times(1))
                 .getStationOrder(same(line), same(firstStation));
         verify(mockRouteDao, times(1))
@@ -223,8 +220,6 @@ class PassengerDataServiceTest {
     @Test
     void prepareTicketOrderOutboundSuccessTest() {
         int journeyId = 0;
-        String stationFrom = STATION_FROM;
-        String stationTo = STATION_TO;
         Journey journey = new Journey();
         journey.setRoute(new Route());
         Line line =  new Line();
@@ -235,20 +230,20 @@ class PassengerDataServiceTest {
         Station secondStation = new Station();
         ScheduledStop firstStop = new ScheduledStop();
         firstStop.setStation(new Station());
-        firstStop.getStation().setName(stationFrom);
+        firstStop.getStation().setName(STATION_FROM);
         firstStop.setDeparture(LocalDateTime.of(2020, 2, 2, 0, 20));
         ScheduledStop secondStop = new ScheduledStop();
         secondStop.setStation(new Station());
-        secondStop.getStation().setName(stationTo);
+        secondStop.getStation().setName(STATION_TO);
         secondStop.setArrival(LocalDateTime.of(2020, 2, 2, 20, 20));
         journey.setStops(Arrays.asList(firstStop, secondStop));
         JourneyDto journeyDto = new JourneyDto();
         ScheduledStopDto firstStopDto = new ScheduledStopDto();
         ScheduledStopDto secondStopDto = new ScheduledStopDto();
         when(mockPassengerDao.getJourneyById(anyInt())).thenReturn(journey);
-        when(mockScheduleDao.getStationByName(eq(stationFrom)))
+        when(mockScheduleDao.getStationByName(eq(STATION_FROM)))
                 .thenReturn(firstStation);
-        when(mockScheduleDao.getStationByName(eq(stationTo)))
+        when(mockScheduleDao.getStationByName(eq(STATION_TO)))
                 .thenReturn(secondStation);
         when(mockRouteDao.getStationOrder(same(line), same(firstStation)))
                 .thenReturn(3);
@@ -266,11 +261,11 @@ class PassengerDataServiceTest {
                 .thenReturn(15);
 
         TicketOrderDto result = passengerDataService
-                .prepareTicketOrder(journeyId, stationFrom, stationTo);
+                .prepareTicketOrder(journeyId, STATION_FROM, STATION_TO);
 
         verify(mockPassengerDao, times(2)).getJourneyById(eq(journeyId));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationFrom));
-        verify(mockScheduleDao, times(1)).getStationByName(same(stationTo));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_FROM));
+        verify(mockScheduleDao, times(1)).getStationByName(same(STATION_TO));
         verify(mockRouteDao, times(1))
                 .getStationOrder(same(line), same(firstStation));
         verify(mockRouteDao, times(1))
@@ -343,21 +338,19 @@ class PassengerDataServiceTest {
         ticketOrder.setOrigin(new ScheduledStopDto());
         ticketOrder.getOrigin().setId(1);
         ticketOrder.setDestination(new ScheduledStopDto());
-        String firstName = FIRST_NAME;
-        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         ScheduledStop firstStop = new ScheduledStop();
         firstStop.setDeparture(LocalDateTime.of(2020, 2, 2, 0, 5));
         when(mockPassengerDao.getStopById(eq(1))).thenReturn(firstStop);
 
-        String result = passengerDataService.buyTicket(ticketOrder, firstName,
-                lastName, dateOfBirth);
+        String result = passengerDataService.buyTicket(ticketOrder, FIRST_NAME,
+                LAST_NAME, dateOfBirth);
 
         verify(mockPassengerDao, times(1)).getJourneyById(eq(0));
         verify(mockPassengerDao, times(1)).getStopById(eq(1));
         verify(mockPassengerDao, times(1)).getStopById(eq(0));
-        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
-                same(lastName), same(dateOfBirth));
+        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(FIRST_NAME),
+                same(LAST_NAME), same(dateOfBirth));
         verifyNoMoreInteractions(mockPassengerDao);
         verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
@@ -373,8 +366,6 @@ class PassengerDataServiceTest {
         ticketOrder.setOrigin(new ScheduledStopDto());
         ticketOrder.getOrigin().setId(1);
         ticketOrder.setDestination(new ScheduledStopDto());
-        String firstName = FIRST_NAME;
-        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey journey = new Journey();
         ScheduledStop firstStop = new ScheduledStop();
@@ -388,14 +379,14 @@ class PassengerDataServiceTest {
         when(mockPassengerDao.getTickets(any(Journey.class),
                 any(Passenger.class))).thenReturn(tickets);
 
-        String result = passengerDataService.buyTicket(ticketOrder, firstName,
-                lastName, dateOfBirth);
+        String result = passengerDataService.buyTicket(ticketOrder, FIRST_NAME,
+                LAST_NAME, dateOfBirth);
 
         verify(mockPassengerDao, times(1)).getJourneyById(eq(0));
         verify(mockPassengerDao, times(1)).getStopById(eq(1));
         verify(mockPassengerDao, times(1)).getStopById(eq(0));
-        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
-                same(lastName), same(dateOfBirth));
+        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(FIRST_NAME),
+                same(LAST_NAME), same(dateOfBirth));
         verify(mockPassengerDao, times(1))
                 .getTickets(same(journey), same(passenger));
         verifyNoMoreInteractions(mockPassengerDao);
@@ -414,8 +405,6 @@ class PassengerDataServiceTest {
         ticketOrder.getOrigin().setId(1);
         ticketOrder.setDestination(new ScheduledStopDto());
         ticketOrder.getDestination().setId(2);
-        String firstName = FIRST_NAME;
-        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey journey = new Journey();
         journey.setTrainType(new Train());
@@ -435,14 +424,14 @@ class PassengerDataServiceTest {
                 any(ScheduledStop.class), any(ScheduledStop.class)))
                 .thenReturn(10);
 
-        String result = passengerDataService.buyTicket(ticketOrder, firstName,
-                lastName, dateOfBirth);
+        String result = passengerDataService.buyTicket(ticketOrder, FIRST_NAME,
+                LAST_NAME, dateOfBirth);
 
         verify(mockPassengerDao, times(1)).getJourneyById(eq(0));
         verify(mockPassengerDao, times(1)).getStopById(eq(1));
         verify(mockPassengerDao, times(1)).getStopById(eq(2));
-        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
-                same(lastName), same(dateOfBirth));
+        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(FIRST_NAME),
+                same(LAST_NAME), same(dateOfBirth));
         verify(mockPassengerDao, times(1))
                 .getTickets(same(journey), same(passenger));
         verify(mockPassengerDao, times(1)).currentTickets(same(journey),
@@ -463,8 +452,6 @@ class PassengerDataServiceTest {
         ticketOrder.getOrigin().setId(1);
         ticketOrder.setDestination(new ScheduledStopDto());
         ticketOrder.getDestination().setId(2);
-        String firstName = FIRST_NAME;
-        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey journey = new Journey();
         journey.setTrainType(new Train());
@@ -484,14 +471,14 @@ class PassengerDataServiceTest {
                 any(ScheduledStop.class), any(ScheduledStop.class)))
                 .thenReturn(5);
 
-        String result = passengerDataService.buyTicket(ticketOrder, firstName,
-                lastName, dateOfBirth);
+        String result = passengerDataService.buyTicket(ticketOrder, FIRST_NAME,
+                LAST_NAME, dateOfBirth);
 
         verify(mockPassengerDao, times(1)).getJourneyById(eq(0));
         verify(mockPassengerDao, times(1)).getStopById(eq(1));
         verify(mockPassengerDao, times(1)).getStopById(eq(2));
-        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
-                same(lastName), same(dateOfBirth));
+        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(FIRST_NAME),
+                same(LAST_NAME), same(dateOfBirth));
         verify(mockPassengerDao, times(1))
                 .getTickets(same(journey), same(passenger));
         verify(mockPassengerDao, times(1)).currentTickets(same(journey),
@@ -517,21 +504,19 @@ class PassengerDataServiceTest {
         ticketOrder.getFirstTrain().setDestination(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setOrigin(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
-        String firstName = FIRST_NAME;
-        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         ScheduledStop firstStop = new ScheduledStop();
         firstStop.setDeparture(LocalDateTime.of(2020, 2, 2, 0, 5));
         when(mockPassengerDao.getStopById(eq(1))).thenReturn(firstStop);
 
-        String result = passengerDataService.buyTickets(ticketOrder, firstName,
-                lastName, dateOfBirth);
+        String result = passengerDataService.buyTickets(ticketOrder, FIRST_NAME,
+                LAST_NAME, dateOfBirth);
 
         verify(mockPassengerDao, times(2)).getJourneyById(eq(0));
         verify(mockPassengerDao, times(1)).getStopById(eq(1));
         verify(mockPassengerDao, times(3)).getStopById(eq(0));
-        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
-                same(lastName), same(dateOfBirth));
+        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(FIRST_NAME),
+                same(LAST_NAME), same(dateOfBirth));
         verifyNoMoreInteractions(mockPassengerDao);
         verifyZeroInteractions(mockRouteDao);
         verifyZeroInteractions(mockScheduleDao);
@@ -553,8 +538,6 @@ class PassengerDataServiceTest {
         ticketOrder.getFirstTrain().setDestination(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setOrigin(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
-        String firstName = FIRST_NAME;
-        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey firstJourney = new Journey();
         ScheduledStop firstStop = new ScheduledStop();
@@ -568,15 +551,15 @@ class PassengerDataServiceTest {
         when(mockPassengerDao.getTickets(any(Journey.class),
                 any(Passenger.class))).thenReturn(tickets);
 
-        String result = passengerDataService.buyTickets(ticketOrder, firstName,
-                lastName, dateOfBirth);
+        String result = passengerDataService.buyTickets(ticketOrder, FIRST_NAME,
+                LAST_NAME, dateOfBirth);
 
         verify(mockPassengerDao, times(1)).getJourneyById(eq(1));
         verify(mockPassengerDao, times(1)).getJourneyById(eq(0));
         verify(mockPassengerDao, times(1)).getStopById(eq(1));
         verify(mockPassengerDao, times(3)).getStopById(eq(0));
-        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
-                same(lastName), same(dateOfBirth));
+        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(FIRST_NAME),
+                same(LAST_NAME), same(dateOfBirth));
         verify(mockPassengerDao, times(1))
                 .getTickets(same(firstJourney), same(passenger));
         verifyNoMoreInteractions(mockPassengerDao);
@@ -601,8 +584,6 @@ class PassengerDataServiceTest {
         ticketOrder.getFirstTrain().setDestination(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setOrigin(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
-        String firstName = FIRST_NAME;
-        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey firstJourney = new Journey();
         Journey secondJourney = new Journey();
@@ -620,15 +601,15 @@ class PassengerDataServiceTest {
         when(mockPassengerDao.getTickets(same(secondJourney),
                 any(Passenger.class))).thenReturn(tickets);
 
-        String result = passengerDataService.buyTickets(ticketOrder, firstName,
-                lastName, dateOfBirth);
+        String result = passengerDataService.buyTickets(ticketOrder, FIRST_NAME,
+                LAST_NAME, dateOfBirth);
 
         verify(mockPassengerDao, times(1)).getJourneyById(eq(1));
         verify(mockPassengerDao, times(1)).getJourneyById(eq(2));
         verify(mockPassengerDao, times(1)).getStopById(eq(1));
         verify(mockPassengerDao, times(3)).getStopById(eq(0));
-        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
-                same(lastName), same(dateOfBirth));
+        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(FIRST_NAME),
+                same(LAST_NAME), same(dateOfBirth));
         verify(mockPassengerDao, times(1))
                 .getTickets(same(firstJourney), same(passenger));
         verify(mockPassengerDao, times(1))
@@ -656,8 +637,6 @@ class PassengerDataServiceTest {
         ticketOrder.getFirstTrain().getDestination().setId(2);
         ticketOrder.getSecondTrain().setOrigin(new ScheduledStopDto());
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
-        String firstName = FIRST_NAME;
-        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey firstJourney = new Journey();
         firstJourney.setTrainType(new Train());
@@ -679,16 +658,16 @@ class PassengerDataServiceTest {
                 any(ScheduledStop.class), any(ScheduledStop.class)))
                 .thenReturn(10);
 
-        String result = passengerDataService.buyTickets(ticketOrder, firstName,
-                lastName, dateOfBirth);
+        String result = passengerDataService.buyTickets(ticketOrder, FIRST_NAME,
+                LAST_NAME, dateOfBirth);
 
         verify(mockPassengerDao, times(1)).getJourneyById(eq(1));
         verify(mockPassengerDao, times(1)).getJourneyById(eq(2));
         verify(mockPassengerDao, times(1)).getStopById(eq(1));
         verify(mockPassengerDao, times(1)).getStopById(eq(2));
         verify(mockPassengerDao, times(2)).getStopById(eq(0));
-        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
-                same(lastName), same(dateOfBirth));
+        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(FIRST_NAME),
+                same(LAST_NAME), same(dateOfBirth));
         verify(mockPassengerDao, times(1))
                 .getTickets(same(firstJourney), same(passenger));
         verify(mockPassengerDao, times(1))
@@ -720,8 +699,6 @@ class PassengerDataServiceTest {
         ticketOrder.getSecondTrain().getOrigin().setId(3);
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
         ticketOrder.getSecondTrain().getDestination().setId(4);
-        String firstName = FIRST_NAME;
-        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey firstJourney = new Journey();
         firstJourney.setTrainType(new Train());
@@ -752,8 +729,8 @@ class PassengerDataServiceTest {
                 any(ScheduledStop.class), any(ScheduledStop.class)))
                 .thenReturn(10);
 
-        String result = passengerDataService.buyTickets(ticketOrder, firstName,
-                lastName, dateOfBirth);
+        String result = passengerDataService.buyTickets(ticketOrder, FIRST_NAME,
+                LAST_NAME, dateOfBirth);
 
         verify(mockPassengerDao, times(1)).getJourneyById(eq(1));
         verify(mockPassengerDao, times(1)).getJourneyById(eq(2));
@@ -761,8 +738,8 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1)).getStopById(eq(2));
         verify(mockPassengerDao, times(1)).getStopById(eq(3));
         verify(mockPassengerDao, times(1)).getStopById(eq(4));
-        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
-                same(lastName), same(dateOfBirth));
+        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(FIRST_NAME),
+                same(LAST_NAME), same(dateOfBirth));
         verify(mockPassengerDao, times(1)).getTickets(same(firstJourney),
                 same(passenger));
         verify(mockPassengerDao, times(1)).getTickets(same(secondJourney),
@@ -796,8 +773,6 @@ class PassengerDataServiceTest {
         ticketOrder.getSecondTrain().getOrigin().setId(3);
         ticketOrder.getSecondTrain().setDestination(new ScheduledStopDto());
         ticketOrder.getSecondTrain().getDestination().setId(4);
-        String firstName = FIRST_NAME;
-        String lastName = LAST_NAME;
         LocalDate dateOfBirth = LocalDate.of(2000, 2, 20);
         Journey firstJourney = new Journey();
         firstJourney.setTrainType(new Train());
@@ -825,8 +800,8 @@ class PassengerDataServiceTest {
                 any(ScheduledStop.class), any(ScheduledStop.class)))
                 .thenReturn(5);
 
-        String result = passengerDataService.buyTickets(ticketOrder, firstName,
-                lastName, dateOfBirth);
+        String result = passengerDataService.buyTickets(ticketOrder, FIRST_NAME,
+                LAST_NAME, dateOfBirth);
 
         verify(mockPassengerDao, times(1)).getJourneyById(eq(1));
         verify(mockPassengerDao, times(1)).getJourneyById(eq(2));
@@ -834,8 +809,8 @@ class PassengerDataServiceTest {
         verify(mockPassengerDao, times(1)).getStopById(eq(2));
         verify(mockPassengerDao, times(1)).getStopById(eq(3));
         verify(mockPassengerDao, times(1)).getStopById(eq(4));
-        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(firstName),
-                same(lastName), same(dateOfBirth));
+        verify(mockPassengerDao, times(1)).getPassengerByInfo(same(FIRST_NAME),
+                same(LAST_NAME), same(dateOfBirth));
         verify(mockPassengerDao, times(1)).getTickets(same(firstJourney),
                 same(passenger));
         verify(mockPassengerDao, times(1)).getTickets(same(secondJourney),
