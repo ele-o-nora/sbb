@@ -26,9 +26,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
         return session.createQuery("select distinct s from ScheduledStop s "
                 + "where s.station = :station "
                 + "and ((s.arrival >= :from and s.arrival < :to) "
-                + "or (s.departure >= :from and s.departure < :to)) "
+                + "or (s.departure >= :from and s.departure < :to) "
                 + "or (s.eta >= :from and s.eta < :to) "
-                + "or (s.etd >= :from and s.etd < :to)",
+                + "or (s.etd >= :from and s.etd < :to))",
                 ScheduledStop.class)
                 .setParameter("station", station)
                 .setParameter("from", from)
