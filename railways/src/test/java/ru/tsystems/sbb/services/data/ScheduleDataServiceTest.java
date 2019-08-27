@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.dto.JourneyDto;
-import ru.tsystems.sbb.model.dto.ScheduledStopDto;
+import ru.tsystems.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.TransferTrainsDto;
 import ru.tsystems.sbb.model.entities.Journey;
 import ru.tsystems.sbb.model.entities.Line;

@@ -15,7 +15,7 @@ import ru.tsystems.sbb.model.dto.BuyerDetailsDto;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
-import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TicketOrderDto;
 import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;

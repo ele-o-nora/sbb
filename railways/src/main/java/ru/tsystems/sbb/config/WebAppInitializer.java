@@ -13,7 +13,7 @@ public class WebAppInitializer
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{HibernateConfig.class, SecurityConfig.class,
-        AppConfig.class};
+        AppConfig.class, JmsConfig.class};
     }
 
     @Override

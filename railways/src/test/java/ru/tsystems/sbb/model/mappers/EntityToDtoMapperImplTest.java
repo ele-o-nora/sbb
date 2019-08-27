@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
-import ru.tsystems.sbb.model.dto.ScheduledStopDto;
+import ru.tsystems.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.entities.Journey;
 import ru.tsystems.sbb.model.entities.Passenger;

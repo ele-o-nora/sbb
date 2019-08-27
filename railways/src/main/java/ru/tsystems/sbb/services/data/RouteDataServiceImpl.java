@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tsystems.sbb.model.dao.RouteDao;
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
-import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.dto.StationDto;
 import ru.tsystems.sbb.model.entities.Line;
 import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.Station;

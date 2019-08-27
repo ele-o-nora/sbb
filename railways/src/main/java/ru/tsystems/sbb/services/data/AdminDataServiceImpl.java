@@ -83,6 +83,7 @@ public class AdminDataServiceImpl implements AdminDataService {
         lineStation.setStation(station);
         lineStation.setOrder(order);
         adminDao.add(lineStation);
+        jmsTemplate.send(session -> session.createTextMessage("New station"));
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
-import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TrainDto;
 import ru.tsystems.sbb.services.data.AdminDataService;

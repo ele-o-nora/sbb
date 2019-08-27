@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import ru.tsystems.dto.ScheduledStopDto;
+
 /**
  * Contains necessary information for the sale of a ticket.
  */

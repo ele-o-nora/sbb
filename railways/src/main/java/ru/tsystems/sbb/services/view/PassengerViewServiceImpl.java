@@ -12,7 +12,7 @@ import ru.tsystems.sbb.model.dto.ChangeNameDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.PasswordDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
-import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TicketOrderDto;
 import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
@@ -217,7 +217,7 @@ public class PassengerViewServiceImpl implements PassengerViewService {
     public Map<String, Object> getUserTickets(final int page) {
         Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
-        LOGGER.info("Method call: getUserTickets({}) by user: {}", page,
+        LOGGER.trace("Method call: getUserTickets({}) by user: {}", page,
                 getUserName());
         Map<String, Object> objects = new HashMap<>();
         List<TicketDto> tickets = passengerDataService

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Indicator board</title>
+</h:head>
+<f:view>
+    <h:outputLabel value="Failed to load data" rendered="#{empty scheduleBean.stations}"/>
+    <h:form>
+    <h:outputLabel value="Current schedule for station " rendered="#{not empty scheduleBean.stations}"/>
+    <h:selectOneMenu value="#{scheduleBean.currentStation}" rendered="#{not empty scheduleBean.stations}">
+        <f:ajax listener="#{scheduleBean.changeStation}" render=":schedule"/>
+        <f:selectItems value="#{scheduleBean.stations}"/>
+    </h:selectOneMenu>
+    </h:form>
+    <h:outputLabel value="There are no trains scheduled to stop at this station at the moment"
+                   rendered="#{empty scheduleBean.currentSchedule and not empty scheduleBean.stations}"/>
+    <h:dataTable value="${scheduleBean.currentSchedule}" rendered="#{not empty scheduleBean.currentSchedule}"
+                 var="train" id="schedule">
+        <h:column>
+            <f:facet name = "header">Route</f:facet>
+            #{train.route}
+        </h:column>
+        <h:column>
+            <f:facet name = "header">Direction</f:facet>
+            #{train.direction}
+        </h:column>
+        <h:column>
+            <f:facet name = "header">ETA</f:facet>
+            #{train.actualArrival}
+        </h:column>
+        <h:column>
+            <f:facet name = "header">ETD</f:facet>
+            #{train.actualDeparture}
+        </h:column>
+        <h:column>
+            <f:facet name = "header">Status</f:facet>
+            #{train.status}
+        </h:column>
+    </h:dataTable>
+
+</f:view>
+</html>

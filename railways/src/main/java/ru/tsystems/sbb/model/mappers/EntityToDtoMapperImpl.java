@@ -8,8 +8,8 @@ import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
 import ru.tsystems.sbb.model.dto.RouteStationDto;
-import ru.tsystems.sbb.model.dto.ScheduledStopDto;
-import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.dto.ScheduledStopDto;
+import ru.tsystems.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TicketDto;
 import ru.tsystems.sbb.model.dto.TrainDto;
 import ru.tsystems.sbb.model.entities.Journey;
@@ -91,7 +91,6 @@ public class EntityToDtoMapperImpl implements EntityToDtoMapper {
                 .getJourney().getRoute().getNumber());
         scheduledStopDto.setDirection(scheduledStop
                 .getJourney().getDestination().getName());
-        scheduledStopDto.setDelay(scheduledStop.getJourney().getDelay());
         if (scheduledStop.getJourney().isCancelled()) {
             scheduledStopDto.setStatus("Cancelled");
         } else if (scheduledStop.getJourney().getDelay() > 0) {

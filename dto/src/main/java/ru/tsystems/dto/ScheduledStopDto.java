@@ -1,4 +1,4 @@
-package ru.tsystems.sbb.model.dto;
+package ru.tsystems.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,6 @@ public class ScheduledStopDto {
     private String departure;
     private String actualArrival;
     private String actualDeparture;
-    private int delay;
     private String status;
 
     public void setArrivals(final LocalDateTime arrivalTime, final int delay,

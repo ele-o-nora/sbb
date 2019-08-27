@@ -12,7 +12,7 @@ import ru.tsystems.sbb.model.dao.PassengerDao;
 import ru.tsystems.sbb.model.dao.RouteDao;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.dto.JourneyDto;
-import ru.tsystems.sbb.model.dto.ScheduledStopDto;
+import ru.tsystems.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.TicketOrderDto;
 import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
 import ru.tsystems.sbb.model.entities.Journey;

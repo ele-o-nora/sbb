@@ -8,9 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.JourneyDto;
-import ru.tsystems.sbb.model.dto.ScheduledStopDto;
+import ru.tsystems.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
-import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TransferTrainsDto;
 import ru.tsystems.sbb.services.data.RouteDataService;
 import ru.tsystems.sbb.services.data.ScheduleDataService;
@@ -51,7 +51,7 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
                                                final String destination,
                                                final String dateTime,
                                                final String searchType) {
-        LOGGER.info("Method call: getTrainsFromTo({}, {}, {}, {})", origin,
+        LOGGER.trace("Method call: getTrainsFromTo({}, {}, {}, {})", origin,
                 destination, dateTime, searchType);
         Map<String, Object> objects = prepSignUp();
         try {
@@ -93,7 +93,7 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
     @Override
     public Map<String, Object> getStationSchedule(final String stationName,
                                                   final String momentFrom) {
-        LOGGER.info("Method call: getStationSchedule({}, {})", stationName,
+        LOGGER.trace("Method call: getStationSchedule({}, {})", stationName,
                 momentFrom);
         try {
             if (momentFrom == null || momentFrom.isEmpty()) {

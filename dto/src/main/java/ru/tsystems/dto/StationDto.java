@@ -1,4 +1,4 @@
-package ru.tsystems.sbb.model.dto;
+package ru.tsystems.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

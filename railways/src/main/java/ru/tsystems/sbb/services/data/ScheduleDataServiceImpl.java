@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
 import ru.tsystems.sbb.model.dto.JourneyDto;
-import ru.tsystems.sbb.model.dto.ScheduledStopDto;
+import ru.tsystems.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.TransferTrainsDto;
 import ru.tsystems.sbb.model.entities.Journey;
 import ru.tsystems.sbb.model.entities.Line;
@@ -15,7 +15,6 @@ import ru.tsystems.sbb.model.entities.Station;
 import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
 import java.time.Clock;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,16 +37,14 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 
     private static final String DEFAULT_SEARCH_TYPE = "departure";
     private static final int TRANSFER_TIME = 15;
-    private static final int TRAINS_SEARCH_PERIOD = 6;
-    private static final int SCHEDULE_SEARCH_PERIOD = 4;
-    private static final int FULL_SCHEDULE_SEARCH_PERIOD = 24;
+    private static final int SEARCH_PERIOD = 5;
 
     @Override
     public List<ScheduledStopDto> stationSchedule(final String stationName,
                                                   final LocalDateTime from) {
         Station station = scheduleDao.getStationByName(stationName);
         List<ScheduledStop> scheduledStops = scheduleDao
-                .stationSchedule(station, from, SCHEDULE_SEARCH_PERIOD);
+                .stationSchedule(station, from, SEARCH_PERIOD);
         Collections.sort(scheduledStops, new ScheduleComparator());
         return scheduledStops.stream()
                 .map(scheduledStop -> mapper.convert(scheduledStop))
@@ -68,11 +65,11 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         if (searchType.equalsIgnoreCase(DEFAULT_SEARCH_TYPE)) {
             journeys = scheduleDao.
                     trainsFromToByDeparture(origin, destination,
-                            fromOrBy, TRAINS_SEARCH_PERIOD);
+                            fromOrBy, SEARCH_PERIOD);
         } else {
             journeys = scheduleDao.
                     trainsFromToByArrival(origin, destination,
-                            fromOrBy, TRAINS_SEARCH_PERIOD);
+                            fromOrBy, SEARCH_PERIOD);
         }
         return journeys.stream().map(journey -> mapper.convert(journey))
                 .collect(Collectors.toList());
@@ -112,7 +109,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         for (Station transfer : transferStations) {
             List<Journey> trainsToTransfer = scheduleDao
                     .trainsFromToByDeparture(origin, transfer,
-                            from, TRAINS_SEARCH_PERIOD);
+                            from, SEARCH_PERIOD);
             if (!trainsToTransfer.isEmpty()) {
                 for (Journey firstTrain : trainsToTransfer) {
                     LocalDateTime arrivalAtTransfer = firstTrain.getStops()
@@ -146,7 +143,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         for (Station transfer : transferStations) {
             List<Journey> trainsFromTransfer = scheduleDao
                     .trainsFromToByArrival(transfer, destination,
-                            by, TRAINS_SEARCH_PERIOD);
+                            by, SEARCH_PERIOD);
             if (!trainsFromTransfer.isEmpty()) {
                 for (Journey secondTrain : trainsFromTransfer) {
                     LocalDateTime departFromTransfer = secondTrain.getStops()
@@ -172,11 +169,11 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
     }
 
     @Override
-    public List<ScheduledStopDto> fullTodaySchedule(int stationId) {
+    public List<ScheduledStopDto> currentSchedule(int stationId) {
         Station station = scheduleDao.getStationById(stationId);
         List<ScheduledStop> schedule = scheduleDao
-                .stationSchedule(station, LocalDate.now(clock).atStartOfDay(),
-                        FULL_SCHEDULE_SEARCH_PERIOD);
+                .stationSchedule(station, LocalDateTime.now(clock),
+                        SEARCH_PERIOD);
         schedule.sort(new ScheduleComparator());
         return schedule.stream()
                 .map(scheduledStop -> mapper.convert(scheduledStop))

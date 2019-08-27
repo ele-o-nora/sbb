@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
+import ru.tsystems.dto.ScheduledStopDto;
 
 @Getter
 @Setter

@@ -2,7 +2,7 @@ package ru.tsystems.sbb.services.data;
 
 import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.RouteDto;
-import ru.tsystems.sbb.model.dto.StationDto;
+import ru.tsystems.dto.StationDto;
 
 import java.util.List;
 

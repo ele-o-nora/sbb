@@ -1,7 +1,7 @@
 package ru.tsystems.sbb.services.data;
 
 import ru.tsystems.sbb.model.dto.JourneyDto;
-import ru.tsystems.sbb.model.dto.ScheduledStopDto;
+import ru.tsystems.dto.ScheduledStopDto;
 import ru.tsystems.sbb.model.dto.TransferTrainsDto;
 
 import java.time.LocalDateTime;
@@ -68,5 +68,5 @@ public interface ScheduleDataService {
      * @return list of ScheduledStopDto for specified station where arrival or
      *  departure fall on the current day
      */
-    List<ScheduledStopDto> fullTodaySchedule(int stationId);
+    List<ScheduledStopDto> currentSchedule(int stationId);
 }
