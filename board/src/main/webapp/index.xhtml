@@ -6,19 +6,23 @@
 <f:view>
     <h:head>
         <h:outputStylesheet library="webjars" name="bootstrap/4.3.1/css/bootstrap.min.css"/>
+        <style type="text/css">
+            .custom-select:focus {
+                border-color: #E0E0E0!important;
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px rgba(64, 64, 64, 0.6)!important;
+            }
+        </style>
         <title>Indicator board</title>
     </h:head>
     <h:body styleClass="text-center">
-        <h:panelGroup id="main" styleClass="mt-3 p-3">
+        <h:panelGroup id="main">
             <h:outputLabel value="Failed to load data" rendered="#{empty scheduleBean.stations}"
-            styleClass="font-weight-bold text-danger"/>
+            styleClass="font-weight-bold text-danger mt-3"/>
             <h:form>
-                <h:panelGroup styleClass="form-row">
-                    <h:panelGroup styleClass="col-sm-3 offset-3">
-                        <h:outputLabel value="Current schedule for station "
+                <h:panelGroup styleClass="form-group row mt-3 justify-content-center">
+                        <h:outputLabel value="Current schedule for"
                                        rendered="#{not empty scheduleBean.stations}"
-                                       styleClass="text-secondary font-weight-bold float-right align-bottom"/>
-                    </h:panelGroup>
+                                       styleClass="col-sm-2 col-form-label"/>
                     <h:panelGroup styleClass="col-sm-3">
                         <h:selectOneMenu value="#{scheduleBean.currentStation}"
                                          rendered="#{not empty scheduleBean.stations}"
