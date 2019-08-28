@@ -23,7 +23,6 @@ import ru.tsystems.sbb.model.entities.Tariff;
 import ru.tsystems.sbb.model.entities.Train;
 import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
-import javax.annotation.PostConstruct;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -350,8 +349,4 @@ public class AdminDataServiceImpl implements AdminDataService {
         jmsTemplate.send(session -> session.createTextMessage("Delay"));
     }
 
-    @PostConstruct
-    public void init() {
-        jmsTemplate.send(session -> session.createTextMessage("Startup"));
-    }
 }
