@@ -33,16 +33,30 @@ public class ScheduleService {
         updateMaps();
     }
 
+    /**
+     * Returns list of station names from corresponding map.
+     * @return list of String that is complete list of stations' names
+     */
     public List<String> stationsList() {
         List<String> stationNames = new ArrayList<>(stationsMap.keySet());
         Collections.sort(stationNames);
         return stationNames;
     }
 
+    /**
+     * Returns list of ScheduledStopDto that represent current schedule for
+     *  specific station.
+     * @param stationName name of the station for which the schedule is returned
+     * @return list of ScheduledStopDto mapped by specified station name
+     */
     public List<ScheduledStopDto> stationSchedule(final String stationName) {
         return scheduleMap.get(stationName);
     }
 
+    /**
+     * Calls to RestService in order to get current list of stations and current
+     *  schedule for each of the stations.
+     */
     public void updateMaps() {
         try {
             StationDto[] stations = restService.getStationList();

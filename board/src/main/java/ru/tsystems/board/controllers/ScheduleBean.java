@@ -52,6 +52,10 @@ public class ScheduleBean {
     @Push(channel = "scheduleNews")
     private PushContext pushContext;
 
+    /**
+     * Initializes locally maintained list of station names and current
+     *  station's schedule. Initializes message listener.
+     */
     @PostConstruct
     public void init() {
         currentStation = DEFAULT_STATION;
@@ -73,6 +77,11 @@ public class ScheduleBean {
         }
     }
 
+    /**
+     * Calls to ScheduleService in order to bring station and schedule maps to
+     *  current state. Updates locally maintained list of station names and
+     *  current station's schedule. Informs frontend about update.
+     */
     public void updateSchedule() {
         LOGGER.info("Updating schedule");
         scheduleService.updateMaps();
@@ -81,6 +90,10 @@ public class ScheduleBean {
         pushContext.send("update");
     }
 
+    /**
+     * Calls to ScheduleService in order to update list of ScheduledStopDto
+     *  so that it would properly reflect the current station choice.
+     */
     public void changeStation() {
         currentSchedule = scheduleService.stationSchedule(currentStation);
     }

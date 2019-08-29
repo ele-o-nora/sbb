@@ -1,4 +1,4 @@
-package ru.tsystems.sbb.controllers;
+package ru.tsystems.sbb.controllers.view;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

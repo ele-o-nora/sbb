@@ -1,4 +1,4 @@
-package ru.tsystems.sbb.controllers;
+package ru.tsystems.sbb.controllers.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

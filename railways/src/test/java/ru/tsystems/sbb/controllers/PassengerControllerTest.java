@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import ru.tsystems.sbb.controllers.view.PassengerController;
 import ru.tsystems.sbb.model.dto.BuyerDetailsDto;
 import ru.tsystems.sbb.model.dto.ChangeNameDto;
 import ru.tsystems.sbb.model.dto.PassengerDetailsDto;
