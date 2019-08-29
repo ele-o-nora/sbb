@@ -73,7 +73,7 @@ public class ScheduleBean {
             MessageListener listener = message -> updateSchedule();
             consumer.setMessageListener(listener);
         } catch (JMSException e) {
-            LOGGER.error("Failed establish topic subscription", e);
+            LOGGER.error("Failed to establish topic subscription", e);
         }
     }
 

@@ -33,3 +33,4 @@ hs_err_pid*
 /railways/target/
 /railways/src/test/resources/log4j2-test.properties
 /board/target/
+/dto/target/
