@@ -8,6 +8,7 @@ import ru.tsystems.dto.StationDto;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,12 +16,12 @@ import java.util.List;
 import java.util.Map;
 
 @Singleton
-public class ScheduleService {
+public class ScheduleService implements Serializable {
 
     @Inject
     private RestService restService;
 
-    private static final Logger LOGGER = LoggerFactory
+    private static final transient Logger LOGGER = LoggerFactory
             .getLogger(ScheduleService.class);
 
     private Map<String, Integer> stationsMap;

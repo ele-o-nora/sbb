@@ -1,6 +1,7 @@
 package ru.tsystems.board.controllers;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
@@ -10,7 +11,7 @@ import ru.tsystems.dto.ScheduledStopDto;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Startup;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.push.Push;
 import javax.faces.push.PushContext;
 import javax.inject.Inject;
@@ -23,30 +24,36 @@ import javax.jms.MessageListener;
 import javax.jms.Session;
 import javax.jms.Topic;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Named
-@ApplicationScoped
 @Startup
-@Getter
-@Setter
-public class ScheduleBean {
+@SessionScoped
+@NoArgsConstructor
+public class ScheduleBean implements Serializable {
 
     @Inject
     private ScheduleService scheduleService;
 
     private static final String DEFAULT_STATION = "King's Landing";
-    private static final Logger LOGGER = LoggerFactory
+    private static final transient Logger LOGGER = LoggerFactory
             .getLogger(ScheduleBean.class);
 
+    @Getter
     private List<String> stations;
+
+    @Getter
     private List<ScheduledStopDto> currentSchedule;
+
+    @Getter
+    @Setter
     private String currentStation;
 
-    private ConnectionFactory connectionFactory;
-    private Connection connection;
-    private Session session;
-    private MessageConsumer consumer;
+    private transient ConnectionFactory connectionFactory;
+    private transient Connection connection;
+    private transient Session session;
+    private transient MessageConsumer consumer;
 
     @Inject
     @Push(channel = "scheduleNews")

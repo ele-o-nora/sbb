@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -12,7 +13,8 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @NoArgsConstructor
 @ToString
-public class ScheduledStopDto {
+public class ScheduledStopDto implements Serializable {
+    private static final long serialVersionUID = -2910813165098073721L;
     private int id;
     private String station;
     @ToString.Exclude
