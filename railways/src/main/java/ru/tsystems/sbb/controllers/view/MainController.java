@@ -31,4 +31,9 @@ public class MainController {
     public ModelAndView accessDenied() {
         return new ModelAndView("accessDenied");
     }
+
+    @GetMapping("/map")
+    public ModelAndView map() {
+        return new ModelAndView("map", viewService.prepareRailwayMap());
+    }
 }

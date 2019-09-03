@@ -20,6 +20,12 @@ public class Station extends AbstractEntity {
     @Column
     private String name;
 
+    @Column
+    private int x;
+
+    @Column
+    private int y;
+
     @OneToMany(mappedBy = "station")
     private List<LineStation> lines;
 

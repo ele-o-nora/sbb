@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.dto.ScheduledStopDto;
+import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
 import ru.tsystems.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TransferTrainsDto;
@@ -113,8 +114,21 @@ public class ScheduleViewServiceImpl implements ScheduleViewService {
         }
     }
 
+    @Override
+    public Map<String, Object> prepareRailwayMap() {
+        LOGGER.trace("Method call: prepareRailwayMap()");
+        Map<String, Object> objects = prepSignUp();
+        List<LineDto> lines = routeDataService.getAllLines();
+        for (LineDto l : lines) {
+            List<StationDto> stations = routeDataService
+                    .getAllLineStations(l.getId());
+            objects.put("stations" + l.getName(), stations);
+        }
+        return objects;
+    }
+
     private Map<String, Object> getStationSchedule(final String stationName,
-                                                  final LocalDateTime from) {
+                                                   final LocalDateTime from) {
         List<ScheduledStopDto> trains = scheduleDataService
                 .stationSchedule(stationName, from);
         Map<String, Object> objects = prepSignUp();

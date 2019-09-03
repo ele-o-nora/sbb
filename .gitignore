@@ -34,3 +34,4 @@ hs_err_pid*
 /railways/src/test/resources/log4j2-test.properties
 /board/target/
 /dto/target/
+/railways/src/main/webapp/resources/westeros.jpg

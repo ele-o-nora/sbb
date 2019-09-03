@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**", "/resources/**", "/",
                         "/curSchedule", "/findTrains", "/login", "/register",
                         "/buyTicket", "/buyTickets", "/finalizeTicketSale",
-                        "/finalizeTicketsSale", "/rest/**").permitAll()
+                        "/finalizeTicketsSale", "/rest/**", "/map").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

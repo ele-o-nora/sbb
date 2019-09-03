@@ -170,6 +170,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Leaflet.js -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>leaflet</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

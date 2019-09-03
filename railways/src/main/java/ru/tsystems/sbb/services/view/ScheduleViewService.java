@@ -46,4 +46,10 @@ public interface ScheduleViewService {
      */
     Map<String, Object> getTrainsFromTo(String origin, String destination,
                                         String dateTime, String searchType);
+
+    /**
+     * Gets from data service lists of stations by line to be drawn on the map.
+     * @return map containing lists of stations for each existing line
+     */
+    Map<String, Object> prepareRailwayMap();
 }

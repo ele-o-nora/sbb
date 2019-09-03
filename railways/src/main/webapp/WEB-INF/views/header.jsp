@@ -33,6 +33,9 @@
             <li class="nav-item">
                 <a href="${pageContext.request.contextPath}/" class="nav-link">Home</a>
             </li>
+            <li class="nav-item">
+                <a href="${pageContext.request.contextPath}/map" class="nav-link">Map</a>
+            </li>
             <sec:authorize access="hasRole('USER')">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
