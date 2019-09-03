@@ -33,13 +33,12 @@ public interface AdminViewService {
      * @param stationName new station's name
      * @param lineId id of the line to which the station belongs
      * @param order position from centre on the line that new station occupies
-     * @param distBefore distance to the previous station
-     * @param distAfter distance to the next station
+     * @param x station's x coordinate
+     * @param y station's y coordinate
      * @return map containing updated list of this line's stations
      */
     Map<String, Object> addNewStation(String stationName, int lineId,
-                                      int order, int distBefore,
-                                      int distAfter);
+                                      int order, int x, int y);
 
     /**
      * Calls to data service to process adding new train model with specific

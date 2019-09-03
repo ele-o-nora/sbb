@@ -22,11 +22,10 @@ public interface AdminDataService {
      * @param stationName name of the station to be created
      * @param lineId id indicating which line the new station belongs to
      * @param order position of the new station on the line
-     * @param distBefore distance to the previous station on the line
-     * @param distAfter distance to the next station on the line
+     * @param x station's x coordinate
+     * @param y station's y coordinate
      */
-    void addNewStation(String stationName, int lineId, int order,
-                       int distBefore, int distAfter);
+    void addNewStation(String stationName, int lineId, int order, int x, int y);
 
     /**
      * Creates new train model with specific name, quantity of seats and speed.

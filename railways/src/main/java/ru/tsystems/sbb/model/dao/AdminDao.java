@@ -6,7 +6,6 @@ import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.RouteStation;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
-import ru.tsystems.sbb.model.entities.StationsDistance;
 import ru.tsystems.sbb.model.entities.Tariff;
 import ru.tsystems.sbb.model.entities.Train;
 
@@ -84,19 +83,6 @@ public interface AdminDao {
      * @return Train identified by specified id
      */
     Train getTrainById(int trainId);
-
-    /**
-     * Adds new distance between stations to the database.
-     * @param stationsDistance distance between stations to be added
-     */
-    void add(StationsDistance stationsDistance);
-
-    /**
-     * Removes from database distance between specific stations.
-     * @param s1 first station for which distance is to be removed
-     * @param s2 second station for which distance is to be removed
-     */
-    void deleteDistance(Station s1, Station s2);
 
     /**
      * Adds new tariff to the database.

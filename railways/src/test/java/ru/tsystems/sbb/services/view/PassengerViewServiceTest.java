@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ru.tsystems.sbb.config.ViewServiceTestConfig;
+import ru.tsystems.sbb.exceptions.TicketSaleException;
 import ru.tsystems.sbb.model.dto.BuyerDetailsDto;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
@@ -240,9 +241,10 @@ class PassengerViewServiceTest {
         TicketOrderDto order = new TicketOrderDto();
         LocalDate dateOfBirth = LocalDate.of(2002, 2, 20);
         List<StationDto> stations = new ArrayList<>();
+        TicketSaleException e = new TicketSaleException(FAIL_STATUS);
         when(mockPassengerDataService.buyTicket(any(TicketOrderDto.class),
                 anyString(), anyString(), any(LocalDate.class)))
-                .thenReturn(FAIL_STATUS);
+                .thenThrow(e);
         when(mockRouteDataService.allStations()).thenReturn(stations);
 
         Map<String, Object> result = passengerViewService
@@ -269,7 +271,7 @@ class PassengerViewServiceTest {
         List<TicketDto> tickets = new ArrayList<>();
         when(mockPassengerDataService.buyTicket(any(TicketOrderDto.class),
                 anyString(), anyString(), any(LocalDate.class)))
-                .thenReturn(SUCCESS);
+                .thenReturn(true);
         when(mockRouteDataService.allStations()).thenReturn(stations);
         when(mockPassengerDataService.getPassengerTickets(anyInt(), anyString(),
                 anyString(), any(LocalDate.class))).thenReturn(tickets);
@@ -298,10 +300,11 @@ class PassengerViewServiceTest {
         TransferTicketOrderDto order = new TransferTicketOrderDto();
         LocalDate dateOfBirth = LocalDate.of(2002, 2, 20);
         List<StationDto> stations = new ArrayList<>();
+        TicketSaleException e = new TicketSaleException(FAIL_STATUS);
         when(mockPassengerDataService
                 .buyTickets(any(TransferTicketOrderDto.class),
                 anyString(), anyString(), any(LocalDate.class)))
-                .thenReturn(FAIL_STATUS);
+                .thenThrow(e);
         when(mockRouteDataService.allStations()).thenReturn(stations);
 
         Map<String, Object> result = passengerViewService
@@ -334,7 +337,7 @@ class PassengerViewServiceTest {
         when(mockPassengerDataService
                 .buyTickets(any(TransferTicketOrderDto.class),
                         anyString(), anyString(), any(LocalDate.class)))
-                .thenReturn(SUCCESS);
+                .thenReturn(true);
         when(mockRouteDataService.allStations()).thenReturn(stations);
         when(mockPassengerDataService.getPassengerTickets(anyInt(), anyString(),
                 anyString(), any(LocalDate.class))).thenReturn(tickets);

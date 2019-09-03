@@ -64,35 +64,15 @@ public interface RouteDao {
     List<LineStation> getLineStations(Line line, int from);
 
     /**
-     * Gets from database the station that is identified by occupying
-     *  specific position on specific line.
-     * @param line line to which station belongs
-     * @param order ordinal number indicating station's position on the line
-     * @return Station that occupies specified position on the specified line
+     * Gets from database partial list of stations from specific line that
+     *  starts and ends on specific stations.
+     * @param first order of the first station to be included in the list
+     * @param last order of the last station to be included in the list
+     * @param line line for which the list of stations is returned
+     * @return list of Station that are linked to specified Line limited by
+     *  specified ordinal numbers
      */
-    Station getStation(Line line, int order);
-
-    /**
-     * Gets from database exact travel distance between two stations, where
-     *  the first of the stations lies closer to the center of the network
-     *  than the second one.
-     * @param from station closer to the centre
-     * @param to station farther the center
-     * @param line line to which both stations belong
-     * @return integer value of the distance between specified stations
-     */
-    int outboundDistance(Station from, Station to, Line line);
-
-    /**
-     * Gets from database exact travel distance between two stations, where
-     *  the first of the stations lies farther from the center of the network
-     *  than the second one.
-     * @param from station farther from the centre
-     * @param to station closer to the center
-     * @param line line to which both stations belong
-     * @return integer value of the distance between specified stations
-     */
-    int inboundDistance(Station from, Station to, Line line);
+    List<Station> getStations(int first, int last, Line line);
 
     /**
      * Gets from database ordinal number of specific station on specific line.

@@ -38,7 +38,7 @@ public interface PassengerDataService {
      * @param dateOfBirth date of birth of the passenger to be found or created
      * @return String indicating either success or reason of failure of the sale
      */
-    String buyTicket(TicketOrderDto ticket, String firstName, String lastName,
+    boolean buyTicket(TicketOrderDto ticket, String firstName, String lastName,
                       LocalDate dateOfBirth);
 
     /**
@@ -61,7 +61,7 @@ public interface PassengerDataService {
      * @param dateOfBirth date of birth of the passenger to be found or created
      * @return String indicating either success or reason of failure of the sale
      */
-    String buyTickets(TransferTicketOrderDto tickets, String firstName,
+    boolean buyTickets(TransferTicketOrderDto tickets, String firstName,
                       String lastName, LocalDate dateOfBirth);
 
     /**

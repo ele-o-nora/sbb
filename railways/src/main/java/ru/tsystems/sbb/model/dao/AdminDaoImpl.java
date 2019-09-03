@@ -10,7 +10,6 @@ import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.RouteStation;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
-import ru.tsystems.sbb.model.entities.StationsDistance;
 import ru.tsystems.sbb.model.entities.Tariff;
 import ru.tsystems.sbb.model.entities.Train;
 
@@ -68,11 +67,6 @@ public class AdminDaoImpl implements AdminDao {
     }
 
     @Override
-    public void add(final StationsDistance stationsDistance) {
-        sessionFactory.getCurrentSession().persist(stationsDistance);
-    }
-
-    @Override
     public void cleanRouteStopPattern(final Route route) {
         Session session = sessionFactory.getCurrentSession();
         session.createQuery("delete from RouteStation rs "
@@ -85,17 +79,6 @@ public class AdminDaoImpl implements AdminDao {
         return sessionFactory.getCurrentSession()
                 .createQuery("from Train t order by t.model", Train.class)
                 .getResultList();
-    }
-
-    @Override
-    public void deleteDistance(Station s1, Station s2) {
-        Session session = sessionFactory.getCurrentSession();
-        session.createQuery("delete from StationsDistance sd "
-                + "where (sd.firstStation = :s1 and sd.secondStation = :s2) "
-                + "or (sd.firstStation = :s2 and sd.secondStation = :s1)")
-                .setParameter("s1", s1)
-                .setParameter("s2", s2)
-                .executeUpdate();
     }
 
     @Override

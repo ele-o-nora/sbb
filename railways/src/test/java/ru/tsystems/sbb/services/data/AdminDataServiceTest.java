@@ -1,6 +1,7 @@
 package ru.tsystems.sbb.services.data;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +21,6 @@ import ru.tsystems.sbb.model.entities.Route;
 import ru.tsystems.sbb.model.entities.RouteStation;
 import ru.tsystems.sbb.model.entities.ScheduledStop;
 import ru.tsystems.sbb.model.entities.Station;
-import ru.tsystems.sbb.model.entities.StationsDistance;
 import ru.tsystems.sbb.model.entities.Train;
 import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 
@@ -87,12 +87,12 @@ class AdminDataServiceTest {
     }
 
     @Test
-    void addNewFirstStationTest() {
+    void addNewStationTest() {
         String stationName = "firstStation";
         int lineId = 0;
-        int order = 1;
-        int distBefore = 0;
-        int distAfter = 10;
+        int order = 2;
+        int x = 50;
+        int y = 100;
         Line line = new Line();
         LineStation lineStation = new LineStation();
         List<LineStation> lineStations = Arrays
@@ -100,92 +100,13 @@ class AdminDataServiceTest {
         when(mockRouteDao.getLineById(anyInt())).thenReturn(line);
         when(mockRouteDao.getLineStations(any(Line.class), anyInt()))
                 .thenReturn(lineStations);
-        when(mockRouteDao.getStation(any(Line.class), anyInt()))
-                .thenReturn(new Station());
 
-        adminDataService.addNewStation(stationName, lineId, order,
-                distBefore, distAfter);
+        adminDataService.addNewStation(stationName, lineId, order, x, y);
 
         verify(mockRouteDao, times(2)).getLineById(eq(0));
-        verify(mockRouteDao, times(1)).getLineStations(same(line), eq(1));
+        verify(mockRouteDao, times(1)).getLineStations(same(line), eq(2));
         verify(mockAdminDao, times(2)).update(lineStation);
         verify(mockAdminDao, times(1)).add(any(Station.class));
-        verify(mockRouteDao, times(1)).getStation(same(line), eq(2));
-        verify(mockAdminDao, times(2)).add(any(StationsDistance.class));
-        verify(mockAdminDao, times(1)).add(any(LineStation.class));
-        verifyNoMoreInteractions(mockAdminDao);
-        verifyNoMoreInteractions(mockRouteDao);
-        verifyZeroInteractions(mockScheduleDao);
-        verifyZeroInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockMapper);
-    }
-
-    @Test
-    void addNewLastStationTest() {
-        String stationName = "lastStation";
-        int lineId = 0;
-        int order = 10;
-        int distBefore = 10;
-        int distAfter = 0;
-        Line line = new Line();
-        when(mockRouteDao.getLineById(anyInt())).thenReturn(line);
-        when(mockRouteDao.getLineStations(any(Line.class), anyInt()))
-                .thenReturn(new ArrayList<>());
-        when(mockRouteDao.getStation(any(Line.class), anyInt()))
-                .thenReturn(new Station());
-
-        adminDataService.addNewStation(stationName, lineId, order,
-                distBefore, distAfter);
-
-        verify(mockRouteDao, times(2)).getLineById(eq(0));
-        verify(mockRouteDao, times(1)).getLineStations(same(line), eq(10));
-        verify(mockAdminDao, times(1)).add(any(Station.class));
-        verify(mockRouteDao, times(1)).getStation(same(line), eq(9));
-        verify(mockAdminDao, times(2)).add(any(StationsDistance.class));
-        verify(mockAdminDao, times(1)).add(any(LineStation.class));
-        verifyNoMoreInteractions(mockAdminDao);
-        verifyNoMoreInteractions(mockRouteDao);
-        verifyZeroInteractions(mockScheduleDao);
-        verifyZeroInteractions(mockPassengerDao);
-        verifyZeroInteractions(mockMapper);
-    }
-
-    @Test
-    void addNewMiddleStationTest() {
-        String stationName = "middleStation";
-        int lineId = 0;
-        int order = 5;
-        int distBefore = 10;
-        int distAfter = 10;
-        Line line = new Line();
-        LineStation lineStation = new LineStation();
-        List<LineStation> lineStations = Arrays
-                .asList(lineStation, lineStation);
-        Station firstStation = new Station();
-        Station secondStation = new Station();
-        when(mockRouteDao.getLineById(anyInt())).thenReturn(line);
-        when(mockRouteDao.getLineStations(any(Line.class), anyInt()))
-                .thenReturn(lineStations);
-        when(mockRouteDao.getStation(any(Line.class), eq(4)))
-                .thenReturn(firstStation);
-        when(mockRouteDao.getStation(any(Line.class), eq(5)))
-                .thenReturn(secondStation);
-        when(mockRouteDao.getStation(any(Line.class), eq(6)))
-                .thenReturn(new Station());
-
-        adminDataService.addNewStation(stationName, lineId, order,
-                distBefore, distAfter);
-
-        verify(mockRouteDao, times(3)).getLineById(eq(0));
-        verify(mockAdminDao, times(1))
-                .deleteDistance(same(firstStation), same(secondStation));
-        verify(mockRouteDao, times(1)).getLineStations(same(line), eq(5));
-        verify(mockAdminDao, times(2)).update(lineStation);
-        verify(mockAdminDao, times(1)).add(any(Station.class));
-        verify(mockRouteDao, times(2)).getStation(same(line), eq(4));
-        verify(mockRouteDao, times(1)).getStation(same(line), eq(5));
-        verify(mockRouteDao, times(1)).getStation(same(line), eq(6));
-        verify(mockAdminDao, times(4)).add(any(StationsDistance.class));
         verify(mockAdminDao, times(1)).add(any(LineStation.class));
         verifyNoMoreInteractions(mockAdminDao);
         verifyNoMoreInteractions(mockRouteDao);
@@ -233,17 +154,28 @@ class AdminDataServiceTest {
         route.setLine(line);
         Train train = new Train();
         train.setSpeed(100);
-        RouteStation routeStation = new RouteStation();
-        Station station = new Station();
-        routeStation.setWaitTime(10);
-        routeStation.setStation(station);
-        List<RouteStation> routeStations = Arrays.asList(routeStation,
-                routeStation, routeStation, routeStation);
+        RouteStation first = new RouteStation();
+        RouteStation second = new RouteStation();
+        RouteStation third = new RouteStation();
+        Station firstStation = new Station();
+        Station secondStation = new Station();
+        Station thirdStation = new Station();
+        first.setWaitTime(10);
+        first.setStation(firstStation);
+        second.setWaitTime(10);
+        second.setStation(secondStation);
+        third.setWaitTime(10);
+        third.setStation(thirdStation);
+        List<RouteStation> routeStations = Arrays.asList(first, second, third);
         route.setStations(routeStations);
         when(mockRouteDao.getRouteById(anyInt())).thenReturn(route);
         when(mockAdminDao.getTrainById(anyInt())).thenReturn(train);
-        when(mockRouteDao.inboundDistance(any(Station.class),
-                any(Station.class), any(Line.class))).thenReturn(50);
+        when(mockRouteDao.getStationOrder(any(Line.class), same(firstStation)))
+                .thenReturn(1);
+        when(mockRouteDao.getStationOrder(any(Line.class), same(secondStation)))
+                .thenReturn(3);
+        when(mockRouteDao.getStationOrder(any(Line.class), same(thirdStation)))
+                .thenReturn(5);
 
         adminDataService.scheduleJourneys(routeId, departure, dayFrom,
                 dayUntil, trainId, false);
@@ -251,9 +183,15 @@ class AdminDataServiceTest {
         verify(mockRouteDao, times(1)).getRouteById(eq(0));
         verify(mockAdminDao, times(1)).getTrainById(eq(0));
         verify(mockAdminDao, times(3)).add(any(Journey.class));
-        verify(mockRouteDao, times(9)).inboundDistance(same(station),
-                same(station), same(line));
-        verify(mockAdminDao, times(12)).add(any(ScheduledStop.class));
+        verify(mockRouteDao, times(3)).getStationOrder(same(line),
+                same(firstStation));
+        verify(mockRouteDao, times(6)).getStationOrder(same(line),
+                same(secondStation));
+        verify(mockRouteDao, times(3)).getStationOrder(same(line),
+                same(thirdStation));
+        verify(mockRouteDao, times(3)).getStations(eq(3), eq(5), same(line));
+        verify(mockRouteDao, times(3)).getStations(eq(1), eq(3), same(line));
+        verify(mockAdminDao, times(9)).add(any(ScheduledStop.class));
         verify(mockJmsTemplate, times(1)).send(any());
         verifyNoMoreInteractions(mockRouteDao);
         verifyNoMoreInteractions(mockAdminDao);
@@ -275,17 +213,28 @@ class AdminDataServiceTest {
         route.setLine(line);
         Train train = new Train();
         train.setSpeed(100);
-        RouteStation routeStation = new RouteStation();
-        Station station = new Station();
-        routeStation.setStation(station);
-        routeStation.setWaitTime(10);
-        List<RouteStation> routeStations = Arrays.asList(routeStation,
-                routeStation, routeStation, routeStation);
+        RouteStation first = new RouteStation();
+        RouteStation second = new RouteStation();
+        RouteStation third = new RouteStation();
+        Station firstStation = new Station();
+        Station secondStation = new Station();
+        Station thirdStation = new Station();
+        first.setWaitTime(10);
+        first.setStation(firstStation);
+        second.setWaitTime(10);
+        second.setStation(secondStation);
+        third.setWaitTime(10);
+        third.setStation(thirdStation);
+        List<RouteStation> routeStations = Arrays.asList(first, second, third);
         route.setStations(routeStations);
         when(mockRouteDao.getRouteById(anyInt())).thenReturn(route);
         when(mockAdminDao.getTrainById(anyInt())).thenReturn(train);
-        when(mockRouteDao.outboundDistance(any(Station.class),
-                any(Station.class), any(Line.class))).thenReturn(50);
+        when(mockRouteDao.getStationOrder(any(Line.class), same(firstStation)))
+                .thenReturn(1);
+        when(mockRouteDao.getStationOrder(any(Line.class), same(secondStation)))
+                .thenReturn(3);
+        when(mockRouteDao.getStationOrder(any(Line.class), same(thirdStation)))
+                .thenReturn(5);
 
         adminDataService.scheduleJourneys(routeId, departure, dayFrom,
                 dayUntil, trainId, true);
@@ -293,9 +242,15 @@ class AdminDataServiceTest {
         verify(mockRouteDao, times(1)).getRouteById(eq(0));
         verify(mockAdminDao, times(1)).getTrainById(eq(0));
         verify(mockAdminDao, times(3)).add(any(Journey.class));
-        verify(mockRouteDao, times(9)).outboundDistance(same(station),
-                same(station), same(line));
-        verify(mockAdminDao, times(12)).add(any(ScheduledStop.class));
+        verify(mockRouteDao, times(3)).getStationOrder(same(line),
+                same(firstStation));
+        verify(mockRouteDao, times(6)).getStationOrder(same(line),
+                same(secondStation));
+        verify(mockRouteDao, times(3)).getStationOrder(same(line),
+                same(thirdStation));
+        verify(mockRouteDao, times(3)).getStations(eq(1), eq(3), same(line));
+        verify(mockRouteDao, times(3)).getStations(eq(3), eq(5), same(line));
+        verify(mockAdminDao, times(9)).add(any(ScheduledStop.class));
         verify(mockJmsTemplate, times(1)).send(any());
         verifyNoMoreInteractions(mockRouteDao);
         verifyNoMoreInteractions(mockAdminDao);

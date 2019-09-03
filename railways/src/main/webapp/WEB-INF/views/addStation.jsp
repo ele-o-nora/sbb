@@ -15,17 +15,11 @@
     <div class="col-sm-6 offset-3">
         <c:forEach var="station" items="${stations}" varStatus="status">
             <c:if test="${status.first}">
-                <input type="button" value="+" onclick="showAddStationForm(1, false, true)"
+                <input type="button" value="+" onclick="showAddStationForm(1)"
                        class="btn btn-outline-dark rounded-circle m-2"><br/></c:if>
             <span class="text-secondary">${station.name}</span><br/>
-            <c:if test="${!status.last}">
-            <input type="button" value="+" onclick="showAddStationForm(${status.index+2}, true, true)"
+            <input type="button" value="+" onclick="showAddStationForm(${status.index+2})"
                    class="btn btn-outline-dark rounded-circle m-2"><br/>
-            </c:if>
-            <c:if test="${status.last}">
-                <input type="button" value="+" onclick="showAddStationForm(${status.index+2}, true, false)"
-                       class="btn btn-outline-dark rounded-circle m-2"><br/>
-            </c:if>
         </c:forEach>
     </div>
 </div>
@@ -51,19 +45,17 @@
                                    id="addStationName" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-row justify-content-center m-2" id="rowBefore">
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="distanceBefore" name="distanceBefore"
-                                   placeholder="Distance to the previous station (miles)" pattern="[1-9]{1}[0-9]{0,3}"
-                                   title="Please enter valid distance"
+                    <div class="form-row justify-content-center m-2">
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="x"
+                                   placeholder="x coordinate" pattern="[1-9]{1}[0-9]{0,3}"
+                                   title="Please enter valid coordinate"
                                    onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');">
                         </div>
-                    </div>
-                    <div class="form-row justify-content-center m-2" id="rowAfter">
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="distanceAfter" name="distanceAfter"
-                                   placeholder="Distance to the next station (miles)" pattern="[1-9]{1}[0-9]{0,3}"
-                                   title="Please enter valid distance"
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="y"
+                                   placeholder="y coordinate" pattern="[1-9]{1}[0-9]{0,3}"
+                                   title="Please enter valid coordinate"
                                    onkeyup="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');">
                         </div>
                     </div>

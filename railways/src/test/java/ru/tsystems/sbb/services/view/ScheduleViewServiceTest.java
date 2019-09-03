@@ -13,6 +13,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ru.tsystems.sbb.config.ViewServiceTestConfig;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.dto.ScheduledStopDto;
+import ru.tsystems.sbb.model.dto.LineDto;
 import ru.tsystems.sbb.model.dto.SignUpDto;
 import ru.tsystems.dto.StationDto;
 import ru.tsystems.sbb.model.dto.TransferTrainsDto;
@@ -24,6 +25,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -346,6 +349,37 @@ class ScheduleViewServiceTest {
         assertFalse(result.containsKey(TRAINS));
         assertFalse(result.containsKey(CONNECTIONS));
         assertFalse(result.containsKey(ERROR));
+    }
+
+    @Test
+    void prepareRailwayMapTest() {
+        LineDto firstLine = new LineDto();
+        firstLine.setId(1);
+        firstLine.setName("First");
+        LineDto secondLine = new LineDto();
+        secondLine.setId(2);
+        secondLine.setName("Second");
+        List<LineDto> lines = Arrays.asList(firstLine, secondLine);
+        List<StationDto> firstStations = Collections.emptyList();
+        List<StationDto> secondStations = Collections.emptyList();
+        when(mockRouteDataService.getAllLines()).thenReturn(lines);
+        when(mockRouteDataService.getAllLineStations(eq(1)))
+                .thenReturn(firstStations);
+        when(mockRouteDataService.getAllLineStations(eq(2)))
+                .thenReturn(secondStations);
+
+        Map<String, Object> result = scheduleViewService.prepareRailwayMap();
+
+        verify(mockRouteDataService, times(1)).getAllLines();
+        verify(mockRouteDataService, times(1)).getAllLineStations(eq(1));
+        verify(mockRouteDataService, times(1)).getAllLineStations(eq(2));
+        verifyNoMoreInteractions(mockRouteDataService);
+        verifyZeroInteractions(mockScheduleDataService);
+
+        assertTrue(result.containsKey("stationsFirst"));
+        assertSame(firstStations, result.get("stationsFirst"));
+        assertTrue(result.containsKey("stationsSecond"));
+        assertSame(secondStations, result.get("stationsSecond"));
     }
 
 }

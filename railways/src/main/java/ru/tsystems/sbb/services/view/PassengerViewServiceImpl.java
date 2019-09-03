@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ru.tsystems.sbb.exceptions.TicketSaleException;
 import ru.tsystems.sbb.model.dto.BuyerDetailsDto;
 import ru.tsystems.sbb.model.dto.ChangeNameDto;
 import ru.tsystems.sbb.model.dto.PassengerDto;
@@ -133,16 +134,18 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         LOGGER.info("Method call: finalizeTicketSale({}, {}, {}, {})",
                 ticketOrder, firstName, lastName, dateOfBirth);
         Map<String, Object> objects = getStations();
-        String saleResult = passengerDataService.buyTicket(ticketOrder,
-                firstName, lastName, dateOfBirth);
-        if (saleResult.equalsIgnoreCase(SUCCESS)) {
-            objects.put(STATUS, TICKET_SUCCESS);
-            List<TicketDto> tickets = passengerDataService
-                    .getPassengerTickets(ticketOrder.getJourney().getId(),
-                            firstName, lastName, dateOfBirth);
-            objects.put(TICKETS, tickets);
-        } else {
-            objects.put(STATUS, TICKET_FAIL + saleResult);
+        try {
+            boolean saleResult = passengerDataService.buyTicket(ticketOrder,
+                    firstName, lastName, dateOfBirth);
+            if (saleResult) {
+                objects.put(STATUS, TICKET_SUCCESS);
+                List<TicketDto> tickets = passengerDataService
+                        .getPassengerTickets(ticketOrder.getJourney().getId(),
+                                firstName, lastName, dateOfBirth);
+                objects.put(TICKETS, tickets);
+            }
+        } catch (TicketSaleException e) {
+            objects.put(STATUS, TICKET_FAIL + e.getMessage());
         }
         return objects;
     }
@@ -154,20 +157,22 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         LOGGER.info("Method call: finalizeTicketsSale({}, {}, {}, {})",
                 order, firstName, lastName, dateOfBirth);
         Map<String, Object> objects = getStations();
-        String saleResult = passengerDataService.buyTickets(order,
-                firstName, lastName, dateOfBirth);
-        if (saleResult.equalsIgnoreCase(SUCCESS)) {
-            objects.put(STATUS, TICKET_SUCCESS);
-            List<TicketDto> tickets = new ArrayList<>();
-            tickets.addAll(passengerDataService
-                    .getPassengerTickets(order.getFirstTrain().getJourney()
-                            .getId(), firstName, lastName, dateOfBirth));
-            tickets.addAll(passengerDataService
-                    .getPassengerTickets(order.getSecondTrain().getJourney()
-                                    .getId(), firstName,lastName, dateOfBirth));
-            objects.put(TICKETS, tickets);
-        } else {
-            objects.put(STATUS, TICKET_FAIL + saleResult);
+        try {
+            boolean saleResult = passengerDataService.buyTickets(order,
+                    firstName, lastName, dateOfBirth);
+            if (saleResult) {
+                objects.put(STATUS, TICKET_SUCCESS);
+                List<TicketDto> tickets = new ArrayList<>();
+                tickets.addAll(passengerDataService
+                        .getPassengerTickets(order.getFirstTrain().getJourney()
+                                .getId(), firstName, lastName, dateOfBirth));
+                tickets.addAll(passengerDataService
+                        .getPassengerTickets(order.getSecondTrain().getJourney()
+                                .getId(), firstName, lastName, dateOfBirth));
+                objects.put(TICKETS, tickets);
+            }
+        } catch (TicketSaleException e) {
+            objects.put(STATUS, TICKET_FAIL + e.getMessage());
         }
         return objects;
     }

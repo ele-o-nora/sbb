@@ -73,13 +73,13 @@ public class AdminViewServiceImpl implements AdminViewService {
     public Map<String, Object> addNewStation(final String stationName,
                                              final int lineId,
                                              final int order,
-                                             final int distBefore,
-                                             final int distAfter) {
+                                             final int x,
+                                             final int y) {
         LOGGER.info("Method call: addNewStation({}, {}, {}, {}, {}) by "
-                        + "employee: {}", stationName, lineId, order,
-                distBefore, distAfter, getEmployeeUsername());
+                        + "employee: {}", stationName, lineId, order, x, y,
+                getEmployeeUsername());
         adminDataService.addNewStation(stationName, lineId, order,
-                distBefore, distAfter);
+                x, y);
         return getCurrentLineStations(lineId);
     }
 

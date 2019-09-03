@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.tsystems.sbb.exceptions.TicketSaleException;
 import ru.tsystems.sbb.model.dao.PassengerDao;
 import ru.tsystems.sbb.model.dao.RouteDao;
 import ru.tsystems.sbb.model.dao.ScheduleDao;
@@ -61,7 +62,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
             + "for this journey.";
     private static final String SUCCESS = "success";
     private static final int SEARCH_RESULTS_STEP = 5;
-    private static final int BASE_TARIFF_DISTANCE = 30;
+    private static final double BASE_TARIFF_DISTANCE = 50;
     private static final int MIN_MINUTES = 10;
 
     @Override
@@ -88,21 +89,26 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         Line line = journey.getRoute().getLine();
         int fromOrder = routeDao.getStationOrder(line, from);
         int toOrder = routeDao.getStationOrder(line, to);
-        int distance;
-        if (fromOrder > toOrder) {
-            distance = routeDao.inboundDistance(from, to, line);
-        } else {
-            distance = routeDao.outboundDistance(from, to, line);
+        double distance = 0;
+        List<Station> stationsToPass = routeDao
+                .getStations(Math.min(fromOrder, toOrder),
+                        Math.max(fromOrder, toOrder), line);
+        for (int i = 1; i < stationsToPass.size(); i++) {
+            distance += calcDistanceBetweenPoints(
+                    stationsToPass.get(i - 1).getX(),
+                    stationsToPass.get(i - 1).getY(),
+                    stationsToPass.get(i).getX(),
+                    stationsToPass.get(i).getY());
         }
         float tariff = passengerDao.getCurrentTariff();
-        int tenLeaguesSections = (int) Math.ceil(distance / (double) BASE_TARIFF_DISTANCE);
-        return tenLeaguesSections * tariff;
+        int tenLeagueSections = (int) Math.ceil(distance / BASE_TARIFF_DISTANCE);
+        return tenLeagueSections * tariff;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW,
     isolation = Isolation.SERIALIZABLE)
-    public String buyTicket(final TicketOrderDto ticketOrder,
+    public boolean buyTicket(final TicketOrderDto ticketOrder,
                           final String firstName, final String lastName,
                           final LocalDate dateOfBirth) {
         Journey journey = passengerDao.getJourneyById(ticketOrder
@@ -115,17 +121,17 @@ public class PassengerDataServiceImpl implements PassengerDataService {
                 dateOfBirth);
         if (ChronoUnit.MINUTES.between(LocalDateTime.now(clock),
                 from.getDeparture()) < MIN_MINUTES) {
-            return NO_TIME;
+            throw new TicketSaleException(NO_TIME);
         } else if (!passengerDao.getTickets(journey, passenger).isEmpty()) {
-            return SAME_PASSENGER;
+            throw new TicketSaleException(SAME_PASSENGER);
         } else if (passengerDao.currentTickets(journey, from, to)
                 < journey.getTrainType().getSeats()) {
             Ticket ticket = Ticket.builder().from(from).to(to).journey(journey)
                     .price(ticketOrder.getPrice()).passenger(passenger).build();
             passengerDao.add(ticket);
-            return SUCCESS;
+            return true;
         } else {
-            return NO_SEATS;
+            throw new TicketSaleException(NO_SEATS);
         }
     }
 
@@ -185,47 +191,13 @@ public class PassengerDataServiceImpl implements PassengerDataService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW,
     isolation = Isolation.SERIALIZABLE)
-    public String buyTickets(final TransferTicketOrderDto tickets,
+    public boolean buyTickets(final TransferTicketOrderDto tickets,
                               final String firstName,
                               final String lastName,
                               final LocalDate dateOfBirth) {
-        Journey firstJourney = passengerDao.getJourneyById(tickets
-                .getFirstTrain().getJourney().getId());
-        Journey secondJourney = passengerDao.getJourneyById(tickets
-                .getSecondTrain().getJourney().getId());
-        ScheduledStop firstFrom = passengerDao.getStopById(tickets
-                .getFirstTrain().getOrigin().getId());
-        ScheduledStop firstTo = passengerDao.getStopById(tickets
-                .getFirstTrain().getDestination().getId());
-        ScheduledStop secondFrom = passengerDao.getStopById(tickets
-                .getSecondTrain().getOrigin().getId());
-        ScheduledStop secondTo = passengerDao.getStopById(tickets
-                .getSecondTrain().getDestination().getId());
-        Passenger passenger = getOrCreatePassenger(firstName, lastName,
-                dateOfBirth);
-        if (ChronoUnit.MINUTES.between(LocalDateTime.now(clock),
-                firstFrom.getDeparture()) < MIN_MINUTES) {
-            return NO_TIME;
-        } else if (!passengerDao.getTickets(firstJourney, passenger).isEmpty()
-        || !passengerDao.getTickets(secondJourney, passenger).isEmpty()) {
-            return SAME_PASSENGER;
-        } else if (passengerDao.currentTickets(firstJourney, firstFrom,
-                firstTo) < firstJourney.getTrainType().getSeats()
-                && passengerDao.currentTickets(secondJourney, secondFrom,
-                secondTo) < secondJourney.getTrainType().getSeats()) {
-            Ticket firstTicket = Ticket.builder().from(firstFrom).to(firstTo)
-                    .journey(firstJourney)
-                    .price(tickets.getFirstTrain().getPrice())
-                    .passenger(passenger).build();
-            Ticket secondTicket = Ticket.builder().from(secondFrom).to(secondTo)
-                    .journey(secondJourney)
-                    .price(tickets.getSecondTrain().getPrice())
-                    .passenger(passenger).build();
-            passengerDao.add(firstTicket);
-            passengerDao.add(secondTicket);
-            return SUCCESS;
-        }
-        return NO_SEATS;
+        return buyTicket(tickets.getFirstTrain(), firstName, lastName,
+                dateOfBirth) && buyTicket(tickets.getSecondTrain(), firstName,
+                lastName, dateOfBirth);
     }
 
     @Override
@@ -305,6 +277,13 @@ public class PassengerDataServiceImpl implements PassengerDataService {
             passengerDao.add(passenger);
         }
         return passenger;
+    }
+
+    private double calcDistanceBetweenPoints(final int x1, final int y1,
+                                             final int x2, final int y2) {
+        double xDiff = Math.abs(x1 - x2);
+        double yDiff = Math.abs(y1 - y2);
+        return Math.ceil(Math.hypot(xDiff, yDiff));
     }
 
 }

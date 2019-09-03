@@ -30,20 +30,17 @@ public class AdminController {
 
     @PostMapping("/addNewStation")
     public ModelAndView addStation(@RequestParam(value = "name")
-                                               final String newStation,
+                                       final String newStation,
                                    @RequestParam(value = "line")
-                                               final int lineId,
+                                       final int lineId,
                                    @RequestParam(value = "order")
-                                               final int order,
-                                   @RequestParam(value = "distanceBefore",
-                                   required = false, defaultValue = "0")
-                                       final int before,
-                                   @RequestParam(value = "distanceAfter",
-                                   required = false, defaultValue = "0")
-                                       final int after) {
+                                       final int order,
+                                   @RequestParam(value = "x")
+                                       final int x,
+                                   @RequestParam(value = "y")
+                                       final int y) {
         return new ModelAndView("addStation",
-                viewService.addNewStation(newStation, lineId, order,
-                        before, after));
+                viewService.addNewStation(newStation, lineId, order, x, y));
     }
 
     @PostMapping("/addTrain")
