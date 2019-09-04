@@ -10,7 +10,6 @@ import ru.tsystems.board.services.ScheduleService;
 import ru.tsystems.dto.ScheduledStopDto;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Startup;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.push.Push;
 import javax.faces.push.PushContext;
@@ -28,7 +27,6 @@ import java.io.Serializable;
 import java.util.List;
 
 @Named
-@Startup
 @SessionScoped
 @NoArgsConstructor
 public class ScheduleBean implements Serializable {
