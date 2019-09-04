@@ -3,12 +3,10 @@ package ru.tsystems.board.timers;
 import ru.tsystems.board.controllers.ScheduleBean;
 
 import javax.ejb.Schedule;
-import javax.ejb.Startup;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 @Stateless
-@Startup
 public class Timer {
 
     @Inject
