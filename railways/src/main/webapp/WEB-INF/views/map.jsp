@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Network map</title>
+    <title>Railway network map</title>
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/webjars/leaflet/1.5.1/leaflet.css"/>
     <script type="text/javascript"
@@ -34,10 +34,14 @@
     const stations = {};
     const linesLayer = L.layerGroup().addTo(map);
     const stationsLayer = L.layerGroup().addTo(map);
-    const northern = L.polyline({}, {color:'black'}).addTo(linesLayer);
-    const western = L.polyline({}, {color:'red'}).addTo(linesLayer);
-    const southern = L.polyline({}, {color:'green'}).addTo(linesLayer);
-    const eastern = L.polyline({}, {color:'blue'}).addTo(linesLayer);
+    const northern = L.polyline({}, {color:'black', weight:5}).addTo(linesLayer);
+    northern.bindPopup("Northern line");
+    const western = L.polyline({}, {color:'red', weight:5}).addTo(linesLayer);
+    western.bindPopup("Western line");
+    const southern = L.polyline({}, {color:'green', weight:5}).addTo(linesLayer);
+    southern.bindPopup("Southern line");
+    const eastern = L.polyline({}, {color:'blue', weight:5}).addTo(linesLayer);
+    eastern.bindPopup("Eastern line");
     <c:forEach items="${stationsNorthern}" var="station">
     northern.addLatLng([${station.y}, ${station.x}]);
     <c:choose>
