@@ -54,3 +54,7 @@
 .list-group-item a:hover {
     text-decoration: none;
 }
+
+#map {
+    height: 550px;
+}

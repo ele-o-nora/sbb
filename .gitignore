@@ -35,3 +35,4 @@ hs_err_pid*
 /board/target/
 /dto/target/
 /railways/src/main/webapp/resources/westeros.jpg
+/railways/src/main/webapp/resources/js/Leaflet.Editable.js
