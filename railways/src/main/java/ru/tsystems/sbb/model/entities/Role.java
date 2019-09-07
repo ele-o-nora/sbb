@@ -12,6 +12,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Set;
 
+/**
+ * Role associated with particular set of permissions.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,9 +22,15 @@ import java.util.Set;
 @Table
 public class Role extends AbstractEntity {
 
+    /**
+     * Name of the role.
+     */
     @Column
     private String name;
 
+    /**
+     * List of registered users that have this role.
+     */
     @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "role_id"),

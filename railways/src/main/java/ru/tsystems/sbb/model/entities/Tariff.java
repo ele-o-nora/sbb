@@ -11,6 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+/**
+ * Base tariff used for ticket pricing.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,9 +23,15 @@ import java.time.LocalDateTime;
 @Table
 public class Tariff extends AbstractEntity {
 
+    /**
+     * Timestamp that indicates when this tariff was created.
+     */
     @Column(name = "moment_from")
     private LocalDateTime momentFrom;
 
+    /**
+     * Specific sum that should be paid for each ten leagues travelled.
+     */
     @Column(name = "price_per_ten_leagues")
     private float pricePerTenLeagues;
 

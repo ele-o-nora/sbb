@@ -13,6 +13,9 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import java.util.List;
 
+/**
+ * Single scheduled journey.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,28 +23,50 @@ import java.util.List;
 @Table
 public class Journey extends AbstractEntity {
 
+    /**
+     * Route which this journey follows.
+     */
     @ManyToOne
     @JoinColumn(name = "route_id")
     private Route route;
 
+    /**
+     * Model of physical train that carries out this journey.
+     */
     @ManyToOne
     @JoinColumn(name = "train_id")
     private Train trainType;
 
+    /**
+     * List of tickets bought for this journey.
+     */
     @OneToMany(mappedBy = "journey")
     private List<Ticket> tickets;
 
+    /**
+     * List of stops that contains information about this journey's
+     *  detailed schedule.
+     */
     @OneToMany(mappedBy = "journey")
     @OrderBy("id asc")
     private List<ScheduledStop> stops;
 
+    /**
+     * Last station of the journey, specifying its direction on the route.
+     */
     @ManyToOne
     @JoinColumn(name = "destination_id")
     private Station destination;
 
+    /**
+     * Number of minutes this journey is delayed.
+     */
     @Column
     private int delay;
 
+    /**
+     * Flag indicating if this journey is cancelled.
+     */
     @Column
     private boolean cancelled;
 

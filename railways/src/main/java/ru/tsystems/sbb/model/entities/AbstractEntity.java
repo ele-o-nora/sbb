@@ -9,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * Class that contains common fields for multiple tables.
+ */
 @MappedSuperclass
 @Getter
 @Setter

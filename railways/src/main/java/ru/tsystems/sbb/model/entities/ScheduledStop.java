@@ -49,19 +49,25 @@ public class ScheduledStop extends AbstractEntity {
     @Column
     private LocalDateTime departure;
 
+    /**
+     * List of tickets for which this stop serves as origin.
+     */
     @OneToMany(mappedBy = "from")
     private List<Ticket> ticketsFrom;
 
+    /**
+     * List of tickets for which this stop serves as destination.
+     */
     @OneToMany(mappedBy = "to")
     private List<Ticket> ticketsTo;
 
     /**
-     * Arrival adjusted for delay. Null if journey has never been delayed.
+     * Arrival adjusted for delay. Null if the journey has never been delayed.
      */
     private LocalDateTime eta;
 
     /**
-     * Departure adjusted for delay. Null if journey has never been delayed.
+     * Departure adjusted for delay. Null if the journey has never been delayed.
      */
     private LocalDateTime etd;
 

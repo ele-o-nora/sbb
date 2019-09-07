@@ -12,6 +12,9 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Passenger that can use railway services.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,18 +22,33 @@ import java.util.List;
 @Table
 public class Passenger extends AbstractEntity {
 
+    /**
+     * Passenger's legal first name.
+     */
     @Column(name = "first_name")
     private String firstName;
 
+    /**
+     * Passenger's legal last name.
+     */
     @Column(name = "last_name")
     private String lastName;
 
+    /**
+     * Passenger's date of birth.
+     */
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
+    /**
+     * Registered account linked to this passenger.
+     */
     @OneToOne(mappedBy = "passenger")
     private User user;
 
+    /**
+     * List of tickets bought by this passenger.
+     */
     @OneToMany(mappedBy = "passenger")
     private List<Ticket> tickets;
 }

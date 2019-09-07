@@ -13,6 +13,10 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import java.util.List;
 
+/**
+ * Route that is comprised of particular set of stations for the journey
+ *  to pass through.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,16 +24,28 @@ import java.util.List;
 @Table
 public class Route extends AbstractEntity {
 
+    /**
+     * Route's unique identifier.
+     */
     @Column
     private String number;
 
+    /**
+     * Line to which the route is linked.
+     */
     @ManyToOne
     @JoinColumn(name = "line_id")
     private Line line;
 
+    /**
+     * List of scheduled journeys that run on this route.
+     */
     @OneToMany(mappedBy = "route")
     private List<Journey> journeys;
 
+    /**
+     * List of stations the route consists of.
+     */
     @OneToMany(mappedBy = "route")
     @OrderBy("id asc")
     private List<RouteStation> stations;

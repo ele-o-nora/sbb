@@ -10,6 +10,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
+/**
+ * Model of a train.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,15 +20,27 @@ import java.util.List;
 @Table
 public class Train extends AbstractEntity {
 
+    /**
+     * Unique identifier for this train type.
+     */
     @Column
     private String model;
 
+    /**
+     * Number of seats this train has.
+     */
     @Column
     private int seats;
 
+    /**
+     * Maximum speed this train can travel with.
+     */
     @Column
     private int speed;
 
+    /**
+     * List of journeys that are served by this train type.
+     */
     @OneToMany(mappedBy = "trainType")
     private List<Journey> journeys;
 }
