@@ -35,6 +35,7 @@
     const image = L.imageOverlay('${pageContext.request.contextPath}/resources/westeros.jpg', bounds).addTo(map);
     map.setView([2112, 2090], -1);
     const stations = {};
+    const stationNames = {};
     const linesLayer = L.featureGroup().addTo(map);
     const stationsLayer = L.featureGroup().addTo(map);
     const northern = L.polyline({}, {color:'black', weight:5, opacity:0.8}).addTo(linesLayer);
@@ -47,6 +48,7 @@
     eastern.bindPopup("Eastern line");
     <c:forEach items="${stationsNorthern}" var="station">
     northern.addLatLng([${station.y}, ${station.x}]);
+    stationNames[${station.id}] = "${station.name}";
     <c:choose>
     <c:when test="${station.id ne 1}">
     stations[${station.id}] = L.circle([${station.y}, ${station.x}],
@@ -62,6 +64,7 @@
     </c:forEach>
     <c:forEach items="${stationsWestern}" var="station">
     western.addLatLng([${station.y}, ${station.x}]);
+    stationNames[${station.id}] = "${station.name}";
     <c:if test="${station.id ne 1}">
     stations[${station.id}] = L.circle([${station.y}, ${station.x}],
         {color: 'red', fillColor: 'red', fillOpacity: 1.0, radius: 12}).addTo(stationsLayer);
@@ -70,6 +73,7 @@
     </c:forEach>
     <c:forEach items="${stationsSouthern}" var="station">
     southern.addLatLng([${station.y}, ${station.x}]);
+    stationNames[${station.id}] = "${station.name}";
     <c:if test="${station.id ne 1}">
     stations[${station.id}] = L.circle([${station.y}, ${station.x}],
         {color: 'green', fillColor: 'green', fillOpacity: 1.0, radius: 12}).addTo(stationsLayer);
@@ -78,6 +82,7 @@
     </c:forEach>
     <c:forEach items="${stationsEastern}" var="station">
     eastern.addLatLng([${station.y}, ${station.x}]);
+    stationNames[${station.id}] = "${station.name}";
     <c:if test="${station.id ne 1}">
     stations[${station.id}] = L.circle([${station.y}, ${station.x}],
         {color: 'blue', fillColor: 'blue', fillOpacity: 1.0, radius: 12}).addTo(stationsLayer);
@@ -98,20 +103,102 @@
     southern.enableEdit();
     eastern.enableEdit();
 
+    var northernAdded = false;
+    var westernAdded = false;
+    var southernAdded = false;
+    var easternAdded = false;
+
+    map.on('editable:vertex:dragstart', function (e) {
+        for (let key in stations) {
+            if (stations[key].getLatLng().lat == e.vertex.latlng.lat
+                && stations[key].getLatLng().lng == e.vertex.latlng.lng) {
+                e.vertex.dragging.disable();
+            }
+        }
+    });
+
+    northern.on('editable:vertex:new', function () {
+        northernAdded = true;
+    });
+
+    northern.on('editable:middlemarker:mousedown', function(e) {
+        if (northernAdded) {
+            e.cancel();
+        }
+    });
+
+    western.on('editable:vertex:new', function () {
+        westernAdded = true;
+    });
+
+    western.on('editable:middlemarker:mousedown', function(e) {
+        if (westernAdded) {
+            e.cancel();
+        }
+    });
+
+    southern.on('editable:vertex:new', function () {
+        southernAdded = true;
+    });
+
+    southern.on('editable:middlemarker:mousedown', function(e) {
+        if (southernAdded) {
+            e.cancel();
+        }
+    });
+
+    eastern.on('editable:vertex:new', function () {
+        easternAdded = true;
+    });
+
+    eastern.on('editable:middlemarker:mousedown', function(e) {
+        if (easternAdded) {
+            e.cancel();
+        }
+    });
+
     northern.on('editable:vertex:click', function(e) {
         e.cancel();
+        for (let key in stations) {
+            if (stations[key].getLatLng().lat == e.vertex.latlng.lat
+                && stations[key].getLatLng().lng == e.vertex.latlng.lng) {
+                console.log("stationId: " + key + ", current station name: " + stationNames[key]);
+                return;
+            }
+        }
         console.log("lineId: 1, order: " + (e.vertex.getIndex() + 1) + ", x: " + Math.round(e.latlng.lng) + ", y: " + Math.round(e.latlng.lat));
     });
     western.on('editable:vertex:click', function(e) {
         e.cancel();
+        for (let key in stations) {
+            if (stations[key].getLatLng().lat == e.vertex.latlng.lat
+                && stations[key].getLatLng().lng == e.vertex.latlng.lng) {
+                console.log("stationId: " + key + ", current station name: " + stationNames[key]);
+                return;
+            }
+        }
         console.log("lineId: 2, order: " + (e.vertex.getIndex() + 1) + ", x: " + Math.round(e.latlng.lng) + ", y: " + Math.round(e.latlng.lat));
     });
     southern.on('editable:vertex:click', function(e) {
         e.cancel();
+        for (let key in stations) {
+            if (stations[key].getLatLng().lat == e.vertex.latlng.lat
+                && stations[key].getLatLng().lng == e.vertex.latlng.lng) {
+                console.log("stationId: " + key + ", current station name: " + stationNames[key]);
+                return;
+            }
+        }
         console.log("lineId: 3, order: " + (e.vertex.getIndex() + 1) + ", x: " + Math.round(e.latlng.lng) + ", y: " + Math.round(e.latlng.lat));
     });
     eastern.on('editable:vertex:click', function(e) {
         e.cancel();
+        for (let key in stations) {
+            if (stations[key].getLatLng().lat == e.vertex.latlng.lat
+                && stations[key].getLatLng().lng == e.vertex.latlng.lng) {
+                console.log("stationId: " + key + ", current station name: " + stationNames[key]);
+                return;
+            }
+        }
         console.log("lineId: 4, order: " + (e.vertex.getIndex() + 1) + ", x: " + Math.round(e.latlng.lng) + ", y: " + Math.round(e.latlng.lat));
     });
     </sec:authorize>
