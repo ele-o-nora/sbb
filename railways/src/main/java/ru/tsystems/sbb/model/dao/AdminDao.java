@@ -101,4 +101,10 @@ public interface AdminDao {
      * @param scheduledStop stop to be updated
      */
     void update(ScheduledStop scheduledStop);
+
+    /**
+     * Updates existing station.
+     * @param station station to be updated
+     */
+    void update(Station station);
 }

@@ -252,6 +252,13 @@ public class AdminDataServiceImpl implements AdminDataService {
         jmsTemplate.send(session -> session.createTextMessage("Delay"));
     }
 
+    @Override
+    public void renameStation(final int stationId, final String newName) {
+        Station station = scheduleDao.getStationById(stationId);
+        station.setName(newName);
+        adminDao.update(station);
+    }
+
     private double calcDistanceBetweenPoints(final int x1, final int y1,
                                              final int x2, final int y2) {
         double xDiff = Math.abs(x1 - x2);

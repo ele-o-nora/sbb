@@ -151,4 +151,11 @@ public interface AdminDataService {
      * @param delay number of minutes journey is now delayed
      */
     void delayJourney(int journeyId, int delay);
+
+    /**
+     * Updates station with specific id so that it would have specific name.
+     * @param stationId id indicating which station to update
+     * @param newName new station's name
+     */
+    void renameStation(int stationId, String newName);
 }

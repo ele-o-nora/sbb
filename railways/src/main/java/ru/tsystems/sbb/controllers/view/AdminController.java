@@ -164,4 +164,11 @@ public class AdminController {
         viewService.delayJourney(journeyId, delay);
         return "redirect:/admin/journeys/" + date;
     }
+
+    @PostMapping("/renameStation")
+    public String renameStation(@RequestParam final int id,
+                                @RequestParam final String name) {
+        viewService.renameStation(id, name);
+        return "redirect:/map";
+    }
 }

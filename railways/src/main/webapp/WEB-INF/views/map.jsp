@@ -103,10 +103,10 @@
     southern.enableEdit();
     eastern.enableEdit();
 
-    var northernAdded = false;
-    var westernAdded = false;
-    var southernAdded = false;
-    var easternAdded = false;
+    let northernAdded = false;
+    let westernAdded = false;
+    let southernAdded = false;
+    let easternAdded = false;
 
     map.on('editable:vertex:dragstart', function (e) {
         for (let key in stations) {
@@ -162,46 +162,108 @@
         for (let key in stations) {
             if (stations[key].getLatLng().lat == e.vertex.latlng.lat
                 && stations[key].getLatLng().lng == e.vertex.latlng.lng) {
-                console.log("stationId: " + key + ", current station name: " + stationNames[key]);
+                showRenameStationForm(key, stationNames[key]);
                 return;
             }
         }
-        console.log("lineId: 1, order: " + (e.vertex.getIndex() + 1) + ", x: " + Math.round(e.latlng.lng) + ", y: " + Math.round(e.latlng.lat));
+        showAddStationFromMapForm(1, (e.vertex.getIndex() + 1), Math.round(e.latlng.lng), Math.round(e.latlng.lat));
     });
     western.on('editable:vertex:click', function(e) {
         e.cancel();
         for (let key in stations) {
             if (stations[key].getLatLng().lat == e.vertex.latlng.lat
                 && stations[key].getLatLng().lng == e.vertex.latlng.lng) {
-                console.log("stationId: " + key + ", current station name: " + stationNames[key]);
+                showRenameStationForm(key, stationNames[key]);
                 return;
             }
         }
-        console.log("lineId: 2, order: " + (e.vertex.getIndex() + 1) + ", x: " + Math.round(e.latlng.lng) + ", y: " + Math.round(e.latlng.lat));
+        showAddStationFromMapForm(2, (e.vertex.getIndex() + 1), Math.round(e.latlng.lng), Math.round(e.latlng.lat));
     });
     southern.on('editable:vertex:click', function(e) {
         e.cancel();
         for (let key in stations) {
             if (stations[key].getLatLng().lat == e.vertex.latlng.lat
                 && stations[key].getLatLng().lng == e.vertex.latlng.lng) {
-                console.log("stationId: " + key + ", current station name: " + stationNames[key]);
+                showRenameStationForm(key, stationNames[key]);
                 return;
             }
         }
-        console.log("lineId: 3, order: " + (e.vertex.getIndex() + 1) + ", x: " + Math.round(e.latlng.lng) + ", y: " + Math.round(e.latlng.lat));
+        showAddStationFromMapForm(3, (e.vertex.getIndex() + 1), Math.round(e.latlng.lng), Math.round(e.latlng.lat));
     });
     eastern.on('editable:vertex:click', function(e) {
         e.cancel();
         for (let key in stations) {
             if (stations[key].getLatLng().lat == e.vertex.latlng.lat
                 && stations[key].getLatLng().lng == e.vertex.latlng.lng) {
-                console.log("stationId: " + key + ", current station name: " + stationNames[key]);
+                showRenameStationForm(key, stationNames[key]);
                 return;
             }
         }
-        console.log("lineId: 4, order: " + (e.vertex.getIndex() + 1) + ", x: " + Math.round(e.latlng.lng) + ", y: " + Math.round(e.latlng.lat));
+        showAddStationFromMapForm(4, (e.vertex.getIndex() + 1), Math.round(e.latlng.lng), Math.round(e.latlng.lat));
     });
     </sec:authorize>
 </script>
+<div class="modal fade" id="addStationFromMapModal" tabindex="-1" role="dialog" aria-labelledby="stationAddTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="stationAddTitle">Add new station</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/admin/addNewStation"
+                      method="post" id="addStationForm" class="form-horizontal">
+                    <input type="hidden" name="order" id="order" value="0">
+                    <input type="hidden" name="line" id="line" value="0">
+                    <div class="form-row justify-content-center m-2">
+                        <div class="col-sm-9">
+                            <input type="text" placeholder="Station name" name="name"
+                                   id="addStationName" class="form-control" required>
+                        </div>
+                    </div>
+                    <input type="hidden" name="x" id="x" value="-1">
+                    <input type="hidden" name="y" id="y" value="-1">
+                    <div class="form-row justify-content-center m-2">
+                        <input type="submit" value="Add station" class="btn btn-outline-secondary">
+                    </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="renameStationModal" tabindex="-1" role="dialog" aria-labelledby="renameStationTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="renameStationTitle">Rename station</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/admin/renameStation"
+                      method="post" id="renameStationForm" class="form-horizontal">
+                    <input type="hidden" name="id" id="id" value="0">
+                    <div class="form-row justify-content-center m-2">
+                        <label class="col-sm-3 col-form-label" for="newName">New name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="name" id="newName" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row justify-content-center m-2">
+                        <input type="submit" value="Save" class="btn btn-outline-secondary">
+                    </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

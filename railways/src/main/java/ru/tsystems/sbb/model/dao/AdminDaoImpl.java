@@ -82,17 +82,22 @@ public class AdminDaoImpl implements AdminDao {
     }
 
     @Override
-    public Train getTrainById(int trainId) {
+    public Train getTrainById(final int trainId) {
         return sessionFactory.getCurrentSession().get(Train.class, trainId);
     }
 
     @Override
-    public void update(Journey journey) {
+    public void update(final Journey journey) {
         sessionFactory.getCurrentSession().update(journey);
     }
 
     @Override
-    public void update(ScheduledStop scheduledStop) {
+    public void update(final ScheduledStop scheduledStop) {
         sessionFactory.getCurrentSession().update(scheduledStop);
+    }
+
+    @Override
+    public void update(final Station station) {
+        sessionFactory.getCurrentSession().update(station);
     }
 }

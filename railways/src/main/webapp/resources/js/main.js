@@ -204,3 +204,17 @@ function showAdjustJourneyModal(journeyId) {
     $('#adjustJourneyModal').modal();
     return false;
 }
+
+function showAddStationFromMapForm(line, order, x, y) {
+    $('#line').val(line);
+    $('#order').val(order);
+    $('#x').val(x);
+    $('#y').val(y);
+    $('#addStationFromMapModal').modal();
+}
+
+function showRenameStationForm(id, name) {
+    $('#id').val(id);
+    $('#newName').val(name);
+    $('#renameStationModal').modal();
+}

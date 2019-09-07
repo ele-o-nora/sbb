@@ -240,19 +240,26 @@ public class AdminViewServiceImpl implements AdminViewService {
     }
 
     @Override
-    public void cancelJourney(int journeyId) {
+    public void cancelJourney(final int journeyId) {
         LOGGER.info("Method call: cancelJourney({}) by employee: {}",
                 journeyId, getEmployeeUsername());
         adminDataService.cancelJourney(journeyId);
     }
 
     @Override
-    public void delayJourney(int journeyId, int delay) {
+    public void delayJourney(final int journeyId, final int delay) {
         LOGGER.info("Method call: delayJourney({}, {}) by employee: {}",
                 journeyId, delay, getEmployeeUsername());
         if (delay >= 0) {
             adminDataService.delayJourney(journeyId, delay);
         }
+    }
+
+    @Override
+    public void renameStation(final int stationId, final String newName) {
+        LOGGER.info("Method call: renameStation({}, {}) by employee: {}",
+                stationId, newName, getEmployeeUsername());
+        adminDataService.renameStation(stationId, newName);
     }
 
     private String getEmployeeUsername() {
