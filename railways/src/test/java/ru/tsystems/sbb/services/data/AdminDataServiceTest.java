@@ -296,4 +296,40 @@ class AdminDataServiceTest {
         assertNull(lastStop.getEtd());
         assertEquals(expected, lastStop.getEta());
     }
+
+    @Test
+    void renameStationSameNameTest() {
+        Station station = new Station();
+        station.setName("stationName");
+        when(mockScheduleDao.getStationById(anyInt())).thenReturn(station);
+
+        adminDataService.renameStation(0, "stationName");
+
+        verify(mockScheduleDao, times(1)).getStationById(eq(0));
+        verifyNoMoreInteractions(mockScheduleDao);
+        verifyZeroInteractions(mockAdminDao);
+        verifyZeroInteractions(mockRouteDao);
+        verifyZeroInteractions(mockPassengerDao);
+        verifyZeroInteractions(mockMapper);
+        verifyZeroInteractions(mockJmsTemplate);
+    }
+
+    @Test
+    void renameStationNewNameTest() {
+        Station station = new Station();
+        station.setName("stationName");
+        when(mockScheduleDao.getStationById(anyInt())).thenReturn(station);
+
+        adminDataService.renameStation(0, "newName");
+
+        verify(mockScheduleDao, times(1)).getStationById(eq(0));
+        verify(mockAdminDao, times(1)).update(same(station));
+        verify(mockJmsTemplate, times(1)).send(any());
+        verifyNoMoreInteractions(mockScheduleDao);
+        verifyNoMoreInteractions(mockAdminDao);
+        verifyNoMoreInteractions(mockJmsTemplate);
+        verifyZeroInteractions(mockRouteDao);
+        verifyZeroInteractions(mockPassengerDao);
+        verifyZeroInteractions(mockMapper);
+    }
 }

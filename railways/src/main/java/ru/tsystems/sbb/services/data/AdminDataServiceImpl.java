@@ -255,8 +255,12 @@ public class AdminDataServiceImpl implements AdminDataService {
     @Override
     public void renameStation(final int stationId, final String newName) {
         Station station = scheduleDao.getStationById(stationId);
-        station.setName(newName);
-        adminDao.update(station);
+        if (!station.getName().equals(newName)) {
+            station.setName(newName);
+            adminDao.update(station);
+            jmsTemplate.send(session -> session
+                    .createTextMessage("Renamed station"));
+        }
     }
 
     private double calcDistanceBetweenPoints(final int x1, final int y1,
