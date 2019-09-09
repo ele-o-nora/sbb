@@ -28,6 +28,9 @@ public class ScheduleService implements Serializable {
     private Map<Integer, String> stationsMapById;
     private Map<Integer, List<ScheduledStopDto>> scheduleMap;
 
+    /**
+     * Initializes maps.
+     */
     @PostConstruct
     public void init() {
         stationsMapByName = new HashMap<>();
@@ -80,10 +83,20 @@ public class ScheduleService implements Serializable {
         }
     }
 
+    /**
+     * Returns id for the station with specific name.
+     * @param stationName name of the station for which the id is returned
+     * @return id of the station with the specified name
+     */
     public int getStationId(final String stationName) {
         return stationsMapByName.get(stationName);
     }
 
+    /**
+     * Returns name for the station with specific id.
+     * @param id id of the station for which the name is returned
+     * @return name of the station with the specified id
+     */
     public String getStationName(final int id) {
         return stationsMapById.get(id);
     }
