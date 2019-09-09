@@ -1,6 +1,5 @@
 package ru.tsystems.board.services;
 
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.tsystems.dto.ScheduledStopDto;
@@ -15,7 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Singleton
 public class ScheduleService implements Serializable {
@@ -26,12 +24,14 @@ public class ScheduleService implements Serializable {
     private static final transient Logger LOGGER = LoggerFactory
             .getLogger(ScheduleService.class);
 
-    private Map<String, Integer> stationsMap;
+    private Map<String, Integer> stationsMapByName;
+    private Map<Integer, String> stationsMapById;
     private Map<Integer, List<ScheduledStopDto>> scheduleMap;
 
     @PostConstruct
     public void init() {
-        stationsMap = new HashMap<>();
+        stationsMapByName = new HashMap<>();
+        stationsMapById = new HashMap<>();
         scheduleMap = new HashMap<>();
         updateMaps();
     }
@@ -42,7 +42,7 @@ public class ScheduleService implements Serializable {
      * @return list of String that is complete list of stations' names
      */
     public List<String> stationsList() {
-        List<String> stationNames = new ArrayList<>(stationsMap.keySet());
+        List<String> stationNames = new ArrayList<>(stationsMapByName.keySet());
         Collections.sort(stationNames);
         return stationNames;
     }
@@ -64,11 +64,13 @@ public class ScheduleService implements Serializable {
      */
     public void updateMaps() {
         scheduleMap.clear();
-        stationsMap.clear();
+        stationsMapByName.clear();
+        stationsMapById.clear();
         try {
             StationDto[] stations = restService.getStationList();
             for (StationDto station : stations) {
-                stationsMap.put(station.getName(), station.getId());
+                stationsMapByName.put(station.getName(), station.getId());
+                stationsMapById.put(station.getId(), station.getName());
                 List<ScheduledStopDto> schedule = restService
                         .getStationSchedule(station.getId());
                 scheduleMap.put(station.getId(), schedule);
@@ -79,17 +81,11 @@ public class ScheduleService implements Serializable {
     }
 
     public int getStationId(final String stationName) {
-        return stationsMap.get(stationName);
+        return stationsMapByName.get(stationName);
     }
 
-    public String getStationById(final int id) {
-        Set<Map.Entry<String, Integer>> stations = stationsMap.entrySet();
-        for (Map.Entry<String, Integer> s : stations) {
-            if (s.getValue() == id) {
-                return s.getKey();
-            }
-        }
-        return null;
+    public String getStationName(final int id) {
+        return stationsMapById.get(id);
     }
 
 }

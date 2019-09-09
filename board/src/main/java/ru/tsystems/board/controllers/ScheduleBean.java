@@ -64,7 +64,7 @@ public class ScheduleBean implements Serializable {
     @PostConstruct
     public void init() {
         stations = scheduleService.stationsList();
-        currentStation = scheduleService.getStationById(1);
+        currentStation = scheduleService.getStationName(1);
         currentStationId = scheduleService.getStationId(currentStation);
         currentSchedule = scheduleService.stationSchedule(currentStationId);
 
@@ -93,7 +93,7 @@ public class ScheduleBean implements Serializable {
         scheduleService.updateMaps();
         stations = scheduleService.stationsList();
         currentSchedule = scheduleService.stationSchedule(currentStationId);
-        currentStation = scheduleService.getStationById(currentStationId);
+        currentStation = scheduleService.getStationName(currentStationId);
         pushContext.send("update");
     }
 
