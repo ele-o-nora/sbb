@@ -34,7 +34,6 @@ public class ScheduleBean implements Serializable {
     @Inject
     private ScheduleService scheduleService;
 
-    private static final String DEFAULT_STATION = "King's Landing";
     private static final transient Logger LOGGER = LoggerFactory
             .getLogger(ScheduleBean.class);
 
@@ -47,6 +46,7 @@ public class ScheduleBean implements Serializable {
     @Getter
     @Setter
     private String currentStation;
+    private int currentStationId;
 
     private transient ConnectionFactory connectionFactory;
     private transient Connection connection;
@@ -59,13 +59,14 @@ public class ScheduleBean implements Serializable {
 
     /**
      * Initializes locally maintained list of station names and current
-     *  station's schedule. Initializes message listener.
+     * station's schedule. Initializes message listener.
      */
     @PostConstruct
     public void init() {
-        currentStation = DEFAULT_STATION;
         stations = scheduleService.stationsList();
-        currentSchedule = scheduleService.stationSchedule(currentStation);
+        currentStation = scheduleService.getStationById(1);
+        currentStationId = scheduleService.getStationId(currentStation);
+        currentSchedule = scheduleService.stationSchedule(currentStationId);
 
         try {
             connectionFactory =
@@ -84,23 +85,25 @@ public class ScheduleBean implements Serializable {
 
     /**
      * Calls to ScheduleService in order to bring station and schedule maps to
-     *  current state. Updates locally maintained list of station names and
-     *  current station's schedule. Informs frontend about update.
+     * current state. Updates locally maintained list of station names and
+     * current station's schedule. Informs frontend about update.
      */
     public void updateSchedule() {
         LOGGER.info("Updating schedule");
         scheduleService.updateMaps();
         stations = scheduleService.stationsList();
-        currentSchedule = scheduleService.stationSchedule(currentStation);
+        currentSchedule = scheduleService.stationSchedule(currentStationId);
+        currentStation = scheduleService.getStationById(currentStationId);
         pushContext.send("update");
     }
 
     /**
      * Calls to ScheduleService in order to update list of ScheduledStopDto
-     *  so that it would properly reflect the current station choice.
+     * so that it would properly reflect the current station choice.
      */
     public void changeStation() {
-        currentSchedule = scheduleService.stationSchedule(currentStation);
+        currentStationId = scheduleService.getStationId(currentStation);
+        currentSchedule = scheduleService.stationSchedule(currentStationId);
     }
 
 }

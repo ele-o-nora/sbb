@@ -43,8 +43,10 @@ class ScheduleServiceTest {
     void initTest() {
         StationDto firstStation = new StationDto();
         firstStation.setName("firstStation");
+        firstStation.setId(1);
         StationDto secondStation = new StationDto();
         secondStation.setName("secondStation");
+        secondStation.setId(2);
         List<String> names = Arrays.asList("firstStation", "secondStation");
         StationDto[] stations = new StationDto[]{firstStation, secondStation};
         when(restServiceMock.getStationList()).thenReturn(stations);
@@ -54,11 +56,12 @@ class ScheduleServiceTest {
         scheduleService.init();
 
         verify(restServiceMock, times(1)).getStationList();
-        verify(restServiceMock, times(2)).getStationSchedule(eq(0));
+        verify(restServiceMock, times(1)).getStationSchedule(eq(1));
+        verify(restServiceMock, times(1)).getStationSchedule(eq(2));
         verifyNoMoreInteractions(restServiceMock);
 
         assertEquals(names, scheduleService.stationsList());
-        assertSame(schedule, scheduleService.stationSchedule("firstStation"));
-        assertSame(schedule, scheduleService.stationSchedule("secondStation"));
+        assertSame(schedule, scheduleService.stationSchedule(1));
+        assertSame(schedule, scheduleService.stationSchedule(2));
     }
 }
