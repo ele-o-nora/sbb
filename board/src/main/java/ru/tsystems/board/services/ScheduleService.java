@@ -29,7 +29,7 @@ public class ScheduleService implements Serializable {
     private Map<Integer, List<ScheduledStopDto>> scheduleMap;
 
     /**
-     * Initializes maps.
+     * Initializes maps used to maintain complete stations and schedule info.
      */
     @PostConstruct
     public void init() {
