@@ -19,7 +19,7 @@ public class Timer {
 
     /**
      * Calls to ScheduleBean in order to update the schedule maps every hour
-     *  at 00 minutes 00 seconds.
+     *  at 30 minutes 00 seconds.
      */
     @Schedule(hour = "*", minute="30")
     public void updateSchedule() {
