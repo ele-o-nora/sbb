@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ChangeNameDto {
+public final class ChangeNameDto {
 
     @NotNull(message = "First name is a required field")
     @NotBlank(message = "First name cannot be empty")

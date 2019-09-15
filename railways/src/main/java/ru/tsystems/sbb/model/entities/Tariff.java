@@ -26,13 +26,13 @@ public class Tariff extends AbstractEntity {
     /**
      * Timestamp that indicates when this tariff was created.
      */
-    @Column(name = "moment_from")
+    @Column(name = "moment_from", nullable = false, unique = true)
     private LocalDateTime momentFrom;
 
     /**
      * Specific sum that should be paid for each ten leagues travelled.
      */
-    @Column(name = "price_per_ten_leagues")
+    @Column(name = "price_per_ten_leagues", nullable = false)
     private float pricePerTenLeagues;
 
 }

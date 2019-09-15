@@ -15,7 +15,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @EqualsAndHashCode
 @PasswordMatches
-public class PasswordDto {
+public final class PasswordDto {
 
     @NotNull(message = "Password is a required field")
     @NotEmpty(message = "Password cannot be empty")

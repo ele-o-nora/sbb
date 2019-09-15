@@ -14,7 +14,7 @@ import ru.tsystems.dto.ScheduledStopDto;
 @Setter
 @NoArgsConstructor
 @ToString
-public class TicketOrderDto {
+public final class TicketOrderDto {
 
     /**
      * Journey for which the ticket is valid.

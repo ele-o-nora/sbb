@@ -88,7 +88,7 @@ public class RouteDaoImpl implements RouteDao {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select s from Station s join s.lines ls "
                 + "where ls.line = :line and ls.order >= :first "
-                + "and ls.order <= :last", Station.class)
+                + "and ls.order <= :last order by ls.order", Station.class)
                 .setParameter("line", line)
                 .setParameter("first", first)
                 .setParameter("last", last).getResultList();

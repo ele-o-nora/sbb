@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PassengerDto {
+public final class PassengerDto {
     private int id;
     private String firstName;
     private String lastName;

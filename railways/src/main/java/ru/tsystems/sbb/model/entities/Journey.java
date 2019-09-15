@@ -27,14 +27,14 @@ public class Journey extends AbstractEntity {
      * Route which this journey follows.
      */
     @ManyToOne
-    @JoinColumn(name = "route_id")
+    @JoinColumn(name = "route_id", nullable = false)
     private Route route;
 
     /**
      * Model of physical train that carries out this journey.
      */
     @ManyToOne
-    @JoinColumn(name = "train_id")
+    @JoinColumn(name = "train_id", nullable = false)
     private Train trainType;
 
     /**
@@ -55,19 +55,19 @@ public class Journey extends AbstractEntity {
      * Last station of the journey, specifying its direction on the route.
      */
     @ManyToOne
-    @JoinColumn(name = "destination_id")
+    @JoinColumn(name = "destination_id", nullable = false)
     private Station destination;
 
     /**
      * Number of minutes this journey is delayed.
      */
-    @Column
+    @Column(nullable = false)
     private int delay;
 
     /**
      * Flag indicating if this journey is cancelled.
      */
-    @Column
+    @Column(nullable = false)
     private boolean cancelled;
 
 }

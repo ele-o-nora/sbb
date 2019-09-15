@@ -11,7 +11,7 @@ import javax.validation.Valid;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
-public class BuyerDetailsDto {
+public final class BuyerDetailsDto {
 
     @Valid
     private PassengerDetailsDto passenger;

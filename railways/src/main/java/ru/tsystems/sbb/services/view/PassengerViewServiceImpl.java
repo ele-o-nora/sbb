@@ -20,6 +20,7 @@ import ru.tsystems.sbb.model.dto.TransferTicketOrderDto;
 import ru.tsystems.sbb.services.data.PassengerDataService;
 import ru.tsystems.sbb.services.data.RouteDataService;
 
+import javax.persistence.PersistenceException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +41,8 @@ public class PassengerViewServiceImpl implements PassengerViewService {
 
     private static final String SIGN_UP_SUCCESS = "Registration successful. "
             + "You may now sign in.";
+    private static final String SIGN_UP_FAIL = "Registration failed. "
+            + "There already is an account associated with this email.";
     private static final String UPDATE_SUCCESS = "Your account "
             + "was successfully updated.";
     private static final String TICKET_SUCCESS = "Ticket sale successful. "
@@ -64,9 +67,15 @@ public class PassengerViewServiceImpl implements PassengerViewService {
         LOGGER.info("Method call: register({}, {}, {}, {}, {})", firstName,
                 lastName, dateOfBirth, email, password);
         Map<String, Object> objects = getStations();
-        passengerDataService.register(firstName, lastName, dateOfBirth,
-                email, password);
-        objects.put(STATUS, SIGN_UP_SUCCESS);
+        try {
+            passengerDataService.register(firstName, lastName, dateOfBirth,
+                    email, password);
+            objects.put(STATUS, SIGN_UP_SUCCESS);
+        } catch (PersistenceException e) {
+            LOGGER.error("Failed to register user {}",
+                    email);
+            objects.put(STATUS, SIGN_UP_FAIL);
+        }
         return objects;
     }
 

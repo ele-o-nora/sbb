@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.List;
 
 /**
@@ -17,25 +18,25 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"x", "y"}))
 public class Station extends AbstractEntity {
 
     /**
      * Name of the station.
      */
-    @Column
+    @Column(nullable = false, unique = true)
     private String name;
 
     /**
      * Station's x coordinate on the map.
      */
-    @Column
+    @Column(nullable = false)
     private int x;
 
     /**
      * Station's y coordinate on the map.
      */
-    @Column
+    @Column(nullable = false)
     private int y;
 
     /**

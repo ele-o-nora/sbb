@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PassengerDetailsDto {
+public final class PassengerDetailsDto {
 
     @NotNull(message = "First name is a required field")
     @NotBlank(message = "First name cannot be empty")

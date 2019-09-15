@@ -12,7 +12,7 @@ import ru.tsystems.dto.ScheduledStopDto;
 @Setter
 @NoArgsConstructor
 @ToString
-public class JourneyDto {
+public final class JourneyDto {
     private int id;
     private String route;
     private String destination;

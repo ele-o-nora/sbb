@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class SignUpDto {
+public final class SignUpDto {
 
     @Valid
     private @NonNull PassengerDetailsDto passengerDetails;

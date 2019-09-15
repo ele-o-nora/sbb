@@ -31,13 +31,13 @@ public class User extends AbstractEntity {
     /**
      * User's e-mail. Serves as unique identifier.
      */
-    @Column
+    @Column(nullable = false, unique = true)
     private String email;
 
     /**
      * User's password.
      */
-    @Column
+    @Column(nullable = false)
     private String password;
 
     /**

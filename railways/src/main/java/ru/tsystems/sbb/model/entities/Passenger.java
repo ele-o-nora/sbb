@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,25 +20,26 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"first_name",
+        "last_name", "date_of_birth"}))
 public class Passenger extends AbstractEntity {
 
     /**
      * Passenger's legal first name.
      */
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     /**
      * Passenger's legal last name.
      */
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     /**
      * Passenger's date of birth.
      */
-    @Column(name = "date_of_birth")
+    @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
     /**

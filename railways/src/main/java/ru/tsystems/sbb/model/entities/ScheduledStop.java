@@ -27,14 +27,14 @@ public class ScheduledStop extends AbstractEntity {
      * The journey to which this stop belongs.
      */
     @ManyToOne
-    @JoinColumn(name = "journey_id")
+    @JoinColumn(name = "journey_id", nullable = false)
     private Journey journey;
 
     /**
      * Station which this stop represents.
      */
     @ManyToOne
-    @JoinColumn(name = "station_id")
+    @JoinColumn(name = "station_id", nullable = false)
     private Station station;
 
     /**

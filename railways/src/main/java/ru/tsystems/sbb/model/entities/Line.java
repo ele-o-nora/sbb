@@ -23,7 +23,7 @@ public class Line extends AbstractEntity {
     /**
      * Unique name that identifies this line.
      */
-    @Column
+    @Column(nullable = false, unique = true)
     private String name;
 
     /**

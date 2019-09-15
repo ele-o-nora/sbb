@@ -73,11 +73,17 @@ public class AdminController {
                               @RequestParam(value = "routeId", required = false,
                               defaultValue = "0") final int routeId,
                               @RequestParam(value = "lineId") final int lineId,
-                              @RequestParam(value = "stations")
+                              @RequestParam(value = "stations",
+                                      required = false)
                                   final String[] stations) {
-        return new ModelAndView("scheduleRoute",
-                viewService.newRouteStopPattern(routeNum, routeId,
-                        lineId, stations));
+        if (stations != null && stations.length > 1) {
+            return new ModelAndView("scheduleRoute",
+                    viewService.newRouteStopPattern(routeNum, routeId,
+                            lineId, stations));
+        } else {
+            return new ModelAndView("routeStations",
+                    viewService.modifyRouteStations(lineId, routeId));
+        }
     }
 
     @PostMapping("/addNewRoute")

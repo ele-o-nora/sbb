@@ -1,5 +1,6 @@
 package ru.tsystems.sbb.services.view;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +40,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -70,6 +72,10 @@ class PassengerViewServiceTest {
     private static final String TICKET_RETURN_FAIL = "Couldn't return ticket. ";
     private static final String TICKET_RETURN_SUCCESS = "Ticket successfully "
             + "returned. Your refund will be processed shortly.";
+    private static final String SIGN_UP_SUCCESS = "Registration successful. "
+            + "You may now sign in.";
+    private static final String SIGN_UP_FAIL = "Registration failed. "
+            + "There already is an account associated with this email.";
 
     private static final String STATION_FROM = "stationFrom";
     private static final String STATION_TO = "stationTo";
@@ -89,6 +95,7 @@ class PassengerViewServiceTest {
     private static final String PREVIOUS_PAGE = "previousPage";
     private static final String USERNAME = "testUser";
     private static final String SIGN_UP_DTO = "signUpDto";
+    private static final String PASSWORD = "password";
 
     @AfterEach
     void resetMocks() {
@@ -531,5 +538,36 @@ class PassengerViewServiceTest {
         assertTrue(result.containsKey(SIGN_UP_DTO));
         assertEquals(new SignUpDto(), result.get(SIGN_UP_DTO));
         assertFalse(result.containsKey(PASSENGER));
+    }
+
+    @Test
+    void signUpErrorTest() {
+        doThrow(ConstraintViolationException.class).when(mockPassengerDataService)
+                .register(anyString(), anyString(), any(LocalDate.class),
+                        anyString(), anyString());
+        LocalDate dob = LocalDate.of(1990, 1, 1);
+        Map<String, Object> result = passengerViewService.register(FIRST_NAME,
+                LAST_NAME, dob, USERNAME, PASSWORD);
+
+        verify(mockPassengerDataService, times(1)).register(same(FIRST_NAME),
+                same(LAST_NAME), same(dob), same(USERNAME), same(PASSWORD));
+        verifyNoMoreInteractions(mockPassengerDataService);
+
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(SIGN_UP_FAIL, result.get(STATUS));
+    }
+
+    @Test
+    void signUpSuccessTest() {
+        LocalDate dob = LocalDate.of(1990, 1, 1);
+        Map<String, Object> result = passengerViewService.register(FIRST_NAME,
+                LAST_NAME, dob, USERNAME, PASSWORD);
+
+        verify(mockPassengerDataService, times(1)).register(same(FIRST_NAME),
+                same(LAST_NAME), same(dob), same(USERNAME), same(PASSWORD));
+        verifyNoMoreInteractions(mockPassengerDataService);
+
+        assertTrue(result.containsKey(STATUS));
+        assertEquals(SIGN_UP_SUCCESS, result.get(STATUS));
     }
 }

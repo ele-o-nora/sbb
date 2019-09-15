@@ -14,7 +14,7 @@ import java.time.YearMonth;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PaymentDetailsDto {
+public final class PaymentDetailsDto {
 
     @NotNull(message = "Card number is a required field")
     @NotEmpty(message = "Card number cannot be empty")

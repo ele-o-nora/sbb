@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TransferTrainsDto {
+public final class TransferTrainsDto {
     private JourneyDto firstTrain;
     private JourneyDto secondTrain;
     private String transferStation;

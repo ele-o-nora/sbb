@@ -31,6 +31,8 @@ public class HibernateConfig {
                 env.getRequiredProperty("hibernate.show_sql"));
         properties.put("hibernate.jdbc.time_zone",
                 env.getRequiredProperty("hibernate.jdbc.time_zone"));
+        properties.put("hibernate.hbm2ddl.auto",
+                env.getRequiredProperty("hibernate.hbm2ddl.auto"));
         return properties;
     }
 

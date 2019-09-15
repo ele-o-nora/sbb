@@ -17,7 +17,6 @@ import ru.tsystems.sbb.model.mappers.EntityToDtoMapper;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +44,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
         Station station = scheduleDao.getStationByName(stationName);
         List<ScheduledStop> scheduledStops = scheduleDao
                 .stationSchedule(station, from, SEARCH_PERIOD);
-        Collections.sort(scheduledStops, new ScheduleComparator());
+        scheduledStops.sort(new ScheduleComparator());
         return scheduledStops.stream()
                 .map(scheduledStop -> mapper.convert(scheduledStop))
                 .collect(Collectors.toList());

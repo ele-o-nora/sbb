@@ -110,12 +110,14 @@ public class AdminViewServiceImpl implements AdminViewService {
         LOGGER.info("Method call: modifyRouteStations({}, {}) by employee: {}",
                 lineId, routeId, getEmployeeUsername());
         LineDto line = routeDataService.getLine(lineId);
-        RouteDto route = routeDataService.getRoute(routeId);
         List<StationDto> lineStations = routeDataService
                 .getAllLineStations(lineId);
         Map<String, Object> objects = new HashMap<>();
         objects.put("line", line);
-        objects.put("route", route);
+        if (routeId > 0) {
+            RouteDto route = routeDataService.getRoute(routeId);
+            objects.put("route", route);
+        }
         objects.put("stations", lineStations);
         return objects;
     }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RouteStationDto {
+public final class RouteStationDto {
 
     private int id;
     private String name;

@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-public class TransferTicketOrderDto {
+public final class TransferTicketOrderDto {
 
     /**
      * Necessary information about the first of two journeys.

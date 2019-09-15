@@ -25,7 +25,7 @@ public class Role extends AbstractEntity {
     /**
      * Name of the role.
      */
-    @Column
+    @Column(nullable = false, unique = true)
     private String name;
 
     /**

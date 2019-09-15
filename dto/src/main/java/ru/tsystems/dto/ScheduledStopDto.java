@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @NoArgsConstructor
 @ToString
-public class ScheduledStopDto implements Serializable {
+public final class ScheduledStopDto implements Serializable {
     private static final long serialVersionUID = -2910813165098073721L;
     private int id;
     private String station;

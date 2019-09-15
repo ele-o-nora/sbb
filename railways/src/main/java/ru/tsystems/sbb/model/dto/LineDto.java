@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LineDto {
+public final class LineDto {
     private int id;
     private String name;
 }

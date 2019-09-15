@@ -23,19 +23,19 @@ public class Train extends AbstractEntity {
     /**
      * Unique identifier for this train type.
      */
-    @Column
+    @Column(nullable = false, unique = true)
     private String model;
 
     /**
      * Number of seats this train has.
      */
-    @Column
+    @Column(nullable = false)
     private int seats;
 
     /**
      * Maximum speed this train can travel with.
      */
-    @Column
+    @Column(nullable = false)
     private int speed;
 
     /**

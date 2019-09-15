@@ -9,7 +9,7 @@ import ru.tsystems.dto.ScheduledStopDto;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TicketDto {
+public final class TicketDto {
 
     private int id;
     private JourneyDto journey;

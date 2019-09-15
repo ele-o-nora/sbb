@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RouteDto {
+public final class RouteDto {
     private int id;
     private String number;
     private String line;

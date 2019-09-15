@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TrainDto {
+public final class TrainDto {
     private int id;
     private String model;
     private int seats;

@@ -24,6 +24,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import ru.tsystems.dto.StationDto;
 import ru.tsystems.sbb.config.ViewServiceTestConfig;
 import ru.tsystems.sbb.model.dto.JourneyDto;
 import ru.tsystems.sbb.model.dto.LineDto;
@@ -79,6 +80,7 @@ class AdminViewServiceTest {
     private static final String TICKETS = "tickets";
     private static final String TARIFF = "tariff";
     private static final String TRAIN_MODELS = "trainModels";
+    private static final String STATIONS = "stations";
 
     @AfterEach
     void resetMocks() {
@@ -105,6 +107,55 @@ class AdminViewServiceTest {
         verify(mockAdminDataService, times(1)).updateTariff(eq(price));
         verifyNoMoreInteractions(mockAdminDataService);
         verifyZeroInteractions(mockRouteDataService);
+    }
+
+    @Test
+    void modifyRouteStationsZeroRouteIdTest() {
+        LineDto line = new LineDto();
+        List<StationDto> stations = new ArrayList<>();
+        when(mockRouteDataService.getLine(anyInt())).thenReturn(line);
+        when(mockRouteDataService.getAllLineStations(anyInt()))
+                .thenReturn(stations);
+
+        Map<String, Object> result = adminViewService.modifyRouteStations(1, 0);
+
+        verify(mockRouteDataService, times(1)).getLine(eq(1));
+        verify(mockRouteDataService, times(1)).getAllLineStations(eq(1));
+        verifyNoMoreInteractions(mockRouteDataService);
+        verifyZeroInteractions(mockAdminDataService);
+
+        assertTrue(result.containsKey(LINE));
+        assertSame(line, result.get(LINE));
+        assertTrue(result.containsKey(STATIONS));
+        assertSame(stations, result.get(STATIONS));
+        assertFalse(result.containsKey(ROUTE));
+    }
+
+    @Test
+    void modifyRouteStationsNonZeroRouteIdTest() {
+        LineDto line = new LineDto();
+        List<StationDto> stations = new ArrayList<>();
+        RouteDto route = new RouteDto();
+        when(mockRouteDataService.getLine(anyInt())).thenReturn(line);
+        when(mockRouteDataService.getAllLineStations(anyInt()))
+                .thenReturn(stations);
+        when(mockRouteDataService.getRoute(anyInt())).thenReturn(route);
+
+        Map<String, Object> result = adminViewService.modifyRouteStations(1, 1);
+
+        verify(mockRouteDataService, times(1)).getLine(eq(1));
+        verify(mockRouteDataService, times(1)).getAllLineStations(eq(1));
+        verify(mockRouteDataService, times(1)).getRoute(eq(1));
+        verifyNoMoreInteractions(mockRouteDataService);
+        verifyZeroInteractions(mockAdminDataService);
+
+        assertTrue(result.containsKey(LINE));
+        assertSame(line, result.get(LINE));
+        assertTrue(result.containsKey(STATIONS));
+        assertSame(stations, result.get(STATIONS));
+        assertTrue(result.containsKey(ROUTE));
+        assertSame(route, result.get(ROUTE));
+
     }
 
     @Test
