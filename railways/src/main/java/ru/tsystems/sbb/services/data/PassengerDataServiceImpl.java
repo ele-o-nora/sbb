@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -148,7 +149,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         ScheduledStop stopFrom = journey.getStops().stream()
                 .filter(scheduledStop -> scheduledStop.getStation()
                         .getName().equals(stationFrom)).findFirst()
-                .orElse(new ScheduledStop());
+                .orElseThrow(NoSuchElementException::new);
         if (ChronoUnit.MINUTES.between(LocalDateTime.now(clock),
                 stopFrom.getDeparture()) < MIN_MINUTES) {
             ticketOrder.setStatus(NO_TIME);
@@ -158,7 +159,7 @@ public class PassengerDataServiceImpl implements PassengerDataService {
         ScheduledStop stopTo = journey.getStops().stream()
                 .filter(scheduledStop -> scheduledStop.getStation()
                         .getName().equals(stationTo)).findFirst()
-                .orElse(new ScheduledStop());
+                .orElseThrow(NoSuchElementException::new);
         if (passengerDao.currentTickets(journey, stopFrom, stopTo)
                 == journey.getTrainType().getSeats()) {
             ticketOrder.setStatus(NO_SEATS);

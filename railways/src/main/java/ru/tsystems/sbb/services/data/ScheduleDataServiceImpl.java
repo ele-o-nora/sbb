@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -114,7 +115,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
                     LocalDateTime arrivalAtTransfer = firstTrain.getStops()
                             .stream().filter(scheduledStop -> scheduledStop
                                     .getStation().equals(transfer))
-                            .findFirst().orElse(new ScheduledStop())
+                            .findFirst().orElseThrow(NoSuchElementException::new)
                             .getArrival();
                     Journey secondTrain = scheduleDao
                             .firstTrainAfter(transfer, destination,
@@ -148,7 +149,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
                     LocalDateTime departFromTransfer = secondTrain.getStops()
                             .stream().filter(scheduledStop -> scheduledStop
                                     .getStation().equals(transfer))
-                            .findFirst().orElse(new ScheduledStop())
+                            .findFirst().orElseThrow(NoSuchElementException::new)
                             .getDeparture();
                     Journey firstTrain = scheduleDao
                             .lastTrainBefore(origin, transfer,
